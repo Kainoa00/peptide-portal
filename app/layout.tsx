@@ -1,18 +1,18 @@
 import type { Metadata } from 'next'
-import { Cormorant_Garamond, DM_Sans } from 'next/font/google'
+import { Playfair_Display, Manrope } from 'next/font/google'
 import './globals.css'
 import SkipLink from '@/components/ui/SkipLink'
 
-const cormorant = Cormorant_Garamond({
-  variable: '--font-cormorant',
+const playfair = Playfair_Display({
+  variable: '--font-playfair',
   subsets: ['latin'],
-  weight: ['300', '400', '500', '600'],
+  weight: ['400', '500', '600', '700'],
   style: ['normal', 'italic'],
   display: 'swap',
 })
 
-const dmSans = DM_Sans({
-  variable: '--font-dm-sans',
+const manrope = Manrope({
+  variable: '--font-manrope',
   subsets: ['latin'],
   display: 'swap',
 })
@@ -55,7 +55,7 @@ const organizationSchema = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${cormorant.variable} ${dmSans.variable}`}>
+    <html lang="en" className={`${playfair.variable} ${manrope.variable}`}>
       <body>
         <SkipLink />
         {children}

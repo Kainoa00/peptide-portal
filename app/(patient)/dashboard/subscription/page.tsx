@@ -71,7 +71,7 @@ function CancelModal({ onCancel, onConfirm }: CancelModalProps) {
         alignItems: 'center',
         justifyContent: 'center',
         padding: 24,
-        background: 'rgba(6,6,15,0.8)',
+        background: 'rgba(13,26,16,0.80)',
         backdropFilter: 'blur(8px)',
       }}
       onClick={onCancel}
@@ -282,10 +282,10 @@ export default function SubscriptionPage() {
                         background: 'var(--teal-dim)',
                         color: 'var(--teal)',
                         border: '1px solid var(--border-teal)',
-                        boxShadow: '0 0 10px rgba(45,214,168,0.15)',
+                        boxShadow: '0 0 10px rgba(37,87,54,0.15)',
                       }
                     : {
-                        background: 'rgba(53,53,78,0.4)',
+                        background: 'var(--surface-3)',
                         color: 'var(--text-3)',
                         border: '1px solid var(--border)',
                       }
@@ -370,13 +370,13 @@ export default function SubscriptionPage() {
                   borderRadius: 10,
                   border: 'none',
                   background: effectiveStatus === 'cancelled' ? 'var(--surface-3)' : 'var(--teal)',
-                  color: effectiveStatus === 'cancelled' ? 'var(--text-3)' : '#06060F',
+                  color: effectiveStatus === 'cancelled' ? 'var(--text-3)' : '#FFFFFF',
                   fontSize: 14,
                   fontWeight: 600,
                   cursor: effectiveStatus === 'cancelled' ? 'not-allowed' : 'pointer',
                   transition: 'opacity 0.2s ease, box-shadow 0.2s ease',
                   opacity: portalLoading ? 0.7 : 1,
-                  boxShadow: effectiveStatus === 'active' ? '0 0 24px rgba(45,214,168,0.2)' : 'none',
+                  boxShadow: effectiveStatus === 'active' ? '0 0 24px rgba(37,87,54,0.2)' : 'none',
                   fontFamily: 'inherit',
                   display: 'flex',
                   alignItems: 'center',

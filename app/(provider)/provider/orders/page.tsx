@@ -43,7 +43,7 @@ function Toast({ message, onClose }: { message: string; onClose: () => void }) {
         bottom: '32px',
         right: '32px',
         background: 'var(--surface-3)',
-        border: '1px solid rgba(45,214,168,0.3)',
+        border: '1px solid rgba(37,87,54,0.3)',
         borderRadius: '10px',
         padding: '14px 20px',
         display: 'flex',

@@ -31,15 +31,15 @@ function MolecularOrb() {
         className="absolute inset-0 rounded-full"
         style={{
           background:
-            'radial-gradient(circle at 50% 50%, rgba(45,214,168,0.09) 0%, transparent 68%)',
+            'radial-gradient(circle at 50% 50%, rgba(37,87,54,0.09) 0%, transparent 68%)',
         }}
       />
       {/* Outer spinning ring */}
       <div
         className="absolute inset-0 rounded-full anim-spin-slow"
         style={{
-          border: '1px solid rgba(45,214,168,0.08)',
-          boxShadow: '0 0 0 1px rgba(45,214,168,0.04)',
+          border: '1px solid rgba(37,87,54,0.08)',
+          boxShadow: '0 0 0 1px rgba(37,87,54,0.04)',
         }}
       />
 
@@ -57,7 +57,7 @@ function MolecularOrb() {
               key={idx}
               x1={n.x} y1={n.y}
               x2={next.x} y2={next.y}
-              stroke="rgba(45,214,168,0.18)"
+              stroke="rgba(37,87,54,0.18)"
               strokeWidth="1"
               strokeDasharray="3 5"
             />
@@ -81,7 +81,7 @@ function MolecularOrb() {
             key={idx + 200}
             x1={inn.x} y1={inn.y}
             x2={cx} y2={cy}
-            stroke="rgba(45,214,168,0.1)"
+            stroke="rgba(37,87,54,0.1)"
             strokeWidth="1"
           />
         ))}
@@ -91,13 +91,13 @@ function MolecularOrb() {
           <g key={n.i}>
             <circle
               cx={n.x} cy={n.y} r={7}
-              fill="rgba(45,214,168,0.06)"
-              stroke="rgba(45,214,168,0.35)"
+              fill="rgba(37,87,54,0.06)"
+              stroke="rgba(37,87,54,0.35)"
               strokeWidth="1"
             />
             <circle
               cx={n.x} cy={n.y} r={2.5}
-              fill="#2DD6A8"
+              fill="#255736"
               className="anim-glow-pulse"
               style={{ animationDelay: `${n.i * 350}ms` }}
             />
@@ -120,11 +120,11 @@ function MolecularOrb() {
         {/* Center node */}
         <circle
           cx={cx} cy={cy} r={9}
-          fill="rgba(45,214,168,0.08)"
-          stroke="rgba(45,214,168,0.5)"
+          fill="rgba(37,87,54,0.08)"
+          stroke="rgba(37,87,54,0.5)"
           strokeWidth="1.5"
         />
-        <circle cx={cx} cy={cy} r={4} fill="#2DD6A8" className="anim-glow-pulse" />
+        <circle cx={cx} cy={cy} r={4} fill="#255736" className="anim-glow-pulse" />
       </svg>
     </div>
   )
@@ -145,9 +145,9 @@ const CATEGORIES = [
   {
     label: 'Recovery',
     tag: 'Tissue Repair',
-    accent: '#2DD6A8',
-    dim: 'rgba(45,214,168,0.1)',
-    border: 'rgba(45,214,168,0.25)',
+    accent: '#255736',
+    dim: 'rgba(37,87,54,0.1)',
+    border: 'rgba(37,87,54,0.25)',
     peptides: 'BPC-157 · TB-500',
     desc: 'Accelerate healing of tendons, muscles, and soft tissue with body-protective compounds.',
     href: '/catalog?cat=recovery',
@@ -240,9 +240,9 @@ const TESTIMONIALS = [
       "I've tried everything for recovery. Six weeks on CJC-1295 and my joint pain is down 80%. I sleep like I did in my 20s.",
     name: 'Marcus T.',
     protocol: 'Recovery Protocol',
-    protocolColor: '#2DD6A8',
-    protocolDim: 'rgba(45,214,168,0.1)',
-    protocolBorder: 'rgba(45,214,168,0.25)',
+    protocolColor: '#255736',
+    protocolDim: 'rgba(37,87,54,0.1)',
+    protocolBorder: 'rgba(37,87,54,0.25)',
   },
   {
     quote:
@@ -363,9 +363,9 @@ export default function LandingPage() {
       <header
         className="fixed top-0 left-0 right-0 z-50"
         style={{
-          background: 'rgba(6,6,15,0.80)',
+          background: 'rgba(246,248,246,0.92)',
           backdropFilter: 'blur(16px)',
-          borderBottom: '1px solid rgba(255,255,255,0.06)',
+          borderBottom: '1px solid var(--border)',
         }}
       >
         <div className="max-w-6xl mx-auto px-6 flex items-center justify-between h-16">
@@ -395,7 +395,7 @@ export default function LandingPage() {
             className="text-sm font-medium px-5 py-2.5 rounded-full transition-all"
             style={{
               background: 'var(--teal)',
-              color: '#06060F',
+              color: '#FFFFFF',
               letterSpacing: '0.01em',
             }}
           >
@@ -410,7 +410,7 @@ export default function LandingPage() {
         style={{
           paddingTop: 96,
           background: `
-            radial-gradient(ellipse 80% 60% at 60% 40%, rgba(45,214,168,0.04) 0%, transparent 60%),
+            radial-gradient(ellipse 80% 60% at 60% 40%, rgba(37,87,54,0.04) 0%, transparent 60%),
             radial-gradient(ellipse 60% 80% at 10% 80%, rgba(212,151,90,0.03) 0%, transparent 60%),
             var(--bg)
           `,
@@ -431,7 +431,7 @@ export default function LandingPage() {
               <div className="anim-fade-up inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium tracking-wide"
                 style={{
                   background: 'var(--teal-dim)',
-                  border: '1px solid rgba(45,214,168,0.2)',
+                  border: '1px solid rgba(37,87,54,0.2)',
                   color: 'var(--teal)',
                 }}
               >
@@ -477,8 +477,8 @@ export default function LandingPage() {
                   className="inline-flex items-center gap-2 px-7 py-4 rounded-full font-medium text-sm transition-all"
                   style={{
                     background: 'var(--teal)',
-                    color: '#06060F',
-                    boxShadow: '0 0 32px rgba(45,214,168,0.2)',
+                    color: '#FFFFFF',
+                    boxShadow: '0 0 32px rgba(37,87,54,0.2)',
                   }}
                 >
                   Find Your Protocol
@@ -530,7 +530,7 @@ export default function LandingPage() {
                   style={{
                     inset: -40,
                     background:
-                      'radial-gradient(circle, rgba(45,214,168,0.04) 0%, transparent 70%)',
+                      'radial-gradient(circle, rgba(37,87,54,0.04) 0%, transparent 70%)',
                     pointerEvents: 'none',
                   }}
                 />
@@ -766,8 +766,8 @@ export default function LandingPage() {
               className="inline-flex items-center gap-2 px-8 py-4 rounded-full text-sm font-medium transition-all"
               style={{
                 background: 'var(--teal)',
-                color: '#06060F',
-                boxShadow: '0 0 32px rgba(45,214,168,0.2)',
+                color: '#FFFFFF',
+                boxShadow: '0 0 32px rgba(37,87,54,0.2)',
               }}
             >
               Start Your Assessment
@@ -934,7 +934,7 @@ export default function LandingPage() {
           className="relative py-32 px-6 text-center"
           style={{
             background: `
-              radial-gradient(ellipse 80% 100% at 50% 50%, rgba(45,214,168,0.06) 0%, transparent 70%),
+              radial-gradient(ellipse 80% 100% at 50% 50%, rgba(37,87,54,0.06) 0%, transparent 70%),
               var(--surface)
             `,
             borderTop: '1px solid var(--border)',
@@ -971,7 +971,7 @@ export default function LandingPage() {
                 className="inline-flex items-center gap-2 px-8 py-4 rounded-full font-medium text-sm transition-all anim-teal-glow"
                 style={{
                   background: 'var(--teal)',
-                  color: '#06060F',
+                  color: '#FFFFFF',
                 }}
               >
                 Begin the Assessment

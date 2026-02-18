@@ -49,7 +49,7 @@ function ActionButton({ href, icon, label, description, accent, accentDim, accen
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.transform = 'translateY(-2px)'
-        e.currentTarget.style.boxShadow = `0 0 24px ${accentDim ?? 'rgba(45,214,168,0.1)'}`
+        e.currentTarget.style.boxShadow = `0 0 24px ${accentDim ?? 'rgba(37,87,54,0.1)'}`
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.transform = 'translateY(0)'
@@ -133,13 +133,13 @@ function EmptyState() {
         href="/quiz"
         style={{
           background: 'var(--teal)',
-          color: '#06060F',
+          color: '#FFFFFF',
           borderRadius: 999,
           padding: '10px 28px',
           fontSize: 14,
           fontWeight: 500,
           textDecoration: 'none',
-          boxShadow: '0 0 24px rgba(45,214,168,0.2)',
+          boxShadow: '0 0 24px rgba(37,87,54,0.2)',
         }}
       >
         Start Assessment →

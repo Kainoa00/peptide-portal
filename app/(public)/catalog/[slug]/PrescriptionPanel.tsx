@@ -81,7 +81,7 @@ export default function PrescriptionPanel({ peptide }: Props) {
           className="w-full py-4 rounded-xl text-sm font-medium transition-all mb-3"
           style={{
             background: meta.accent,
-            color: '#06060F',
+            color: '#FFFFFF',
             boxShadow: `0 0 28px ${meta.dim}`,
             opacity: loading ? 0.7 : 1,
           }}
@@ -124,7 +124,7 @@ export default function PrescriptionPanel({ peptide }: Props) {
         <div
           className="px-7 py-4 text-xs leading-relaxed"
           style={{
-            background: 'rgba(0,0,0,0.2)',
+            background: 'rgba(19,24,17,0.05)',
             borderTop: '1px solid var(--border)',
             color: 'var(--text-3)',
           }}

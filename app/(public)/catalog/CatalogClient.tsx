@@ -8,7 +8,7 @@ import { PEPTIDES, CATEGORY_META, getPeptidesByCategory, type Category, type Pep
 /* ─── FDA Status badge ───────────────────────────────────────────── */
 function FdaBadge({ status, label }: { status: Peptide['fdaStatus']; label: string }) {
   const styles = {
-    approved: { bg: 'rgba(45,214,168,0.1)', color: '#2DD6A8', border: 'rgba(45,214,168,0.25)' },
+    approved: { bg: 'rgba(37,87,54,0.1)', color: '#255736', border: 'rgba(37,87,54,0.25)' },
     research:  { bg: 'rgba(212,151,90,0.1)', color: '#D4975A', border: 'rgba(212,151,90,0.25)' },
     flagged:   { bg: 'rgba(232,112,112,0.1)', color: '#E87070', border: 'rgba(232,112,112,0.25)' },
   }[status]
@@ -56,7 +56,7 @@ function PeptideCard({ peptide }: { peptide: Peptide }) {
           fontSize: 96,
           fontWeight: 300,
           lineHeight: 1,
-          color: 'rgba(255,255,255,0.028)',
+          color: 'rgba(19,24,17,0.05)',
           fontStyle: 'italic',
         }}
       >
@@ -195,9 +195,9 @@ export default function CatalogClient() {
       <header
         className="sticky top-0 z-50"
         style={{
-          background: 'rgba(6,6,15,0.88)',
+          background: 'rgba(246,248,246,0.92)',
           backdropFilter: 'blur(16px)',
-          borderBottom: '1px solid rgba(255,255,255,0.06)',
+          borderBottom: '1px solid var(--border)',
         }}
       >
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
@@ -212,7 +212,7 @@ export default function CatalogClient() {
             <Link
               href="/quiz"
               className="text-sm font-medium px-5 py-2.5 rounded-full transition-all"
-              style={{ background: 'var(--teal)', color: '#06060F' }}
+              style={{ background: 'var(--teal)', color: '#FFFFFF' }}
             >
               Take the Quiz →
             </Link>
@@ -225,7 +225,7 @@ export default function CatalogClient() {
         className="relative overflow-hidden"
         style={{
           background: `
-            radial-gradient(ellipse 70% 80% at 50% -20%, rgba(45,214,168,0.05) 0%, transparent 60%),
+            radial-gradient(ellipse 70% 80% at 50% -20%, rgba(37,87,54,0.05) 0%, transparent 60%),
             var(--bg)
           `,
           borderBottom: '1px solid var(--border)',
@@ -267,7 +267,7 @@ export default function CatalogClient() {
       <div
         className="sticky top-16 z-40"
         style={{
-          background: 'rgba(6,6,15,0.92)',
+          background: 'rgba(246,248,246,0.92)',
           backdropFilter: 'blur(12px)',
           borderBottom: '1px solid var(--border)',
         }}
@@ -289,7 +289,7 @@ export default function CatalogClient() {
                       ? (meta ? meta.dim : 'var(--teal-dim)')
                       : 'transparent',
                     border: `1px solid ${isActive
-                      ? (meta ? meta.border : 'rgba(45,214,168,0.3)')
+                      ? (meta ? meta.border : 'rgba(37,87,54,0.3)')
                       : 'var(--border)'}`,
                     color: isActive
                       ? (meta ? meta.accent : 'var(--teal)')
@@ -356,7 +356,7 @@ export default function CatalogClient() {
           style={{
             background: 'var(--surface)',
             border: '1px solid var(--border)',
-            backgroundImage: 'radial-gradient(ellipse 60% 100% at 50% 0%, rgba(45,214,168,0.04), transparent)',
+            backgroundImage: 'radial-gradient(ellipse 60% 100% at 50% 0%, rgba(37,87,54,0.04), transparent)',
           }}
         >
           <p className="text-xs uppercase tracking-widest mb-3" style={{ color: 'var(--text-3)' }}>
@@ -376,8 +376,8 @@ export default function CatalogClient() {
             className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-sm font-medium"
             style={{
               background: 'var(--teal)',
-              color: '#06060F',
-              boxShadow: '0 0 32px rgba(45,214,168,0.2)',
+              color: '#FFFFFF',
+              boxShadow: '0 0 32px rgba(37,87,54,0.2)',
             }}
           >
             Start Assessment

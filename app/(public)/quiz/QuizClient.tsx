@@ -30,7 +30,7 @@ const PEPTIDE_RECS: Record<Goal, { name: string; category: string; accent: strin
     price: 299, slug: 'tirzepatide',
   },
   recovery: {
-    name: 'BPC-157 + TB-500', category: 'Recovery', accent: '#2DD6A8',
+    name: 'BPC-157 + TB-500', category: 'Recovery', accent: '#255736',
     desc: 'Synergistic blend targeting both local tissue repair and systemic healing.',
     price: 249, slug: 'bpc-157-tb-500',
   },
@@ -72,8 +72,8 @@ function OptionCard({
       onClick={onClick}
       className="w-full text-left p-5 rounded-xl transition-all"
       style={{
-        background: selected ? 'rgba(45,214,168,0.08)' : 'var(--surface)',
-        border: `1px solid ${selected ? 'rgba(45,214,168,0.4)' : 'var(--border)'}`,
+        background: selected ? 'rgba(37,87,54,0.08)' : 'var(--surface)',
+        border: `1px solid ${selected ? 'rgba(37,87,54,0.4)' : 'var(--border)'}`,
         outline: 'none',
       }}
     >
@@ -135,7 +135,7 @@ function StepExperience({
             >
               {value === o.value && (
                 <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
-                  <path d="M2 6l3 3 5-5" stroke="#06060F" strokeWidth="2" strokeLinecap="round" />
+                  <path d="M2 6l3 3 5-5" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" />
                 </svg>
               )}
             </div>
@@ -155,7 +155,7 @@ function StepGoals({
 }) {
   const opts: { value: Goal; label: string; icon: string; accent: string }[] = [
     { value: 'weight_loss', label: 'Weight Loss', icon: '⚡', accent: '#E87070' },
-    { value: 'recovery', label: 'Recovery & Repair', icon: '🔩', accent: '#2DD6A8' },
+    { value: 'recovery', label: 'Recovery & Repair', icon: '🔩', accent: '#255736' },
     { value: 'longevity', label: 'Longevity', icon: '⏳', accent: '#D4975A' },
     { value: 'cognitive', label: 'Cognitive Performance', icon: '🧠', accent: '#9B8EE8' },
     { value: 'sleep', label: 'Sleep & Stress', icon: '🌙', accent: '#D4975A' },
@@ -255,7 +255,7 @@ function StepConditions({
             >
               {value.includes(o.value) && (
                 <svg width="8" height="8" viewBox="0 0 12 12" fill="none">
-                  <path d="M2 6l3 3 5-5" stroke="#06060F" strokeWidth="2.5" strokeLinecap="round" />
+                  <path d="M2 6l3 3 5-5" stroke="#FFFFFF" strokeWidth="2.5" strokeLinecap="round" />
                 </svg>
               )}
             </div>
@@ -518,7 +518,7 @@ function StepRecommendation({ answers }: { answers: Answers }) {
                 className="w-full py-3.5 rounded-xl text-sm font-medium transition-all flex items-center justify-center gap-2 disabled:opacity-70"
                 style={{
                   background: rec.accent,
-                  color: '#06060F',
+                  color: '#FFFFFF',
                   boxShadow: `0 0 24px ${rec.accent}30`,
                 }}
               >
@@ -559,8 +559,8 @@ function StepRecommendation({ answers }: { answers: Answers }) {
                 <p
                   className="text-xs text-center py-2 rounded-lg"
                   style={{
-                    background: 'rgba(45,214,168,0.08)',
-                    border: '1px solid rgba(45,214,168,0.2)',
+                    background: 'rgba(37,87,54,0.08)',
+                    border: '1px solid rgba(37,87,54,0.2)',
                     color: 'var(--teal)',
                   }}
                 >
@@ -704,9 +704,9 @@ export default function QuizClient() {
                     background: active
                       ? 'var(--teal)'
                       : filled
-                        ? 'rgba(45,214,168,0.45)'
+                        ? 'rgba(37,87,54,0.40)'
                         : 'var(--surface-3)',
-                    boxShadow: active ? '0 0 8px rgba(45,214,168,0.5)' : 'none',
+                    boxShadow: active ? '0 0 8px rgba(37,87,54,0.5)' : 'none',
                   }}
                 />
               )

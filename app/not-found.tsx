@@ -23,7 +23,7 @@ export default function NotFound() {
         className="absolute inset-0 pointer-events-none"
         style={{
           backgroundImage:
-            'radial-gradient(circle, rgba(255,255,255,0.035) 1px, transparent 1px)',
+            'radial-gradient(circle, rgba(37,87,54,0.06) 1px, transparent 1px)',
           backgroundSize: '28px 28px',
         }}
       />
@@ -35,7 +35,7 @@ export default function NotFound() {
           width: '600px',
           height: '600px',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(45,214,168,0.07) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(37,87,54,0.07) 0%, transparent 70%)',
           transform: 'translate(-50%, -50%)',
           left: '50%',
           top: '50%',
@@ -120,8 +120,8 @@ export default function NotFound() {
             className="flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-all"
             style={{
               background: 'var(--teal)',
-              color: '#06060F',
-              boxShadow: '0 0 20px rgba(45,214,168,0.2)',
+              color: '#FFFFFF',
+              boxShadow: '0 0 20px rgba(37,87,54,0.2)',
             }}
           >
             Take the Quiz

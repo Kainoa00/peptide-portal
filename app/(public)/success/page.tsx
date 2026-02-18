@@ -85,7 +85,7 @@ export default function SuccessPage() {
         <div className="flex justify-center mb-8">
           <div
             className="check-circle w-24 h-24 rounded-full flex items-center justify-center"
-            style={{ background: 'rgba(45,214,168,0.12)', border: '2px solid rgba(45,214,168,0.35)' }}
+            style={{ background: 'rgba(37,87,54,0.12)', border: '2px solid rgba(37,87,54,0.35)' }}
           >
             <svg width="40" height="40" viewBox="0 0 48 48" fill="none">
               <path
@@ -182,8 +182,8 @@ export default function SuccessPage() {
             className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl text-sm font-medium transition-all"
             style={{
               background: 'var(--teal)',
-              color: '#06060F',
-              boxShadow: '0 0 24px rgba(45,214,168,0.2)',
+              color: '#FFFFFF',
+              boxShadow: '0 0 24px rgba(37,87,54,0.2)',
             }}
           >
             View Your Dashboard

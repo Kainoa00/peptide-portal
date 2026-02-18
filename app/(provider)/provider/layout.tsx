@@ -89,7 +89,7 @@ export default function ProviderLayout({ children }: { children: React.ReactNode
       <header
         className="sticky top-0 z-40 flex items-center justify-between px-6 h-16"
         style={{
-          background: 'rgba(6,6,15,0.85)',
+          background: 'rgba(246,248,246,0.92)',
           backdropFilter: 'blur(16px)',
           borderBottom: '1px solid rgba(212,151,90,0.15)',
         }}

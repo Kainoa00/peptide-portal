@@ -37,8 +37,8 @@ function timeAgo(iso: string): string {
 }
 
 const ORDER_STATUS_STYLE: Record<string, React.CSSProperties> = {
-  shipped:   { color: 'var(--teal)',  background: 'var(--teal-dim)',  border: '1px solid rgba(45,214,168,0.25)',  borderRadius: '100px', padding: '2px 8px', fontSize: '11px', fontWeight: 600 },
-  delivered: { color: '#2DD6A8',     background: 'rgba(45,214,168,0.18)', border: '1px solid rgba(45,214,168,0.35)', borderRadius: '100px', padding: '2px 8px', fontSize: '11px', fontWeight: 600 },
+  shipped:   { color: 'var(--teal)',  background: 'var(--teal-dim)',  border: '1px solid rgba(37,87,54,0.25)',  borderRadius: '100px', padding: '2px 8px', fontSize: '11px', fontWeight: 600 },
+  delivered: { color: 'var(--teal)',     background: 'rgba(37,87,54,0.15)', border: '1px solid rgba(37,87,54,0.30)', borderRadius: '100px', padding: '2px 8px', fontSize: '11px', fontWeight: 600 },
   processing:{ color: 'var(--amber)',background: 'var(--amber-dim)', border: '1px solid rgba(212,151,90,0.25)',  borderRadius: '100px', padding: '2px 8px', fontSize: '11px', fontWeight: 600 },
 }
 
@@ -98,7 +98,7 @@ function ColumnHeader({ title, count, color }: { title: string; count: number; c
         style={{
           background: color === 'var(--rose)' ? 'var(--rose-dim)' : color === 'var(--teal)' ? 'var(--teal-dim)' : 'var(--amber-dim)',
           color,
-          border: `1px solid ${color === 'var(--rose)' ? 'rgba(232,112,112,0.3)' : color === 'var(--teal)' ? 'rgba(45,214,168,0.3)' : 'rgba(212,151,90,0.3)'}`,
+          border: `1px solid ${color === 'var(--rose)' ? 'rgba(232,112,112,0.3)' : color === 'var(--teal)' ? 'rgba(37,87,54,0.3)' : 'rgba(212,151,90,0.3)'}`,
           borderRadius: '100px',
           fontSize: '11px',
           fontWeight: 700,

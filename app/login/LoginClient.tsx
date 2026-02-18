@@ -37,7 +37,7 @@ export default function LoginClient() {
       className="min-h-screen flex flex-col"
       style={{
         background: `
-          radial-gradient(ellipse 70% 50% at 50% 0%, rgba(45,214,168,0.07) 0%, transparent 60%),
+          radial-gradient(ellipse 70% 50% at 50% 0%, rgba(37,87,54,0.07) 0%, transparent 60%),
           var(--bg)
         `,
       }}
@@ -193,8 +193,8 @@ export default function LoginClient() {
                 disabled={loading}
                 className="w-full rounded-full py-3.5 text-sm font-medium transition-all"
                 style={{
-                  background: loading ? 'rgba(45,214,168,0.5)' : 'var(--teal)',
-                  color: '#06060F',
+                  background: loading ? 'rgba(37,87,54,0.5)' : 'var(--teal)',
+                  color: '#FFFFFF',
                   cursor: loading ? 'not-allowed' : 'pointer',
                 }}
               >

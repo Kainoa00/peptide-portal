@@ -2,32 +2,64 @@
 
 /* ─── Design Tokens ──────────────────────────────────────────────── */
 :root {
-  --bg:        #06060F;
-  --surface:   #0C0C1E;
-  --surface-2: #111128;
-  --surface-3: #171734;
+  /* Backgrounds */
+  --bg:        #F6F8F6;
+  --surface:   #FFFFFF;
+  --surface-2: #F1F4F0;
+  --surface-3: #E8EDE8;
 
-  --border:       rgba(255,255,255,0.07);
-  --border-hover: rgba(255,255,255,0.14);
-  --border-teal:  rgba(45,214,168,0.25);
+  /* Borders */
+  --border:       rgba(19,24,17,0.08);
+  --border-hover: rgba(19,24,17,0.15);
+  --border-teal:  rgba(37,87,54,0.25);
 
-  --text:   #E8E4D9;
-  --text-2: #6C6C8B;
-  --text-3: #35354E;
+  /* Text */
+  --text:   #131811;
+  --text-2: rgba(19,24,17,0.55);
+  --text-3: rgba(19,24,17,0.35);
 
-  --teal:        #2DD6A8;
-  --teal-dim:    rgba(45,214,168,0.12);
-  --teal-glow:   rgba(45,214,168,0.06);
-  --amber:       #D4975A;
-  --amber-dim:   rgba(212,151,90,0.12);
-  --rose:        #E87070;
-  --rose-dim:    rgba(232,112,112,0.12);
-  --lavender:    #9B8EE8;
-  --lavender-dim:rgba(155,142,232,0.12);
+  /* Forest Green Primary (replaces teal) */
+  --teal:        #255736;
+  --teal-dim:    rgba(37,87,54,0.10);
+  --teal-glow:   rgba(37,87,54,0.06);
 
-  --r:   12px;
+  /* Accent Colors */
+  --amber:       #B87333;
+  --amber-dim:   rgba(184,115,51,0.12);
+  --rose:        #C0514A;
+  --rose-dim:    rgba(192,81,74,0.12);
+  --lavender:    #6B6FA8;
+  --lavender-dim:rgba(107,111,168,0.12);
+
+  /* Radii */
+  --r:    12px;
   --r-lg: 20px;
   --r-xl: 28px;
+}
+
+/* ─── Dark Mode ──────────────────────────────────────────────────── */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:        #0D1A10;
+    --surface:   #152111;
+    --surface-2: #1C2D1E;
+    --surface-3: #243828;
+
+    --border:       rgba(232,237,232,0.08);
+    --border-hover: rgba(232,237,232,0.15);
+    --border-teal:  rgba(37,87,54,0.40);
+
+    --text:   #E8EDE8;
+    --text-2: rgba(232,237,232,0.55);
+    --text-3: rgba(232,237,232,0.30);
+
+    --teal-glow: rgba(37,87,54,0.12);
+    --teal-dim:  rgba(37,87,54,0.18);
+
+    --amber-dim:   rgba(184,115,51,0.16);
+    --rose-dim:    rgba(192,81,74,0.16);
+    --lavender-dim:rgba(107,111,168,0.16);
+  }
 }
 
 /* ─── Base ───────────────────────────────────────────────────────── */
@@ -40,12 +72,12 @@ body {
   color: var(--text);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-family: var(--font-dm-sans, system-ui, sans-serif);
+  font-family: var(--font-manrope, system-ui, sans-serif);
 }
 
 /* ─── Font Utilities ─────────────────────────────────────────────── */
 .font-display {
-  font-family: var(--font-cormorant, Georgia, serif);
+  font-family: var(--font-playfair, Georgia, serif);
 }
 
 /* ─── Keyframes ──────────────────────────────────────────────────── */
@@ -104,11 +136,11 @@ body {
 
 /* ─── Background Patterns ────────────────────────────────────────── */
 .bg-grid {
-  background-image: radial-gradient(circle, rgba(255,255,255,0.035) 1px, transparent 1px);
+  background-image: radial-gradient(circle, rgba(37,87,54,0.06) 1px, transparent 1px);
   background-size: 30px 30px;
 }
 .bg-noise {
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
 }
 
 /* ─── Card Effects ───────────────────────────────────────────────── */
@@ -120,7 +152,7 @@ body {
 }
 .card-glass:hover {
   border-color: var(--border-teal);
-  box-shadow: 0 0 48px var(--teal-glow), 0 0 80px rgba(45,214,168,0.02);
+  box-shadow: 0 0 48px var(--teal-glow), 0 4px 24px rgba(37,87,54,0.06);
   transform: translateY(-2px);
 }
 
@@ -132,13 +164,13 @@ button[style*="background: var(--teal)"]:hover {
 
 /* ─── Gradient Text ──────────────────────────────────────────────── */
 .text-teal {
-  background: linear-gradient(135deg, #2DD6A8 0%, #60EDD8 100%);
+  background: linear-gradient(135deg, #255736 0%, #3A7A52 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 .text-amber {
-  background: linear-gradient(135deg, #D4975A 0%, #E8BC8A 100%);
+  background: linear-gradient(135deg, #B87333 0%, #D4975A 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -166,7 +198,7 @@ button[style*="background: var(--teal)"]:hover {
 
 /* ─── Selection ─────────────────────────────────────────────── */
 ::selection {
-  background: rgba(45,214,168,0.25);
+  background: rgba(37,87,54,0.20);
   color: var(--text);
 }
 
@@ -197,10 +229,10 @@ input:-webkit-autofill:focus {
   }
 }
 
-/* ─── Teal glow animation (for CTA buttons) ─────────────────── */
+/* ─── Forest glow animation (for CTA buttons) ─────────────── */
 @keyframes teal-glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(45,214,168,0.2); }
-  50%       { box-shadow: 0 0 40px rgba(45,214,168,0.4), 0 0 80px rgba(45,214,168,0.1); }
+  0%, 100% { box-shadow: 0 0 20px rgba(37,87,54,0.15); }
+  50%       { box-shadow: 0 0 40px rgba(37,87,54,0.30), 0 0 80px rgba(37,87,54,0.08); }
 }
 .anim-teal-glow { animation: teal-glow 3s ease-in-out infinite; }
 

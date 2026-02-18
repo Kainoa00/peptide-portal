@@ -187,7 +187,7 @@ export default function IntakeReviewPage() {
               <div
                 style={{
                   background: 'var(--teal-dim)',
-                  border: '1px solid rgba(45,214,168,0.3)',
+                  border: '1px solid rgba(37,87,54,0.3)',
                   borderRadius: '10px',
                   padding: '16px',
                   marginBottom: '20px',
