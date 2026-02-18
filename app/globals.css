@@ -7,29 +7,30 @@
   --surface:   #FFFFFF;
   --surface-2: #F1F4F0;
   --surface-3: #E8EDE8;
+  --neutral-soft: #F1F4F0;
 
   /* Borders */
   --border:       rgba(19,24,17,0.08);
-  --border-hover: rgba(19,24,17,0.15);
-  --border-teal:  rgba(37,87,54,0.25);
+  --border-hover: rgba(19,24,17,0.12);
+  --border-teal:  rgba(37,87,54,0.15);
 
   /* Text */
   --text:   #131811;
   --text-2: rgba(19,24,17,0.55);
   --text-3: rgba(19,24,17,0.35);
 
-  /* Forest Green Primary (replaces teal) */
+  /* Forest Green Primary */
   --teal:        #255736;
-  --teal-dim:    rgba(37,87,54,0.10);
-  --teal-glow:   rgba(37,87,54,0.06);
+  --teal-dim:    rgba(37,87,54,0.08);
+  --teal-glow:   rgba(37,87,54,0.0);
 
   /* Accent Colors */
   --amber:       #B87333;
-  --amber-dim:   rgba(184,115,51,0.12);
+  --amber-dim:   rgba(184,115,51,0.10);
   --rose:        #C0514A;
-  --rose-dim:    rgba(192,81,74,0.12);
+  --rose-dim:    rgba(192,81,74,0.10);
   --lavender:    #6B6FA8;
-  --lavender-dim:rgba(107,111,168,0.12);
+  --lavender-dim:rgba(107,111,168,0.10);
 
   /* Radii */
   --r:    12px;
@@ -151,8 +152,8 @@ body {
   transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 .card-glass:hover {
-  border-color: var(--border-teal);
-  box-shadow: 0 0 48px var(--teal-glow), 0 4px 24px rgba(37,87,54,0.06);
+  border-color: var(--border-hover);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.08);
   transform: translateY(-2px);
 }
 
@@ -164,10 +165,8 @@ button[style*="background: var(--teal)"]:hover {
 
 /* ─── Gradient Text ──────────────────────────────────────────────── */
 .text-teal {
-  background: linear-gradient(135deg, #255736 0%, #3A7A52 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #255736;
+  -webkit-text-fill-color: #255736;
 }
 .text-amber {
   background: linear-gradient(135deg, #B87333 0%, #D4975A 100%);

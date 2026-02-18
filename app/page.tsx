@@ -3,191 +3,78 @@
 import Link from 'next/link'
 import { useState } from 'react'
 
-/* ─── Molecular hero visualization (pure SVG + CSS) ─────────────── */
-function MolecularOrb() {
-  const R = 180
-  const OUTER_R = 130
-  const INNER_R = 66
-  const cx = R
-  const cy = R
-
-  const outer = Array.from({ length: 8 }, (_, i) => {
-    const a = (i / 8) * Math.PI * 2 - Math.PI / 2
-    return { x: cx + OUTER_R * Math.cos(a), y: cy + OUTER_R * Math.sin(a), i }
-  })
-
-  const inner = Array.from({ length: 4 }, (_, i) => {
-    const a = (i / 4) * Math.PI * 2 - Math.PI / 4
-    return { x: cx + INNER_R * Math.cos(a), y: cy + INNER_R * Math.sin(a), i }
-  })
-
-  return (
-    <div
-      className="relative anim-float"
-      style={{ width: R * 2, height: R * 2 }}
-    >
-      {/* Ambient glow */}
-      <div
-        className="absolute inset-0 rounded-full"
-        style={{
-          background:
-            'radial-gradient(circle at 50% 50%, rgba(37,87,54,0.09) 0%, transparent 68%)',
-        }}
-      />
-      {/* Outer spinning ring */}
-      <div
-        className="absolute inset-0 rounded-full anim-spin-slow"
-        style={{
-          border: '1px solid rgba(37,87,54,0.08)',
-          boxShadow: '0 0 0 1px rgba(37,87,54,0.04)',
-        }}
-      />
-
-      <svg
-        width={R * 2}
-        height={R * 2}
-        viewBox={`0 0 ${R * 2} ${R * 2}`}
-        className="absolute inset-0"
-      >
-        {/* Outer polygon connections */}
-        {outer.map((n, idx) => {
-          const next = outer[(idx + 1) % outer.length]
-          return (
-            <line
-              key={idx}
-              x1={n.x} y1={n.y}
-              x2={next.x} y2={next.y}
-              stroke="rgba(37,87,54,0.18)"
-              strokeWidth="1"
-              strokeDasharray="3 5"
-            />
-          )
-        })}
-
-        {/* Radial spokes outer→inner */}
-        {inner.map((inn, idx) => (
-          <line
-            key={idx + 100}
-            x1={outer[idx * 2].x} y1={outer[idx * 2].y}
-            x2={inn.x} y2={inn.y}
-            stroke="rgba(212,151,90,0.18)"
-            strokeWidth="1"
-          />
-        ))}
-
-        {/* Inner→center */}
-        {inner.map((inn, idx) => (
-          <line
-            key={idx + 200}
-            x1={inn.x} y1={inn.y}
-            x2={cx} y2={cy}
-            stroke="rgba(37,87,54,0.1)"
-            strokeWidth="1"
-          />
-        ))}
-
-        {/* Outer nodes */}
-        {outer.map((n) => (
-          <g key={n.i}>
-            <circle
-              cx={n.x} cy={n.y} r={7}
-              fill="rgba(37,87,54,0.06)"
-              stroke="rgba(37,87,54,0.35)"
-              strokeWidth="1"
-            />
-            <circle
-              cx={n.x} cy={n.y} r={2.5}
-              fill="#255736"
-              className="anim-glow-pulse"
-              style={{ animationDelay: `${n.i * 350}ms` }}
-            />
-          </g>
-        ))}
-
-        {/* Inner nodes */}
-        {inner.map((n) => (
-          <g key={n.i + 100}>
-            <circle
-              cx={n.x} cy={n.y} r={5}
-              fill="rgba(212,151,90,0.08)"
-              stroke="rgba(212,151,90,0.45)"
-              strokeWidth="1"
-            />
-            <circle cx={n.x} cy={n.y} r={2} fill="#D4975A" />
-          </g>
-        ))}
-
-        {/* Center node */}
-        <circle
-          cx={cx} cy={cy} r={9}
-          fill="rgba(37,87,54,0.08)"
-          stroke="rgba(37,87,54,0.5)"
-          strokeWidth="1.5"
-        />
-        <circle cx={cx} cy={cy} r={4} fill="#255736" className="anim-glow-pulse" />
-      </svg>
-    </div>
-  )
-}
-
-/* ─── Category chip colors ───────────────────────────────────────── */
+/* ─── Category data ─────────────────────────────────────────────── */
 const CATEGORIES = [
   {
     label: 'Weight Loss',
-    tag: 'Fat Metabolism',
-    accent: '#E87070',
-    dim: 'rgba(232,112,112,0.1)',
-    border: 'rgba(232,112,112,0.25)',
-    peptides: 'Tirzepatide · Semaglutide',
-    desc: 'GLP-1 receptor agonists clinically proven to reduce body weight and improve metabolic markers.',
+    tag: 'Metabolism',
+    desc: 'Advanced metabolic support protocols designed to optimize blood sugar and support healthy fat loss while maintaining muscle mass.',
     href: '/catalog?cat=weight_loss',
-  },
-  {
-    label: 'Recovery',
-    tag: 'Tissue Repair',
-    accent: '#255736',
-    dim: 'rgba(37,87,54,0.1)',
-    border: 'rgba(37,87,54,0.25)',
-    peptides: 'BPC-157 · TB-500',
-    desc: 'Accelerate healing of tendons, muscles, and soft tissue with body-protective compounds.',
-    href: '/catalog?cat=recovery',
+    accent: '#C0514A',
+    gradient: 'from-rose-50 to-orange-50',
   },
   {
     label: 'Longevity',
-    tag: 'Anti-Aging',
-    accent: '#D4975A',
-    dim: 'rgba(212,151,90,0.1)',
-    border: 'rgba(212,151,90,0.25)',
-    peptides: 'CJC-1295 · Epitalon',
-    desc: 'Stimulate growth hormone secretion and telomerase activation to slow cellular aging.',
+    tag: 'Vitality',
+    desc: 'Targeted cellular repair and anti-aging protocols focusing on mitochondrial health, cognitive function, and cellular resilience.',
     href: '/catalog?cat=longevity',
+    accent: '#B87333',
+    gradient: 'from-amber-50 to-yellow-50',
+  },
+  {
+    label: 'Recovery',
+    tag: 'Strength',
+    desc: 'Optimizing physical recovery, lean muscle growth, and injury repair for high-performing individuals and athletes.',
+    href: '/catalog?cat=recovery',
+    accent: '#255736',
+    gradient: 'from-green-50 to-emerald-50',
   },
   {
     label: 'Cognitive',
-    tag: 'Neuroprotection',
-    accent: '#9B8EE8',
-    dim: 'rgba(155,142,232,0.1)',
-    border: 'rgba(155,142,232,0.25)',
-    peptides: 'Semax · Dihexa',
-    desc: 'Upregulate BDNF expression and drive synaptogenesis for sharper focus and memory.',
+    tag: 'Performance',
+    desc: 'Upregulate BDNF expression and drive synaptogenesis for sharper focus, memory, and mental performance.',
     href: '/catalog?cat=cognitive',
+    accent: '#6B6FA8',
+    gradient: 'from-purple-50 to-indigo-50',
   },
 ]
 
 const STEPS = [
   {
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+        <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" />
+        <rect x="9" y="3" width="6" height="4" rx="1" />
+        <path d="M9 12h6M9 16h4" />
+      </svg>
+    ),
     n: '01',
-    title: 'Complete the Assessment',
-    body: 'A 5-minute intake quiz screens for goals, medical history, and contraindications.',
+    title: 'Digital Consultation',
+    body: 'Tell us about your health goals and history through our secure HIPAA-compliant platform.',
   },
   {
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+        <circle cx="12" cy="8" r="4" />
+        <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
+        <path d="M16 11l2 2 4-4" />
+      </svg>
+    ),
     n: '02',
     title: 'Physician Review',
     body: 'A board-certified physician reviews your intake within 24–48 hours and issues your prescription.',
   },
   {
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+        <rect x="1" y="3" width="15" height="13" rx="1" />
+        <path d="M16 8h4l3 3v5h-7V8z" />
+        <circle cx="5.5" cy="18.5" r="2.5" />
+        <circle cx="18.5" cy="18.5" r="2.5" />
+      </svg>
+    ),
     n: '03',
-    title: 'Delivered to Your Door',
+    title: 'Direct Delivery',
     body: 'Your compounded protocol ships from a PCAB-accredited pharmacy in discreet, temperature-controlled packaging.',
   },
 ]
@@ -195,76 +82,35 @@ const STEPS = [
 const TRUST = [
   {
     icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
         <path d="M9 12l2 2 4-4" />
       </svg>
     ),
     label: 'HIPAA Compliant',
-    sub: 'End-to-end encrypted PHI storage with BAA-covered infrastructure.',
+    sub: 'End-to-end encrypted PHI storage.',
   },
   {
     icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <circle cx="12" cy="8" r="4" />
         <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
       </svg>
     ),
     label: 'Licensed Physicians',
-    sub: 'Board-certified MDs credentialed in all 50 states review every intake.',
+    sub: 'Board-certified MDs in all 50 states.',
   },
   {
     icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
-        <polyline points="9 22 9 12 15 12 15 22" />
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v11m0 0H5a2 2 0 00-2 2v4a2 2 0 002 2h10a2 2 0 002-2v-4a2 2 0 00-2-2h-4" />
       </svg>
     ),
-    label: 'PCAB-Accredited Pharmacy',
-    sub: 'Domestic compounding labs meeting the highest purity and potency standards.',
+    label: 'Lab Tested',
+    sub: 'PCAB-accredited compounding pharmacies.',
   },
 ]
 
-/* ─── Stats bar data ─────────────────────────────────────────────── */
-const STATS_BAR = [
-  { label: 'Patients Treated', value: '4,200+' },
-  { label: 'Board-Certified Physicians', value: null },
-  { label: 'HIPAA Compliant', value: null },
-  { label: 'Review Time', value: '48-hour' },
-]
-
-/* ─── Testimonials data ──────────────────────────────────────────── */
-const TESTIMONIALS = [
-  {
-    quote:
-      "I've tried everything for recovery. Six weeks on CJC-1295 and my joint pain is down 80%. I sleep like I did in my 20s.",
-    name: 'Marcus T.',
-    protocol: 'Recovery Protocol',
-    protocolColor: '#255736',
-    protocolDim: 'rgba(37,87,54,0.1)',
-    protocolBorder: 'rgba(37,87,54,0.25)',
-  },
-  {
-    quote:
-      'Lost 22 lbs in 3 months. The physician check-ins made me feel safe and supported throughout.',
-    name: 'Jennifer R.',
-    protocol: 'Weight Loss Protocol',
-    protocolColor: '#E87070',
-    protocolDim: 'rgba(232,112,112,0.1)',
-    protocolBorder: 'rgba(232,112,112,0.25)',
-  },
-  {
-    quote:
-      "My mental clarity improved within 2 weeks of starting Semax. I'm sharper at work than I've been in years.",
-    name: 'David K.',
-    protocol: 'Cognitive Protocol',
-    protocolColor: '#9B8EE8',
-    protocolDim: 'rgba(155,142,232,0.1)',
-    protocolBorder: 'rgba(155,142,232,0.25)',
-  },
-]
-
-/* ─── FAQ data ───────────────────────────────────────────────────── */
 const FAQ_ITEMS = [
   {
     q: 'Are peptides safe?',
@@ -288,63 +134,57 @@ const FAQ_ITEMS = [
   },
 ]
 
-/* ─── Star rating component ─────────────────────────────────────── */
-function StarRating() {
-  return (
-    <div className="flex items-center gap-0.5" aria-label="5 out of 5 stars">
-      {Array.from({ length: 5 }).map((_, i) => (
-        <svg
-          key={i}
-          width="14"
-          height="14"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          style={{ color: 'var(--teal)' }}
-        >
-          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-        </svg>
-      ))}
-    </div>
-  )
-}
+const TESTIMONIALS = [
+  {
+    quote: "I've tried everything for recovery. Six weeks on CJC-1295 and my joint pain is down 80%. I sleep like I did in my 20s.",
+    name: 'Marcus T.',
+    protocol: 'Recovery Protocol',
+    protocolColor: '#255736',
+    protocolDim: 'rgba(37,87,54,0.08)',
+    protocolBorder: 'rgba(37,87,54,0.2)',
+  },
+  {
+    quote: 'Lost 22 lbs in 3 months. The physician check-ins made me feel safe and supported throughout.',
+    name: 'Jennifer R.',
+    protocol: 'Weight Loss',
+    protocolColor: '#C0514A',
+    protocolDim: 'rgba(192,81,74,0.08)',
+    protocolBorder: 'rgba(192,81,74,0.2)',
+  },
+  {
+    quote: "My mental clarity improved within 2 weeks of starting Semax. I'm sharper at work than I've been in years.",
+    name: 'David K.',
+    protocol: 'Cognitive Protocol',
+    protocolColor: '#6B6FA8',
+    protocolDim: 'rgba(107,111,168,0.08)',
+    protocolBorder: 'rgba(107,111,168,0.2)',
+  },
+]
 
-/* ─── FAQ accordion item ─────────────────────────────────────────── */
 function FAQItem({ item, isOpen, onToggle }: { item: typeof FAQ_ITEMS[0]; isOpen: boolean; onToggle: () => void }) {
   return (
-    <div
-      style={{ borderBottom: '1px solid var(--border)' }}
-    >
+    <div style={{ borderBottom: '1px solid var(--border)' }}>
       <button
         onClick={onToggle}
-        className="w-full flex items-center justify-between py-5 text-left transition-colors"
-        style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text)' }}
+        className="w-full flex items-center justify-between py-5 text-left"
+        style={{ background: 'none', border: 'none', cursor: 'pointer' }}
         aria-expanded={isOpen}
       >
-        <span className="text-base font-medium pr-4" style={{ color: 'var(--text)' }}>
+        <span className="text-base font-semibold pr-4" style={{ color: 'var(--text)' }}>
           {item.q}
         </span>
-        <span
-          className="flex-shrink-0 text-xl font-light transition-transform"
-          style={{
-            color: 'var(--teal)',
-            lineHeight: 1,
-            transform: isOpen ? 'rotate(0deg)' : 'rotate(0deg)',
-          }}
-        >
+        <span className="flex-shrink-0 text-xl font-light" style={{ color: 'var(--teal)', lineHeight: 1 }}>
           {isOpen ? '−' : '+'}
         </span>
       </button>
       <div
         style={{
-          maxHeight: isOpen ? '300px' : '0px',
+          maxHeight: isOpen ? '200px' : '0px',
           overflow: 'hidden',
           transition: 'max-height 0.35s cubic-bezier(0.16,1,0.3,1)',
         }}
       >
-        <p
-          className="text-sm leading-relaxed pb-5"
-          style={{ color: 'var(--text-2)' }}
-        >
+        <p className="text-sm leading-relaxed pb-5" style={{ color: 'var(--text-2)' }}>
           {item.a}
         </p>
       </div>
@@ -352,536 +192,416 @@ function FAQItem({ item, isOpen, onToggle }: { item: typeof FAQ_ITEMS[0]; isOpen
   )
 }
 
-/* ─── Page ───────────────────────────────────────────────────────── */
 export default function LandingPage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null)
 
   return (
-    <div style={{ background: 'var(--bg)' }}>
+    <div style={{ background: 'var(--bg)', color: 'var(--text)' }}>
 
-      {/* ── Navbar ─────────────────────────────────────────────────── */}
+      {/* ── Navbar ── */}
       <header
         className="fixed top-0 left-0 right-0 z-50"
         style={{
-          background: 'rgba(246,248,246,0.92)',
+          background: 'rgba(255,255,255,0.85)',
           backdropFilter: 'blur(16px)',
           borderBottom: '1px solid var(--border)',
         }}
       >
-        <div className="max-w-6xl mx-auto px-6 flex items-center justify-between h-16">
-          <Link
-            href="/"
-            className="font-display text-xl tracking-tight"
-            style={{ color: 'var(--text)', fontStyle: 'italic', fontWeight: 400 }}
-          >
-            peptide<span style={{ color: 'var(--teal)', fontStyle: 'normal', fontWeight: 300 }}>portal</span>
+        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-3" style={{ textDecoration: 'none' }}>
+            <div
+              className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+              style={{ background: 'var(--teal)' }}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
+                <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v11" />
+                <circle cx="12" cy="17" r="4" />
+              </svg>
+            </div>
+            <span className="text-xl font-extrabold tracking-tight" style={{ color: 'var(--text)' }}>
+              Peptide Portal
+            </span>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-8">
-            {['Catalog', 'How It Works', 'Physicians'].map((label) => (
+          {/* Nav links */}
+          <nav className="hidden md:flex items-center gap-10">
+            {[
+              { label: 'Protocols', href: '/catalog' },
+              { label: 'How it Works', href: '#how-it-works' },
+              { label: 'About', href: '#' },
+            ].map(({ label, href }) => (
               <Link
                 key={label}
-                href={label === 'Catalog' ? '/catalog' : `#${label.toLowerCase().replace(/ /g, '-')}`}
-                className="text-sm transition-colors"
-                style={{ color: 'var(--text-2)' }}
+                href={href}
+                className="text-sm font-semibold transition-colors"
+                style={{ color: 'rgba(19,24,17,0.60)', textDecoration: 'none' }}
+                onMouseEnter={(e) => { e.currentTarget.style.color = '#255736' }}
+                onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(19,24,17,0.60)' }}
               >
                 {label}
               </Link>
             ))}
           </nav>
 
-          <Link
-            href="/quiz"
-            className="text-sm font-medium px-5 py-2.5 rounded-full transition-all"
-            style={{
-              background: 'var(--teal)',
-              color: '#FFFFFF',
-              letterSpacing: '0.01em',
-            }}
-          >
-            Start Quiz →
-          </Link>
+          {/* CTA */}
+          <div className="flex items-center gap-3">
+            <Link
+              href="/login"
+              className="hidden sm:block text-sm font-bold px-5 py-2.5 rounded-full transition-all"
+              style={{ color: 'var(--text)', textDecoration: 'none' }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--neutral-soft, #F1F4F0)' }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent' }}
+            >
+              Log In
+            </Link>
+            <Link
+              href="/quiz"
+              className="text-sm font-bold px-7 py-3 rounded-full transition-all"
+              style={{
+                background: 'var(--teal)',
+                color: '#FFFFFF',
+                textDecoration: 'none',
+                boxShadow: '0 4px 16px rgba(37,87,54,0.25)',
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.02)' }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)' }}
+            >
+              Get Started
+            </Link>
+          </div>
         </div>
       </header>
 
-      {/* ── Hero ───────────────────────────────────────────────────── */}
+      {/* ── Hero ── */}
       <section
-        className="relative min-h-screen flex items-center bg-grid"
+        className="relative flex items-center overflow-hidden"
         style={{
-          paddingTop: 96,
-          background: `
-            radial-gradient(ellipse 80% 60% at 60% 40%, rgba(37,87,54,0.04) 0%, transparent 60%),
-            radial-gradient(ellipse 60% 80% at 10% 80%, rgba(212,151,90,0.03) 0%, transparent 60%),
-            var(--bg)
-          `,
+          minHeight: '90vh',
+          paddingTop: 80,
+          background: 'linear-gradient(135deg, #F6F8F6 0%, #EFF5F0 50%, #F6F8F6 100%)',
         }}
       >
-        {/* Dot grid overlay */}
+        {/* Subtle bg pattern */}
         <div
-          className="absolute inset-0 bg-grid"
-          style={{ opacity: 0.6, pointerEvents: 'none' }}
-        />
-
-        <div className="relative max-w-6xl mx-auto px-6 w-full">
-          <div className="grid lg:grid-cols-2 gap-16 items-center py-24">
-
-            {/* Left: Copy */}
-            <div className="space-y-8">
-              {/* Badge */}
-              <div className="anim-fade-up inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium tracking-wide"
-                style={{
-                  background: 'var(--teal-dim)',
-                  border: '1px solid rgba(37,87,54,0.2)',
-                  color: 'var(--teal)',
-                }}
-              >
-                <span className="w-1.5 h-1.5 rounded-full bg-current anim-glow-pulse" />
-                HIPAA Compliant · Licensed Physicians · 50 States
-              </div>
-
-              {/* Headline */}
-              <div className="anim-fade-up d-100">
-                <h1
-                  className="font-display leading-none tracking-tight"
-                  style={{
-                    fontSize: 'clamp(52px, 7vw, 88px)',
-                    fontWeight: 300,
-                    color: 'var(--text)',
-                  }}
-                >
-                  Your biology,
-                  <br />
-                  <em
-                    className="text-teal"
-                    style={{ fontStyle: 'italic', fontWeight: 400 }}
-                  >
-                    optimized.
-                  </em>
-                </h1>
-              </div>
-
-              {/* Sub */}
-              <p
-                className="anim-fade-up d-200 text-lg leading-relaxed max-w-md"
-                style={{ color: 'var(--text-2)' }}
-              >
-                Evidence-based peptide protocols — weight loss, recovery,
-                longevity, and cognitive performance — reviewed by board-certified
-                physicians and shipped from PCAB-accredited compounding pharmacies.
-              </p>
-
-              {/* CTAs */}
-              <div className="anim-fade-up d-300 flex flex-wrap items-center gap-4">
-                <Link
-                  href="/quiz"
-                  className="inline-flex items-center gap-2 px-7 py-4 rounded-full font-medium text-sm transition-all"
-                  style={{
-                    background: 'var(--teal)',
-                    color: '#FFFFFF',
-                    boxShadow: '0 0 32px rgba(37,87,54,0.2)',
-                  }}
-                >
-                  Find Your Protocol
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                    <path d="M5 12h14M12 5l7 7-7 7" />
-                  </svg>
-                </Link>
-
-                <Link
-                  href="/catalog"
-                  className="inline-flex items-center gap-2 px-7 py-4 rounded-full text-sm transition-colors"
-                  style={{
-                    border: '1px solid var(--border-hover)',
-                    color: 'var(--text-2)',
-                  }}
-                >
-                  Browse Catalog
-                </Link>
-              </div>
-
-              {/* Stats */}
-              <div className="anim-fade-up d-400 flex items-center gap-8 pt-4">
-                {[
-                  { n: '4,200+', l: 'Patients' },
-                  { n: '48 hrs', l: 'Avg. review time' },
-                  { n: '13', l: 'Protocols available' },
-                ].map((s) => (
-                  <div key={s.l}>
-                    <div
-                      className="font-display text-2xl"
-                      style={{ fontWeight: 400, color: 'var(--text)' }}
-                    >
-                      {s.n}
-                    </div>
-                    <div className="text-xs mt-0.5" style={{ color: 'var(--text-2)' }}>
-                      {s.l}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Right: Molecular orb */}
-            <div className="hidden lg:flex justify-center items-center anim-fade-in d-200">
-              <div className="relative">
-                {/* Outer glow ring */}
-                <div
-                  className="absolute rounded-full"
-                  style={{
-                    inset: -40,
-                    background:
-                      'radial-gradient(circle, rgba(37,87,54,0.04) 0%, transparent 70%)',
-                    pointerEvents: 'none',
-                  }}
-                />
-                <MolecularOrb />
-                {/* Label tags floating around */}
-                <div
-                  className="absolute -top-4 -right-8 text-xs px-3 py-1.5 rounded-full"
-                  style={{
-                    background: 'var(--surface)',
-                    border: '1px solid var(--border-teal)',
-                    color: 'var(--teal)',
-                  }}
-                >
-                  BPC-157
-                </div>
-                <div
-                  className="absolute -bottom-2 -left-10 text-xs px-3 py-1.5 rounded-full"
-                  style={{
-                    background: 'var(--surface)',
-                    border: '1px solid rgba(212,151,90,0.3)',
-                    color: 'var(--amber)',
-                  }}
-                >
-                  Tirzepatide
-                </div>
-                <div
-                  className="absolute top-1/2 -right-14 text-xs px-3 py-1.5 rounded-full"
-                  style={{
-                    background: 'var(--surface)',
-                    border: '1px solid rgba(155,142,232,0.3)',
-                    color: 'var(--lavender)',
-                  }}
-                >
-                  Semax
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom fade */}
-        <div
-          className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none"
+          className="absolute inset-0 pointer-events-none"
           style={{
-            background: 'linear-gradient(to bottom, transparent, var(--bg))',
+            backgroundImage: 'radial-gradient(circle, rgba(37,87,54,0.04) 1px, transparent 1px)',
+            backgroundSize: '28px 28px',
           }}
         />
-      </section>
+        {/* Radial soft glow */}
+        <div
+          className="absolute pointer-events-none"
+          style={{
+            right: '-10%',
+            top: '10%',
+            width: '600px',
+            height: '600px',
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(37,87,54,0.06) 0%, transparent 70%)',
+          }}
+        />
 
-      {/* ── Stats Bar ──────────────────────────────────────────────── */}
-      <section
-        style={{
-          borderTop: '1px solid var(--border)',
-          borderBottom: '1px solid var(--border)',
-          background: 'var(--surface)',
-        }}
-      >
-        <div className="max-w-6xl mx-auto px-6 py-5">
-          <div className="flex flex-wrap items-center justify-center gap-3 md:gap-0">
-            {STATS_BAR.map((stat, i) => (
-              <div key={stat.label} className="flex items-center">
-                <div
-                  className="px-5 py-2 rounded-full text-sm text-center"
-                  style={{
-                    background: 'var(--surface-2)',
-                    border: '1px solid var(--border)',
-                    color: 'var(--text-2)',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  {stat.value && (
-                    <span className="font-medium mr-1.5" style={{ color: 'var(--text)' }}>
-                      {stat.value}
-                    </span>
-                  )}
-                  {stat.label}
-                </div>
-                {i < STATS_BAR.length - 1 && (
-                  <div
-                    className="hidden md:block mx-3 h-4 w-px"
-                    style={{ background: 'var(--border)' }}
-                  />
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Protocol Categories ─────────────────────────────────────── */}
-      <section className="py-32 max-w-6xl mx-auto px-6">
-        <div className="mb-16 anim-fade-up">
-          <p className="text-xs uppercase tracking-widest mb-3" style={{ color: 'var(--text-3)' }}>
-            Protocol Library
-          </p>
-          <h2
-            className="font-display"
-            style={{
-              fontSize: 'clamp(36px, 4.5vw, 56px)',
-              fontWeight: 300,
-              color: 'var(--text)',
-              lineHeight: 1.1,
-            }}
-          >
-            Four pathways.
-            <br />
-            <em style={{ fontStyle: 'italic' }}>One platform.</em>
-          </h2>
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-5">
-          {CATEGORIES.map((cat, i) => (
-            <Link
-              key={cat.label}
-              href={cat.href}
-              className={`card-glass group block p-8 anim-fade-up d-${(i + 1) * 100}`}
-            >
-              <div className="flex items-start justify-between mb-6">
-                <div>
-                  <span
-                    className="text-xs font-medium tracking-widest uppercase px-2.5 py-1 rounded-full"
-                    style={{
-                      background: cat.dim,
-                      color: cat.accent,
-                      border: `1px solid ${cat.border}`,
-                    }}
-                  >
-                    {cat.tag}
-                  </span>
-                </div>
-                <svg
-                  width="16" height="16" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" strokeWidth="2"
-                  className="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"
-                  style={{ color: 'var(--text-3)' }}
-                >
-                  <path d="M7 17L17 7M17 7H7M17 7v10" />
-                </svg>
-              </div>
-
-              <h3
-                className="font-display mb-2"
-                style={{ fontSize: 36, fontWeight: 400, color: 'var(--text)', lineHeight: 1.1 }}
-              >
-                {cat.label}
-              </h3>
-
-              <p className="text-sm leading-relaxed mb-6" style={{ color: 'var(--text-2)' }}>
-                {cat.desc}
-              </p>
-
-              <div className="flex items-center gap-2">
-                <div className="w-1.5 h-1.5 rounded-full" style={{ background: cat.accent }} />
-                <span className="text-xs font-medium tracking-wide" style={{ color: cat.accent }}>
-                  {cat.peptides}
-                </span>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* ── How It Works ───────────────────────────────────────────── */}
-      <section
-        id="how-it-works"
-        className="py-32"
-        style={{ borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)' }}
-      >
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="mb-20 anim-fade-up">
-            <p className="text-xs uppercase tracking-widest mb-3" style={{ color: 'var(--text-3)' }}>
-              The Process
-            </p>
-            <h2
-              className="font-display"
+        <div className="relative max-w-7xl mx-auto px-6 w-full py-24">
+          <div className="max-w-2xl space-y-8">
+            {/* Badge */}
+            <div
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border anim-fade-up"
               style={{
-                fontSize: 'clamp(36px, 4.5vw, 56px)',
-                fontWeight: 300,
+                background: 'rgba(37,87,54,0.06)',
+                border: '1px solid rgba(37,87,54,0.15)',
+              }}
+            >
+              <span
+                className="w-2 h-2 rounded-full anim-glow-pulse"
+                style={{ background: 'var(--teal)' }}
+              />
+              <span className="text-xs font-bold tracking-widest uppercase" style={{ color: '#255736' }}>
+                Medical Excellence
+              </span>
+            </div>
+
+            {/* Headline */}
+            <h1
+              className="font-display anim-fade-up d-100 leading-none"
+              style={{
+                fontSize: 'clamp(48px, 7vw, 80px)',
+                fontWeight: 400,
                 color: 'var(--text)',
                 lineHeight: 1.1,
               }}
             >
-              From assessment
+              Your biology,
               <br />
-              <em style={{ fontStyle: 'italic' }}>to your door.</em>
-            </h2>
-          </div>
+              <em style={{ fontStyle: 'italic', color: '#255736' }}>optimized</em> for life.
+            </h1>
 
-          <div className="grid md:grid-cols-3 gap-0">
-            {STEPS.map((step, i) => (
-              <div
-                key={step.n}
-                className={`relative pl-8 pr-6 pb-12 anim-fade-up d-${(i + 1) * 100}`}
+            {/* Sub */}
+            <p
+              className="text-lg leading-relaxed anim-fade-up d-200"
+              style={{ color: 'rgba(19,24,17,0.65)', maxWidth: '520px' }}
+            >
+              Personalized peptide protocols overseen by licensed physicians. Science-backed solutions designed to help you reach your peak performance.
+            </p>
+
+            {/* CTAs */}
+            <div className="flex flex-col sm:flex-row gap-4 anim-fade-up d-300">
+              <Link
+                href="/quiz"
+                className="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-xl text-lg font-bold transition-all"
                 style={{
-                  borderLeft: i === 0 ? '1px solid var(--border-teal)' : '1px solid var(--border)',
+                  background: 'var(--teal)',
+                  color: '#FFFFFF',
+                  boxShadow: '0 8px 28px rgba(37,87,54,0.25)',
+                  textDecoration: 'none',
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)' }}
+                onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)' }}
+              >
+                Find Your Protocol
+              </Link>
+              <Link
+                href="/catalog"
+                className="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-xl text-lg font-bold transition-all"
+                style={{
+                  background: 'rgba(255,255,255,0.8)',
+                  border: '1px solid var(--border)',
+                  color: 'var(--text)',
+                  textDecoration: 'none',
+                  backdropFilter: 'blur(8px)',
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = '#FFFFFF' }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.8)' }}
+              >
+                Browse Catalog
+              </Link>
+            </div>
+
+            {/* Trust chips */}
+            <div className="flex flex-wrap gap-3 anim-fade-up d-400">
+              {TRUST.map((t) => (
+                <div
+                  key={t.label}
+                  className="flex items-center gap-2 px-4 py-2 rounded-full"
+                  style={{
+                    background: 'rgba(255,255,255,0.65)',
+                    border: '1px solid var(--border)',
+                    backdropFilter: 'blur(8px)',
+                  }}
+                >
+                  <span style={{ color: '#255736' }}>{t.icon}</span>
+                  <span className="text-xs font-bold tracking-wide" style={{ color: 'var(--text)' }}>
+                    {t.label}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Stats ── */}
+      <section
+        style={{
+          background: '#FFFFFF',
+          borderTop: '1px solid var(--border)',
+          borderBottom: '1px solid var(--border)',
+        }}
+      >
+        <div className="max-w-7xl mx-auto px-6 py-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+            {[
+              { n: '4,200+', l: 'Patients Optimized' },
+              { n: '48 hr', l: 'Physician Review Time' },
+              { n: '13', l: 'Clinical Protocols' },
+            ].map((s, i) => (
+              <div
+                key={s.l}
+                className="space-y-2"
+                style={{
+                  ...(i === 1 ? { borderLeft: '1px solid var(--border)', borderRight: '1px solid var(--border)', paddingLeft: '2rem', paddingRight: '2rem' } : {}),
                 }}
               >
-                {/* Step number */}
-                <div
-                  className="font-display text-6xl font-light mb-6"
-                  style={{ color: i === 0 ? 'var(--teal)' : 'var(--text-3)' }}
-                >
-                  {step.n}
-                </div>
-                <h3
-                  className="text-lg font-medium mb-3"
-                  style={{ color: 'var(--text)' }}
-                >
-                  {step.title}
-                </h3>
-                <p className="text-sm leading-relaxed" style={{ color: 'var(--text-2)' }}>
-                  {step.body}
-                </p>
-
-                {/* Connector arrow */}
-                {i < STEPS.length - 1 && (
-                  <div
-                    className="hidden md:block absolute -right-3 top-6"
-                    style={{ color: 'var(--text-3)' }}
-                  >
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                      <path d="M5 12h14M12 5l7 7-7 7" />
-                    </svg>
-                  </div>
-                )}
+                <p className="text-5xl font-extrabold" style={{ color: 'var(--text)' }}>{s.n}</p>
+                <p className="text-xs font-bold uppercase tracking-widest" style={{ color: 'rgba(19,24,17,0.40)' }}>{s.l}</p>
               </div>
             ))}
           </div>
+        </div>
+      </section>
 
-          <div className="mt-16 flex justify-center anim-fade-up d-400">
+      {/* ── Protocol Categories ── */}
+      <section className="py-32">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex flex-col md:flex-row justify-between items-end gap-6 mb-16">
+            <div className="max-w-xl space-y-4">
+              <span className="text-sm font-bold uppercase tracking-[0.2em]" style={{ color: '#255736' }}>
+                Our Offerings
+              </span>
+              <h2
+                className="font-display"
+                style={{ fontSize: 'clamp(36px, 4vw, 52px)', fontWeight: 400, color: 'var(--text)', lineHeight: 1.1 }}
+              >
+                Featured Pathways
+              </h2>
+              <p style={{ color: 'rgba(19,24,17,0.60)', fontSize: '1.1rem', lineHeight: 1.6 }}>
+                Every body is unique. We provide the pathways to unlock your specific biological potential.
+              </p>
+            </div>
             <Link
-              href="/quiz"
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-full text-sm font-medium transition-all"
-              style={{
-                background: 'var(--teal)',
-                color: '#FFFFFF',
-                boxShadow: '0 0 32px rgba(37,87,54,0.2)',
-              }}
+              href="/catalog"
+              className="flex items-center gap-2 font-bold transition-colors"
+              style={{ color: '#255736', textDecoration: 'none' }}
             >
-              Start Your Assessment
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              View all protocols
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                 <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
             </Link>
           </div>
+
+          <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
+            {CATEGORIES.map((cat) => (
+              <Link
+                key={cat.label}
+                href={cat.href}
+                className="group block rounded-2xl overflow-hidden transition-all duration-500"
+                style={{
+                  background: '#FFFFFF',
+                  border: '1px solid var(--border)',
+                  boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+                  textDecoration: 'none',
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 12px 40px rgba(0,0,0,0.10)'; e.currentTarget.style.transform = 'translateY(-3px)' }}
+                onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 1px 4px rgba(0,0,0,0.04)'; e.currentTarget.style.transform = 'translateY(0)' }}
+              >
+                {/* Category color header */}
+                <div
+                  className="h-3 w-full"
+                  style={{ background: cat.accent }}
+                />
+
+                <div className="p-8 space-y-4">
+                  <div
+                    className="inline-block text-[10px] font-extrabold uppercase tracking-widest px-3 py-1 rounded-full"
+                    style={{ background: `${cat.accent}15`, color: cat.accent }}
+                  >
+                    {cat.tag}
+                  </div>
+                  <h3
+                    className="font-display text-2xl"
+                    style={{ fontWeight: 700, color: 'var(--text)', lineHeight: 1.2 }}
+                  >
+                    {cat.label}
+                  </h3>
+                  <p className="text-sm leading-relaxed" style={{ color: 'rgba(19,24,17,0.60)' }}>
+                    {cat.desc}
+                  </p>
+                  <div className="pt-4">
+                    <div
+                      className="w-full py-3 rounded-xl text-center font-bold text-sm transition-all"
+                      style={{
+                        border: `2px solid var(--border)`,
+                        color: 'var(--text)',
+                        background: 'transparent',
+                      }}
+                    >
+                      Explore Protocol
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* ── FAQ ────────────────────────────────────────────────────── */}
-      <section className="py-32 max-w-4xl mx-auto px-6">
-        <div className="mb-16 anim-fade-up">
-          <p className="text-xs uppercase tracking-widest mb-3" style={{ color: 'var(--text-3)' }}>
-            Common Questions
-          </p>
-          <h2
-            className="font-display"
-            style={{
-              fontSize: 'clamp(36px, 4.5vw, 56px)',
-              fontWeight: 300,
-              color: 'var(--text)',
-              lineHeight: 1.1,
-            }}
-          >
-            Everything you
-            <br />
-            <em style={{ fontStyle: 'italic' }}>need to know.</em>
-          </h2>
-        </div>
-
-        <div
-          style={{ borderTop: '1px solid var(--border)' }}
-        >
-          {FAQ_ITEMS.map((item, i) => (
-            <FAQItem
-              key={i}
-              item={item}
-              isOpen={openFaq === i}
-              onToggle={() => setOpenFaq(openFaq === i ? null : i)}
-            />
-          ))}
-        </div>
-      </section>
-
-      {/* ── Testimonials ───────────────────────────────────────────── */}
+      {/* ── How It Works ── */}
       <section
+        id="how-it-works"
         className="py-32"
-        style={{ borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)' }}
+        style={{ background: '#F1F4F0' }}
       >
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="mb-16 anim-fade-up">
-            <p className="text-xs uppercase tracking-widest mb-3" style={{ color: 'var(--teal)' }}>
-              Patient Stories
-            </p>
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-20 space-y-4">
             <h2
               className="font-display"
-              style={{
-                fontSize: 'clamp(36px, 4.5vw, 56px)',
-                fontWeight: 300,
-                fontStyle: 'italic',
-                color: 'var(--text)',
-                lineHeight: 1.1,
-              }}
+              style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 400, color: 'var(--text)' }}
+            >
+              Seamless Healthcare
+            </h2>
+            <p style={{ color: 'rgba(19,24,17,0.60)', maxWidth: '520px', margin: '0 auto', lineHeight: 1.7 }}>
+              Accessing advanced biotechnology should be simple. Our three-step process is physician-led from start to finish.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-12">
+            {STEPS.map((step) => (
+              <div key={step.n} className="text-center space-y-5">
+                <div
+                  className="w-16 h-16 rounded-full flex items-center justify-center mx-auto"
+                  style={{
+                    background: '#FFFFFF',
+                    boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+                    color: '#255736',
+                  }}
+                >
+                  {step.icon}
+                </div>
+                <h4 className="text-xl font-bold" style={{ color: 'var(--text)' }}>
+                  {step.n}. {step.title}
+                </h4>
+                <p className="text-sm leading-relaxed" style={{ color: 'rgba(19,24,17,0.60)' }}>
+                  {step.body}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Testimonials ── */}
+      <section className="py-32" style={{ background: '#FFFFFF' }}>
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16 space-y-4">
+            <span className="text-sm font-bold uppercase tracking-[0.2em]" style={{ color: '#255736' }}>
+              Patient Stories
+            </span>
+            <h2
+              className="font-display"
+              style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 400, fontStyle: 'italic', color: 'var(--text)' }}
             >
               Real results, real people.
             </h2>
           </div>
-
-          <div className="flex flex-wrap gap-6">
+          <div className="grid md:grid-cols-3 gap-6">
             {TESTIMONIALS.map((t, i) => (
               <div
                 key={i}
-                className={`flex-1 min-w-72 p-8 rounded-2xl anim-fade-up d-${(i + 1) * 100}`}
+                className="p-8 rounded-2xl"
                 style={{
-                  background: 'var(--surface)',
+                  background: '#FFFFFF',
                   border: '1px solid var(--border)',
+                  boxShadow: '0 2px 12px rgba(0,0,0,0.04)',
                 }}
               >
-                {/* Opening quote mark */}
-                <div
-                  className="font-display mb-4 leading-none select-none"
-                  style={{
-                    fontSize: 72,
-                    lineHeight: 0.8,
-                    color: 'var(--teal-dim)',
-                    fontWeight: 700,
-                  }}
-                  aria-hidden="true"
-                >
-                  &ldquo;
+                <div className="flex mb-4">
+                  {Array.from({ length: 5 }).map((_, j) => (
+                    <svg key={j} width="14" height="14" viewBox="0 0 24 24" fill="#255736">
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                    </svg>
+                  ))}
                 </div>
-
-                {/* Stars */}
-                <div className="mb-4">
-                  <StarRating />
-                </div>
-
-                {/* Quote text */}
-                <p
-                  className="text-sm leading-relaxed mb-6 text-pretty"
-                  style={{ color: 'var(--text-2)' }}
-                >
-                  {t.quote}
+                <p className="text-sm leading-relaxed mb-6" style={{ color: 'rgba(19,24,17,0.65)' }}>
+                  &ldquo;{t.quote}&rdquo;
                 </p>
-
-                {/* Patient name + protocol badge */}
-                <div className="flex items-center justify-between gap-3 flex-wrap">
-                  <span className="text-sm font-medium" style={{ color: 'var(--text)' }}>
+                <div className="flex items-center justify-between gap-3">
+                  <span className="text-sm font-semibold" style={{ color: 'var(--text)' }}>
                     — {t.name}
                   </span>
                   <span
-                    className="text-xs font-medium tracking-wide px-2.5 py-1 rounded-full"
+                    className="text-xs font-semibold px-2.5 py-1 rounded-full"
                     style={{
                       background: t.protocolDim,
                       color: t.protocolColor,
@@ -897,137 +617,187 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── Trust ──────────────────────────────────────────────────── */}
-      <section className="py-28 max-w-6xl mx-auto px-6">
-        <div className="grid md:grid-cols-3 gap-8">
-          {TRUST.map((t, i) => (
-            <div
-              key={t.label}
-              className={`flex items-start gap-4 p-6 rounded-2xl anim-fade-up d-${(i + 1) * 100}`}
-              style={{
-                background: 'var(--surface)',
-                border: '1px solid var(--border)',
-              }}
+      {/* ── FAQ ── */}
+      <section className="py-32" style={{ background: '#F1F4F0' }}>
+        <div className="max-w-4xl mx-auto px-6">
+          <div className="text-center mb-16 space-y-4">
+            <span className="text-sm font-bold uppercase tracking-[0.2em]" style={{ color: '#255736' }}>
+              Common Questions
+            </span>
+            <h2
+              className="font-display"
+              style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 400, color: 'var(--text)' }}
             >
-              <div
-                className="mt-0.5 flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center"
-                style={{ background: 'var(--teal-dim)', color: 'var(--teal)' }}
-              >
-                {t.icon}
-              </div>
-              <div>
-                <div className="font-medium text-sm mb-1" style={{ color: 'var(--text)' }}>
-                  {t.label}
-                </div>
-                <p className="text-xs leading-relaxed" style={{ color: 'var(--text-2)' }}>
-                  {t.sub}
-                </p>
-              </div>
+              Everything you need to know.
+            </h2>
+          </div>
+          <div
+            className="rounded-2xl p-8"
+            style={{ background: '#FFFFFF', border: '1px solid var(--border)' }}
+          >
+            <div style={{ borderTop: '1px solid var(--border)' }}>
+              {FAQ_ITEMS.map((item, i) => (
+                <FAQItem
+                  key={i}
+                  item={item}
+                  isOpen={openFaq === i}
+                  onToggle={() => setOpenFaq(openFaq === i ? null : i)}
+                />
+              ))}
             </div>
-          ))}
+          </div>
         </div>
       </section>
 
-      {/* ── CTA Banner ─────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden">
+      {/* ── CTA Banner ── */}
+      <section className="py-32 px-6" style={{ background: '#F6F8F6' }}>
         <div
-          className="relative py-32 px-6 text-center"
+          className="max-w-5xl mx-auto relative overflow-hidden text-center"
           style={{
-            background: `
-              radial-gradient(ellipse 80% 100% at 50% 50%, rgba(37,87,54,0.06) 0%, transparent 70%),
-              var(--surface)
-            `,
-            borderTop: '1px solid var(--border)',
-            borderBottom: '1px solid var(--border)',
+            background: '#131811',
+            borderRadius: '3rem',
+            padding: 'clamp(48px, 8vw, 96px) clamp(32px, 6vw, 96px)',
           }}
         >
+          {/* Subtle pattern */}
           <div
-            className="absolute inset-0 bg-grid"
-            style={{ opacity: 0.4, pointerEvents: 'none' }}
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              backgroundImage: 'radial-gradient(circle, rgba(37,87,54,0.15) 1px, transparent 1px)',
+              backgroundSize: '24px 24px',
+            }}
           />
-          <div className="relative max-w-2xl mx-auto space-y-8">
-            <p className="text-xs uppercase tracking-widest" style={{ color: 'var(--text-3)' }}>
-              Get Started Today
-            </p>
+          <div className="relative z-10 space-y-8">
             <h2
-              className="font-display anim-fade-up"
-              style={{
-                fontSize: 'clamp(40px, 5vw, 64px)',
-                fontWeight: 300,
-                color: 'var(--text)',
-                lineHeight: 1.1,
-              }}
+              className="font-display"
+              style={{ fontSize: 'clamp(36px, 5vw, 60px)', fontWeight: 400, color: '#FFFFFF', lineHeight: 1.1 }}
             >
               Ready to optimize
               <br />
-              <em className="text-teal" style={{ fontStyle: 'italic' }}>your biology?</em>
+              your human potential?
             </h2>
-            <p className="text-base anim-fade-up d-100" style={{ color: 'var(--text-2)' }}>
-              A 5-minute assessment. A physician-reviewed prescription. Results you can measure.
+            <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: '1.1rem', maxWidth: '480px', margin: '0 auto', lineHeight: 1.7 }}>
+              Join thousands of high-performers who are taking control of their biology with science-backed peptide therapy.
             </p>
-            <div className="flex flex-wrap justify-center gap-4 anim-fade-up d-200">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
               <Link
                 href="/quiz"
-                className="inline-flex items-center gap-2 px-8 py-4 rounded-full font-medium text-sm transition-all anim-teal-glow"
+                className="inline-flex items-center justify-center px-12 py-5 rounded-2xl font-extrabold text-xl transition-all"
                 style={{
-                  background: 'var(--teal)',
+                  background: '#255736',
                   color: '#FFFFFF',
+                  textDecoration: 'none',
+                  boxShadow: '0 0 40px rgba(37,87,54,0.4)',
                 }}
+                onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.04)' }}
+                onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)' }}
               >
-                Begin the Assessment
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-              </Link>
-              <Link
-                href="/catalog"
-                className="inline-flex items-center gap-2 px-8 py-4 rounded-full text-sm transition-colors"
-                style={{
-                  border: '1px solid var(--border-hover)',
-                  color: 'var(--text-2)',
-                }}
-              >
-                Browse Protocols
+                Get Your Protocol
               </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── Footer ─────────────────────────────────────────────────── */}
-      <footer className="py-12 max-w-6xl mx-auto px-6">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <Link
-            href="/"
-            className="font-display text-lg"
-            style={{ color: 'var(--text)', fontStyle: 'italic', fontWeight: 400 }}
-          >
-            peptide<span style={{ color: 'var(--teal)', fontStyle: 'normal', fontWeight: 300 }}>portal</span>
-          </Link>
+      {/* ── Footer ── */}
+      <footer
+        style={{
+          background: '#FFFFFF',
+          borderTop: '1px solid var(--border)',
+        }}
+      >
+        <div className="max-w-7xl mx-auto px-6 py-20">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-16">
+            {/* Brand */}
+            <div className="col-span-2 md:col-span-1 space-y-5">
+              <div className="flex items-center gap-2">
+                <div
+                  className="w-6 h-6 rounded flex items-center justify-center"
+                  style={{ background: '#255736' }}
+                >
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
+                    <circle cx="12" cy="17" r="4" />
+                    <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v11" />
+                  </svg>
+                </div>
+                <span className="text-lg font-extrabold tracking-tight" style={{ color: 'var(--text)' }}>
+                  Peptide Portal
+                </span>
+              </div>
+              <p className="text-sm leading-relaxed" style={{ color: 'rgba(19,24,17,0.45)' }}>
+                Science-led protocols for the modern world. Precision medicine, personalized for you.
+              </p>
+            </div>
 
-          <div className="flex flex-wrap gap-6">
-            {[
-              { label: 'Catalog', href: '/catalog' },
-              { label: 'Privacy Policy', href: '/privacy' },
-              { label: 'Terms of Service', href: '/terms' },
-              { label: 'Provider Login', href: '/login' },
-            ].map((l) => (
-              <Link
-                key={l.label}
-                href={l.href}
-                className="text-sm transition-colors hover:text-[color:var(--text)]"
-                style={{ color: 'var(--text-2)' }}
-              >
-                {l.label}
-              </Link>
-            ))}
+            {/* Protocols */}
+            <div>
+              <h4 className="font-bold mb-6" style={{ color: 'var(--text)' }}>Protocols</h4>
+              <ul className="space-y-4 text-sm" style={{ color: 'rgba(19,24,17,0.55)' }}>
+                {['Weight Loss', 'Longevity', 'Recovery', 'Cognitive'].map((l) => (
+                  <li key={l}>
+                    <Link
+                      href="/catalog"
+                      style={{ color: 'inherit', textDecoration: 'none' }}
+                      onMouseEnter={(e) => { e.currentTarget.style.color = '#255736' }}
+                      onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(19,24,17,0.55)' }}
+                    >
+                      {l}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Company */}
+            <div>
+              <h4 className="font-bold mb-6" style={{ color: 'var(--text)' }}>Company</h4>
+              <ul className="space-y-4 text-sm" style={{ color: 'rgba(19,24,17,0.55)' }}>
+                {['About Us', 'Our Doctors', 'Science', 'Contact'].map((l) => (
+                  <li key={l}>
+                    <Link
+                      href="#"
+                      style={{ color: 'inherit', textDecoration: 'none' }}
+                      onMouseEnter={(e) => { e.currentTarget.style.color = '#255736' }}
+                      onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(19,24,17,0.55)' }}
+                    >
+                      {l}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Legal */}
+            <div>
+              <h4 className="font-bold mb-6" style={{ color: 'var(--text)' }}>Legal</h4>
+              <ul className="space-y-4 text-sm" style={{ color: 'rgba(19,24,17,0.55)' }}>
+                {['Privacy Policy', 'Terms of Service', 'Medical Disclaimer', 'HIPAA Policy'].map((l) => (
+                  <li key={l}>
+                    <Link
+                      href="#"
+                      style={{ color: 'inherit', textDecoration: 'none' }}
+                      onMouseEnter={(e) => { e.currentTarget.style.color = '#255736' }}
+                      onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(19,24,17,0.55)' }}
+                    >
+                      {l}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
 
-          <p className="text-xs" style={{ color: 'var(--text-3)' }}>
-            © 2026 Peptide Portal · Not medical advice.
-          </p>
+          <div
+            className="pt-8 flex flex-col md:flex-row justify-between items-center gap-4"
+            style={{ borderTop: '1px solid var(--border)' }}
+          >
+            <p className="text-xs" style={{ color: 'rgba(19,24,17,0.35)' }}>
+              © 2026 Peptide Portal. All rights reserved. · Not medical advice.
+            </p>
+          </div>
         </div>
       </footer>
+
     </div>
   )
 }
