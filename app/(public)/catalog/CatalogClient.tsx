@@ -156,12 +156,16 @@ export default function CatalogClient() {
       >
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3" style={{ textDecoration: 'none' }}>
-            <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: '#255736' }}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
-                <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v11" />
-                <circle cx="12" cy="17" r="4" />
-              </svg>
-            </div>
+            <div
+              className="w-9 h-9 rounded-lg flex-shrink-0"
+              style={{
+                backgroundImage: 'url(/peptide-icon.jpg)',
+                backgroundSize: '72px auto',
+                backgroundPosition: '0 50%',
+                overflow: 'hidden',
+                border: '1px solid rgba(19,24,17,0.1)',
+              }}
+            />
             <span className="text-xl font-bold tracking-tight" style={{ color: '#131811' }}>
               Peptide<span style={{ color: '#255736' }}>Portal</span>
             </span>
@@ -304,12 +308,16 @@ export default function CatalogClient() {
       >
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: '#255736' }}>
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
-                <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v11" />
-                <circle cx="12" cy="17" r="4" />
-              </svg>
-            </div>
+            <div
+              className="w-7 h-7 rounded-lg flex-shrink-0"
+              style={{
+                backgroundImage: 'url(/peptide-icon.jpg)',
+                backgroundSize: '56px auto',
+                backgroundPosition: '0 50%',
+                overflow: 'hidden',
+                border: '1px solid rgba(19,24,17,0.1)',
+              }}
+            />
             <p className="text-sm font-bold" style={{ color: '#131811' }}>Peptide Portal © 2025</p>
           </div>
           <div className="flex gap-8 text-sm" style={{ color: 'rgba(19,24,17,0.55)' }}>

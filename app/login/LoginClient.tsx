@@ -40,12 +40,16 @@ export default function LoginClient() {
       {/* ── Top bar ─────────────────────────────────────────────────── */}
       <div className="flex items-center justify-between px-6 py-5">
         <Link href="/" className="flex items-center gap-2" style={{ textDecoration: 'none' }}>
-          <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: '#255736' }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
-              <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v11" />
-              <circle cx="12" cy="17" r="4" />
-            </svg>
-          </div>
+          <div
+            className="w-7 h-7 rounded-lg flex-shrink-0"
+            style={{
+              backgroundImage: 'url(/peptide-icon.jpg)',
+              backgroundSize: '56px auto',
+              backgroundPosition: '0 50%',
+              overflow: 'hidden',
+              border: '1px solid rgba(19,24,17,0.1)',
+            }}
+          />
           <span className="text-lg font-extrabold tracking-tight" style={{ color: '#131811' }}>
             Peptide Portal
           </span>
