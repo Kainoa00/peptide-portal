@@ -1,103 +1,79 @@
-﻿'use client'
+'use client'
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { PEPTIDES, CATEGORY_META, getPeptidesByCategory, type Category, type Peptide } from '@/lib/peptide-data'
 
-/* ─── FDA Status badge ───────────────────────────────────────────── */
-function FdaBadge({ status, label }: { status: Peptide['fdaStatus']; label: string }) {
-  const styles = {
-    approved: { bg: 'rgba(37,87,54,0.1)', color: '#255736', border: 'rgba(37,87,54,0.25)' },
-    research:  { bg: 'rgba(212,151,90,0.1)', color: '#D4975A', border: 'rgba(212,151,90,0.25)' },
-    flagged:   { bg: 'rgba(232,112,112,0.1)', color: '#E87070', border: 'rgba(232,112,112,0.25)' },
-  }[status]
-
-  return (
-    <span
-      className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full"
-      style={{ background: styles.bg, color: styles.color, border: `1px solid ${styles.border}` }}
-    >
-      <span className="w-1.5 h-1.5 rounded-full bg-current opacity-80" />
-      {label}
-    </span>
-  )
+/* ─── Category gradient map for image placeholders ───────────────── */
+const CARD_GRADIENTS: Record<Category, string> = {
+  weight_loss: 'linear-gradient(135deg, rgba(232,112,112,0.14) 0%, rgba(232,112,112,0.04) 100%)',
+  recovery:    'linear-gradient(135deg, rgba(37,87,54,0.14) 0%, rgba(37,87,54,0.04) 100%)',
+  longevity:   'linear-gradient(135deg, rgba(212,151,90,0.16) 0%, rgba(212,151,90,0.05) 100%)',
+  cognitive:   'linear-gradient(135deg, rgba(155,142,232,0.16) 0%, rgba(155,142,232,0.05) 100%)',
 }
 
 /* ─── Peptide card ───────────────────────────────────────────────── */
 function PeptideCard({ peptide }: { peptide: Peptide }) {
   const meta = CATEGORY_META[peptide.category]
+  const gradient = CARD_GRADIENTS[peptide.category]
 
   return (
     <Link
       href={`/catalog/${peptide.slug}`}
-      className="group relative block overflow-hidden rounded-2xl transition-all duration-300"
+      className="group flex flex-col rounded-xl overflow-hidden transition-all duration-300"
       style={{
         background: 'var(--surface)',
         border: '1px solid var(--border)',
+        boxShadow: '0 4px 20px rgba(0,0,0,0.03)',
+        textDecoration: 'none',
       }}
     >
-      {/* Hover border glow */}
-      <div
-        className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-        style={{ boxShadow: `inset 0 0 0 1px ${meta.border}, 0 0 48px ${meta.dim}` }}
-      />
-
-      {/* Category left border accent */}
-      <div
-        className="absolute left-0 top-0 bottom-0 w-0.5 rounded-l-2xl"
-        style={{ background: meta.accent }}
-      />
-
-      {/* Faint catalog number */}
-      <div
-        className="absolute right-5 top-3 font-display select-none pointer-events-none"
-        style={{
-          fontSize: 96,
-          fontWeight: 300,
-          lineHeight: 1,
-          color: 'rgba(19,24,17,0.05)',
-          fontStyle: 'italic',
-        }}
-      >
-        {String(peptide.num).padStart(2, '0')}
+      {/* Image / thumbnail area */}
+      <div className="relative overflow-hidden" style={{ aspectRatio: '16/9' }}>
+        <div
+          className="w-full h-full flex items-center justify-center transition-transform duration-500 group-hover:scale-105"
+          style={{ background: gradient }}
+        >
+          {/* Faint peptide name as visual texture */}
+          <span
+            className="font-display select-none pointer-events-none text-center px-4"
+            style={{
+              fontSize: 'clamp(18px, 4vw, 32px)',
+              fontWeight: 300,
+              fontStyle: 'italic',
+              color: meta.accent,
+              opacity: 0.28,
+              lineHeight: 1.1,
+            }}
+          >
+            {peptide.name}
+          </span>
+        </div>
       </div>
 
-      <div className="relative p-7">
-        {/* Top row: category + arrow */}
-        <div className="flex items-start justify-between mb-5">
+      <div className="flex flex-col flex-1 p-6">
+        {/* Category badge */}
+        <div className="mb-4">
           <span
-            className="text-xs font-medium tracking-widest uppercase px-2.5 py-1 rounded-full"
-            style={{ background: meta.dim, color: meta.accent, border: `1px solid ${meta.border}` }}
+            className="text-[10px] font-bold tracking-widest uppercase px-2 py-1 rounded"
+            style={{ background: meta.dim, color: meta.accent }}
           >
             {meta.label}
           </span>
-          <svg
-            width="15" height="15" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" strokeWidth="2"
-            className="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1 mt-0.5"
-            style={{ color: 'var(--text-3)' }}
-          >
-            <path d="M7 17L17 7M17 7H7M17 7v10" />
-          </svg>
         </div>
 
         {/* Name */}
         <h3
-          className="font-display mb-1 leading-none"
-          style={{ fontSize: 32, fontWeight: 400, color: 'var(--text)' }}
+          className="font-display mb-2 leading-tight"
+          style={{ fontSize: 22, fontWeight: 500, color: 'var(--text)' }}
         >
           {peptide.name}
         </h3>
 
-        {/* Tag */}
-        <p className="text-xs uppercase tracking-widest mb-4" style={{ color: meta.accent }}>
-          {peptide.tag}
-        </p>
-
         {/* Description */}
         <p
-          className="text-sm leading-relaxed mb-6"
+          className="text-sm leading-relaxed flex-grow mb-5"
           style={{
             color: 'var(--text-2)',
             display: '-webkit-box',
@@ -109,45 +85,28 @@ function PeptideCard({ peptide }: { peptide: Peptide }) {
           {peptide.description}
         </p>
 
-        {/* Specs row */}
+        {/* Bottom row */}
         <div
-          className="flex items-center gap-4 py-4 mb-5"
-          style={{ borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)' }}
+          className="flex items-center justify-between pt-4"
+          style={{ borderTop: '1px solid var(--border)' }}
         >
           <div>
-            <p className="text-xs uppercase tracking-wider mb-0.5" style={{ color: 'var(--text-3)' }}>
-              Dosage
-            </p>
-            <p className="text-xs font-medium" style={{ color: 'var(--text-2)' }}>
-              {peptide.dosageRange}
-            </p>
-          </div>
-          <div className="w-px h-8 self-center" style={{ background: 'var(--border)' }} />
-          <div>
-            <p className="text-xs uppercase tracking-wider mb-0.5" style={{ color: 'var(--text-3)' }}>
-              Route
-            </p>
-            <p className="text-xs font-medium" style={{ color: 'var(--text-2)' }}>
-              {peptide.deliveryMethod.split('(')[0].trim()}
-            </p>
-          </div>
-        </div>
-
-        {/* Bottom row: FDA status + price */}
-        <div className="flex items-center justify-between">
-          <FdaBadge status={peptide.fdaStatus} label={
-            peptide.fdaStatus === 'approved' ? 'FDA Approved' :
-            peptide.fdaStatus === 'flagged'  ? 'Category 2' :
-            'Research Compound'
-          } />
-          <div className="text-right">
             <span
-              className="font-display text-2xl"
+              className="font-display text-xl"
               style={{ fontWeight: 300, color: 'var(--text)' }}
             >
               ${peptide.priceMonthly}
             </span>
             <span className="text-xs ml-1" style={{ color: 'var(--text-2)' }}>/mo</span>
+          </div>
+          <div
+            className="flex items-center gap-1 text-sm font-bold transition-transform duration-200 group-hover:translate-x-1"
+            style={{ color: 'var(--text-2)' }}
+          >
+            Learn More
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
           </div>
         </div>
       </div>
@@ -181,7 +140,7 @@ export default function CatalogClient() {
   })
 
   const CATS: { value: Category | 'all'; label: string }[] = [
-    { value: 'all',         label: `All (${PEPTIDES.length})` },
+    { value: 'all',         label: `All Protocols` },
     { value: 'weight_loss', label: 'Weight Loss' },
     { value: 'recovery',    label: 'Recovery' },
     { value: 'longevity',   label: 'Longevity' },
@@ -225,8 +184,8 @@ export default function CatalogClient() {
       </header>
 
       {/* ── Page hero ────────────────────────────────────────────── */}
-      <div
-        className="relative overflow-hidden"
+      <section
+        className="relative overflow-hidden pt-20 pb-16 px-6"
         style={{
           background: `
             radial-gradient(ellipse 70% 80% at 50% -20%, rgba(37,87,54,0.05) 0%, transparent 60%),
@@ -235,37 +194,51 @@ export default function CatalogClient() {
           borderBottom: '1px solid var(--border)',
         }}
       >
-        <div className="max-w-7xl mx-auto px-6 py-16">
-          <p className="text-xs uppercase tracking-widest mb-3 anim-fade-up" style={{ color: 'var(--text-3)' }}>
-            Protocol Library
-          </p>
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <h1
-              className="font-display anim-fade-up d-100"
-              style={{
-                fontSize: 'clamp(40px, 5vw, 64px)',
-                fontWeight: 300,
-                color: 'var(--text)',
-                lineHeight: 1.05,
-              }}
-            >
-              {PEPTIDES.length} protocols.
-              <br />
-              <em style={{ fontStyle: 'italic' }}>One platform.</em>
-            </h1>
-            <p
-              className="max-w-sm text-sm leading-relaxed anim-fade-up d-200"
-              style={{ color: 'var(--text-2)' }}
-            >
-              Each protocol is reviewed by a board-certified physician before fulfillment.
-              Not sure where to start?{' '}
-              <Link href="/quiz" style={{ color: 'var(--teal)' }}>
-                Take the 5-minute quiz →
-              </Link>
-            </p>
+        {/* Glows */}
+        <div
+          className="absolute top-0 right-0 pointer-events-none"
+          style={{
+            width: 500,
+            height: 500,
+            borderRadius: '50%',
+            background: 'rgba(37,87,54,0.06)',
+            filter: 'blur(100px)',
+            transform: 'translate(30%, -40%)',
+          }}
+        />
+
+        <div className="max-w-4xl mx-auto text-center space-y-5">
+          <div
+            className="inline-flex items-center gap-2 px-4 py-1 rounded-full text-xs font-bold tracking-widest uppercase"
+            style={{ background: 'rgba(37,87,54,0.08)', color: 'var(--teal)' }}
+          >
+            Protocol Catalog
           </div>
+          <h1
+            className="font-display"
+            style={{
+              fontSize: 'clamp(40px, 7vw, 72px)',
+              fontWeight: 300,
+              fontStyle: 'italic',
+              color: 'var(--text)',
+              lineHeight: 1.05,
+            }}
+          >
+            {PEPTIDES.length} protocols.{' '}
+            <em style={{ fontWeight: 300 }}>One platform.</em>
+          </h1>
+          <p
+            className="text-lg max-w-2xl mx-auto leading-relaxed"
+            style={{ color: 'var(--text-2)', fontWeight: 300 }}
+          >
+            Physician-vetted peptide protocols designed for performance, longevity, and wellness.
+            Not sure where to start?{' '}
+            <Link href="/quiz" style={{ color: 'var(--teal)' }}>
+              Take the quiz →
+            </Link>
+          </p>
         </div>
-      </div>
+      </section>
 
       {/* ── Filter + sort bar ─────────────────────────────────────── */}
       <div
@@ -287,10 +260,10 @@ export default function CatalogClient() {
                 <button
                   key={cat.value}
                   onClick={() => selectCategory(cat.value)}
-                  className="px-4 py-1.5 rounded-full text-sm font-medium transition-all"
+                  className="px-5 py-1.5 rounded-full text-sm font-medium transition-all"
                   style={{
                     background: isActive
-                      ? (meta ? meta.dim : 'var(--teal-dim)')
+                      ? (meta ? meta.dim : 'rgba(37,87,54,0.1)')
                       : 'transparent',
                     border: `1px solid ${isActive
                       ? (meta ? meta.border : 'rgba(37,87,54,0.3)')
@@ -298,6 +271,7 @@ export default function CatalogClient() {
                     color: isActive
                       ? (meta ? meta.accent : 'var(--teal)')
                       : 'var(--text-2)',
+                    fontWeight: isActive ? 700 : 500,
                   }}
                 >
                   {cat.label}
@@ -308,7 +282,7 @@ export default function CatalogClient() {
 
           {/* Sort */}
           <div className="flex items-center gap-2">
-            <span className="text-xs" style={{ color: 'var(--text-3)' }}>Sort:</span>
+            <span className="text-xs" style={{ color: 'var(--text-3)' }}>Sort by:</span>
             {(['default', 'price_asc', 'price_desc'] as const).map((s) => (
               <button
                 key={s}
@@ -318,9 +292,10 @@ export default function CatalogClient() {
                   background: sortBy === s ? 'var(--surface-2)' : 'transparent',
                   border: `1px solid ${sortBy === s ? 'var(--border-hover)' : 'transparent'}`,
                   color: sortBy === s ? 'var(--text)' : 'var(--text-2)',
+                  fontWeight: sortBy === s ? 600 : 400,
                 }}
               >
-                {s === 'default' ? 'Default' : s === 'price_asc' ? 'Price ↑' : 'Price ↓'}
+                {s === 'default' ? 'Popular' : s === 'price_asc' ? 'Price ↑' : 'Price ↓'}
               </button>
             ))}
           </div>
@@ -336,18 +311,18 @@ export default function CatalogClient() {
         </p>
 
         {mounted ? (
-          <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-5">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {sorted.map((peptide) => (
               <PeptideCard key={peptide.slug} peptide={peptide} />
             ))}
           </div>
         ) : (
-          /* Skeleton on SSR to avoid hydration mismatch */
-          <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-5">
-            {Array.from({ length: 6 }).map((_, i) => (
+          /* Skeleton on SSR */
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {Array.from({ length: 8 }).map((_, i) => (
               <div
                 key={i}
-                className="h-80 rounded-2xl"
+                className="h-72 rounded-xl"
                 style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
               />
             ))}
@@ -368,7 +343,7 @@ export default function CatalogClient() {
           </p>
           <h2
             className="font-display mb-3"
-            style={{ fontSize: 36, fontWeight: 300, color: 'var(--text)' }}
+            style={{ fontSize: 36, fontWeight: 300, fontStyle: 'italic', color: 'var(--text)' }}
           >
             Let us build your protocol.
           </h2>

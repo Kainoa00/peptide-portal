@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useState, useCallback } from 'react'
 import Link from 'next/link'
@@ -70,11 +70,13 @@ function OptionCard({
   return (
     <button
       onClick={onClick}
-      className="w-full text-left p-5 rounded-xl transition-all"
+      className="w-full text-left rounded-xl transition-all"
       style={{
-        background: selected ? 'rgba(37,87,54,0.08)' : 'var(--surface)',
-        border: `1px solid ${selected ? 'rgba(37,87,54,0.4)' : 'var(--border)'}`,
+        background: selected ? 'rgba(37,87,54,0.05)' : 'var(--surface)',
+        border: `2px solid ${selected ? 'var(--teal)' : 'var(--border)'}`,
         outline: 'none',
+        padding: '1.5rem',
+        boxShadow: '0 1px 4px rgba(0,0,0,0.03)',
       }}
     >
       {children}
@@ -118,25 +120,23 @@ function StepExperience({
     { value: 'expert', label: 'Experienced user', sub: "I understand peptide therapy and know what I'm looking for." },
   ]
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
       {opts.map((o) => (
         <OptionCard key={o.value} selected={value === o.value} onClick={() => onChange(o.value)}>
           <div className="flex items-center justify-between">
-            <div>
-              <div className="font-medium text-sm mb-0.5" style={{ color: 'var(--text)' }}>{o.label}</div>
-              <div className="text-xs leading-relaxed" style={{ color: 'var(--text-2)' }}>{o.sub}</div>
+            <div className="flex flex-col gap-1">
+              <div className="text-lg font-bold" style={{ color: 'var(--text)' }}>{o.label}</div>
+              <div className="text-sm leading-relaxed" style={{ color: 'var(--text-2)' }}>{o.sub}</div>
             </div>
             <div
-              className="w-5 h-5 rounded-full flex-shrink-0 ml-4 flex items-center justify-center"
+              className="w-6 h-6 rounded-full flex-shrink-0 ml-4 flex items-center justify-center"
               style={{
                 border: `2px solid ${value === o.value ? 'var(--teal)' : 'var(--border-hover)'}`,
                 background: value === o.value ? 'var(--teal)' : 'transparent',
               }}
             >
               {value === o.value && (
-                <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
-                  <path d="M2 6l3 3 5-5" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" />
-                </svg>
+                <div className="w-2 h-2 rounded-full bg-white" />
               )}
             </div>
           </div>
@@ -170,8 +170,8 @@ function StepGoals({
   }
   return (
     <div>
-      <p className="text-xs mb-4" style={{ color: 'var(--text-2)' }}>Select up to 2</p>
-      <div className="flex flex-wrap gap-2.5">
+      <p className="text-sm mb-5" style={{ color: 'var(--text-2)' }}>Select up to 2</p>
+      <div className="flex flex-wrap gap-3">
         {opts.map((o) => (
           <PillOption
             key={o.value}
@@ -237,24 +237,24 @@ function StepConditions({
   }
 
   return (
-    <div className="space-y-2.5">
-      <p className="text-xs mb-4" style={{ color: 'var(--text-2)' }}>Select all that apply</p>
+    <div className="space-y-3">
+      <p className="text-sm mb-5" style={{ color: 'var(--text-2)' }}>Select all that apply</p>
       {opts.map((o) => (
         <OptionCard key={o.value} selected={value.includes(o.value)} onClick={() => toggle(o.value)}>
           <div className="flex items-center justify-between">
             <div>
-              <div className="text-sm font-medium" style={{ color: 'var(--text)' }}>{o.label}</div>
-              <div className="text-xs mt-0.5" style={{ color: 'var(--text-2)' }}>{o.note}</div>
+              <div className="text-base font-bold" style={{ color: 'var(--text)' }}>{o.label}</div>
+              <div className="text-sm mt-0.5" style={{ color: 'var(--text-2)' }}>{o.note}</div>
             </div>
             <div
-              className="w-4 h-4 rounded flex-shrink-0 ml-4 flex items-center justify-center"
+              className="w-5 h-5 rounded flex-shrink-0 ml-4 flex items-center justify-center"
               style={{
                 border: `2px solid ${value.includes(o.value) ? 'var(--teal)' : 'var(--border-hover)'}`,
                 background: value.includes(o.value) ? 'var(--teal)' : 'transparent',
               }}
             >
               {value.includes(o.value) && (
-                <svg width="8" height="8" viewBox="0 0 12 12" fill="none">
+                <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
                   <path d="M2 6l3 3 5-5" stroke="#FFFFFF" strokeWidth="2.5" strokeLinecap="round" />
                 </svg>
               )}
@@ -291,10 +291,10 @@ function StepLifestyle({
   return (
     <div className="space-y-8">
       <div>
-        <p className="text-sm font-medium mb-3" style={{ color: 'var(--text)' }}>
+        <p className="text-sm font-semibold mb-4" style={{ color: 'var(--text)' }}>
           Activity level
         </p>
-        <div className="flex flex-wrap gap-2.5">
+        <div className="flex flex-wrap gap-3">
           {activityOpts.map((o) => (
             <PillOption key={o.value} selected={activity === o.value} onClick={() => onActivity(o.value)}>
               {o.label}
@@ -304,10 +304,10 @@ function StepLifestyle({
       </div>
 
       <div>
-        <p className="text-sm font-medium mb-3" style={{ color: 'var(--text)' }}>
+        <p className="text-sm font-semibold mb-4" style={{ color: 'var(--text)' }}>
           Sleep quality
         </p>
-        <div className="flex flex-wrap gap-2.5">
+        <div className="flex flex-wrap gap-3">
           {sleepOpts.map((o) => (
             <PillOption key={o.value} selected={sleep === o.value} onClick={() => onSleep(o.value)}>
               {o.label}
@@ -331,7 +331,7 @@ function StepPhysical({
   return (
     <div className="space-y-6">
       <div>
-        <label className="text-sm font-medium block mb-2" style={{ color: 'var(--text)' }}>
+        <label className="text-sm font-semibold block mb-3" style={{ color: 'var(--text)' }}>
           Weight
         </label>
         <div className="flex items-center gap-3">
@@ -341,20 +341,19 @@ function StepPhysical({
             value={weight}
             onChange={(e) => onWeight(e.target.value)}
             aria-required="true"
-            className="w-32 px-4 py-3 rounded-xl text-sm outline-none transition-colors"
+            className="w-36 px-4 py-3.5 rounded-xl text-sm outline-none transition-colors"
             style={{
               background: 'var(--surface)',
-              border: '1px solid var(--border)',
+              border: '2px solid var(--border)',
               color: 'var(--text)',
-              colorScheme: 'dark',
             }}
           />
-          <span className="text-sm" style={{ color: 'var(--text-2)' }}>lbs</span>
+          <span className="text-sm font-medium" style={{ color: 'var(--text-2)' }}>lbs</span>
         </div>
       </div>
 
       <div>
-        <label className="text-sm font-medium block mb-2" style={{ color: 'var(--text)' }}>
+        <label className="text-sm font-semibold block mb-3" style={{ color: 'var(--text)' }}>
           Height
         </label>
         <div className="flex items-center gap-3">
@@ -364,15 +363,14 @@ function StepPhysical({
             value={height}
             onChange={(e) => onHeight(e.target.value)}
             aria-required="true"
-            className="w-32 px-4 py-3 rounded-xl text-sm outline-none transition-colors"
+            className="w-36 px-4 py-3.5 rounded-xl text-sm outline-none transition-colors"
             style={{
               background: 'var(--surface)',
-              border: '1px solid var(--border)',
+              border: '2px solid var(--border)',
               color: 'var(--text)',
-              colorScheme: 'dark',
             }}
           />
-          <span className="text-sm" style={{ color: 'var(--text-2)' }}>ft / in</span>
+          <span className="text-sm font-medium" style={{ color: 'var(--text-2)' }}>ft / in</span>
         </div>
       </div>
 
@@ -511,15 +509,14 @@ function StepRecommendation({ answers }: { answers: Answers }) {
 
           {i === 0 && (
             <div className="mt-5 space-y-3">
-              {/* Primary CTA */}
               <button
                 onClick={() => handleCheckout(rec)}
                 disabled={loadingSlug === rec.slug}
-                className="w-full py-3.5 rounded-xl text-sm font-medium transition-all flex items-center justify-center gap-2 disabled:opacity-70"
+                className="w-full py-4 rounded-xl text-sm font-extrabold transition-all flex items-center justify-center gap-2 disabled:opacity-70"
                 style={{
                   background: rec.accent,
                   color: '#FFFFFF',
-                  boxShadow: `0 0 24px ${rec.accent}30`,
+                  boxShadow: `0 4px 20px ${rec.accent}30`,
                 }}
               >
                 {loadingSlug === rec.slug ? (
@@ -534,17 +531,15 @@ function StepRecommendation({ answers }: { answers: Answers }) {
                 )}
               </button>
 
-              {/* Inline error */}
               {checkoutError && (
                 <p className="text-xs text-center" style={{ color: 'var(--rose)' }}>
                   {checkoutError}
                 </p>
               )}
 
-              {/* Secondary CTA */}
               <button
                 onClick={handleSaveLater}
-                className="w-full py-2.5 rounded-xl text-sm transition-all"
+                className="w-full py-3 rounded-xl text-sm transition-all font-medium"
                 style={{
                   background: 'transparent',
                   border: '1px solid var(--border)',
@@ -554,7 +549,6 @@ function StepRecommendation({ answers }: { answers: Answers }) {
                 Save &amp; Continue Later
               </button>
 
-              {/* Save confirmation inline toast */}
               {saveConfirm && (
                 <p
                   className="text-xs text-center py-2 rounded-lg"
@@ -598,8 +592,8 @@ function canProceed(step: number, answers: Answers): boolean {
     case 3: return answers.age !== ''
     case 4: return answers.conditions.length > 0
     case 5: return answers.activity !== null && answers.sleep !== null
-    case 6: return true // physical stats are optional
-    case 7: return false // last step — no "next"
+    case 6: return true
+    case 7: return false
     default: return false
   }
 }
@@ -626,7 +620,6 @@ export default function QuizClient() {
   }, [])
 
   function goNext() {
-    // Expert shortcut: send to catalog
     if (step === 1 && answers.experience === 'expert') {
       router.push('/catalog')
       return
@@ -644,122 +637,99 @@ export default function QuizClient() {
   }
 
   return (
-    <div
-      className="min-h-screen flex flex-col"
-      style={{ background: 'var(--bg)' }}
-    >
-      {/* ── Top bar ─────────────────────────────────────────────── */}
-      <header
-        className="flex-shrink-0 px-6 py-4 flex items-center justify-between"
-        style={{ borderBottom: '1px solid var(--border)' }}
-      >
-        <Link href="/" className="flex items-center gap-2" style={{ textDecoration: 'none' }}>
-          <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: '#255736' }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
-              <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v11" />
-              <circle cx="12" cy="17" r="4" />
-            </svg>
-          </div>
-          <span className="text-lg font-extrabold tracking-tight" style={{ color: '#131811' }}>
-            Peptide Portal
-          </span>
-        </Link>
+    <div className="relative flex min-h-screen w-full flex-col" style={{ background: 'var(--bg)' }}>
 
-        <div className="flex items-center gap-4">
-          <span className="text-xs" style={{ color: 'var(--text-2)' }}>
+      {/* ── Sticky header + progress bar ─────────────────────────── */}
+      <header
+        className="sticky top-0 z-50 flex-shrink-0 w-full"
+        style={{
+          background: 'rgba(255,255,255,0.85)',
+          backdropFilter: 'blur(16px)',
+          borderBottom: '1px solid var(--border)',
+        }}
+      >
+        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2" style={{ textDecoration: 'none' }}>
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: '#255736' }}>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
+                <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v11" />
+                <circle cx="12" cy="17" r="4" />
+              </svg>
+            </div>
+            <span className="text-lg font-extrabold tracking-tight" style={{ color: '#131811' }}>
+              Peptide Portal
+            </span>
+          </Link>
+
+          <span
+            className="text-xs font-semibold uppercase tracking-widest"
+            style={{ color: 'var(--text-2)' }}
+          >
             Step {step} of {TOTAL_STEPS}
           </span>
-          <Link
-            href="/"
-            className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
+        </div>
+
+        {/* Thin progress line */}
+        <div className="w-full h-1" style={{ background: 'var(--surface-2)' }}>
+          <div
+            className="h-full transition-all duration-500 ease-out"
             style={{
-              background: 'var(--surface)',
-              border: '1px solid var(--border)',
-              color: 'var(--text-2)',
+              width: `${(step / TOTAL_STEPS) * 100}%`,
+              background: 'var(--teal)',
             }}
-          >
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M18 6L6 18M6 6l12 12" />
-            </svg>
-          </Link>
+          />
         </div>
       </header>
 
-      {/* ── DNA-strand progress bar ─────────────────────────────── */}
-      <div className="flex-shrink-0 px-6 py-5" style={{ borderBottom: '1px solid var(--border)' }}>
-        <div className="max-w-xl mx-auto">
-          {/* Segmented track */}
-          <div
-            className="flex items-center gap-1"
-            role="progressbar"
-            aria-label={`Step ${step} of ${TOTAL_STEPS}`}
-            aria-valuenow={step}
-            aria-valuemin={1}
-            aria-valuemax={TOTAL_STEPS}
-          >
-            {Array.from({ length: TOTAL_STEPS }, (_, i) => {
-              const filled = i < step
-              const active = i === step - 1
-              return (
-                <div
-                  key={i}
-                  className="h-1.5 flex-1 rounded-full transition-all duration-500"
-                  style={{
-                    background: active
-                      ? 'var(--teal)'
-                      : filled
-                        ? 'rgba(37,87,54,0.40)'
-                        : 'var(--surface-3)',
-                    boxShadow: active ? '0 0 8px rgba(37,87,54,0.5)' : 'none',
-                  }}
-                />
-              )
-            })}
-          </div>
-          {/* Step label */}
-          <p className="text-xs mt-2" style={{ color: 'var(--text-2)' }}>
-            {STEP_QUESTIONS[step - 1]}
-          </p>
-        </div>
-      </div>
-
-      {/* ── Content ─────────────────────────────────────────────── */}
-      <main className="flex-1 flex items-start justify-center px-6 py-12 overflow-y-auto">
-        <div className="w-full max-w-xl">
+      {/* ── Main content ─────────────────────────────────────────── */}
+      <main className="flex-grow flex flex-col items-center justify-start px-6 py-12 md:py-20 overflow-y-auto">
+        <div className="w-full max-w-2xl">
 
           {/* Question heading */}
           {step < TOTAL_STEPS && (
-            <h1
-              id="step-heading"
-              className="font-display mb-8"
-              style={{
-                fontSize: 'clamp(28px, 4vw, 40px)',
-                fontWeight: 300,
-                color: 'var(--text)',
-                lineHeight: 1.2,
-              }}
-            >
-              {STEP_QUESTIONS[step - 1]}
-            </h1>
-          )}
-
-          {step === TOTAL_STEPS && (
-            <div className="mb-8">
-              <p className="text-xs uppercase tracking-widest mb-2" style={{ color: 'var(--teal)' }}>
-                Assessment Complete
-              </p>
-              <h1
+            <div className="text-center mb-12">
+              <h2
                 id="step-heading"
                 className="font-display"
                 style={{
-                  fontSize: 'clamp(28px, 4vw, 40px)',
-                  fontWeight: 300,
+                  fontSize: 'clamp(32px, 5vw, 56px)',
+                  fontWeight: 400,
+                  fontStyle: 'italic',
                   color: 'var(--text)',
-                  lineHeight: 1.2,
+                  lineHeight: 1.15,
                 }}
               >
                 {STEP_QUESTIONS[step - 1]}
-              </h1>
+              </h2>
+              {step === 1 && (
+                <p className="mt-3 text-base" style={{ color: 'var(--text-2)' }}>
+                  Select the option that best describes your current knowledge level.
+                </p>
+              )}
+            </div>
+          )}
+
+          {step === TOTAL_STEPS && (
+            <div className="text-center mb-10">
+              <p
+                className="text-xs uppercase tracking-widest mb-3 font-semibold"
+                style={{ color: 'var(--teal)' }}
+              >
+                Assessment Complete
+              </p>
+              <h2
+                id="step-heading"
+                className="font-display"
+                style={{
+                  fontSize: 'clamp(32px, 5vw, 52px)',
+                  fontWeight: 400,
+                  fontStyle: 'italic',
+                  color: 'var(--text)',
+                  lineHeight: 1.15,
+                }}
+              >
+                {STEP_QUESTIONS[step - 1]}
+              </h2>
             </div>
           )}
 
@@ -823,67 +793,82 @@ export default function QuizClient() {
             {step === 7 && <StepRecommendation answers={answers} />}
           </div>
 
-          {/* Expert shortcut */}
+          {/* Expert shortcut note */}
           {step === 1 && answers.experience === 'expert' && (
-            <p className="mt-4 text-xs" style={{ color: 'var(--text-2)' }}>
+            <p className="mt-4 text-sm text-center" style={{ color: 'var(--text-2)' }}>
               As an experienced user, clicking Continue will take you directly to the catalog.
             </p>
           )}
         </div>
       </main>
 
-      {/* ── Navigation ──────────────────────────────────────────── */}
+      {/* ── Sticky footer navigation ─────────────────────────────── */}
       {step < TOTAL_STEPS && (
         <footer
-          className="flex-shrink-0 px-6 py-5 flex items-center justify-between"
-          style={{ borderTop: '1px solid var(--border)' }}
+          className="sticky bottom-0 z-50 flex-shrink-0 w-full"
+          style={{
+            background: 'rgba(255,255,255,0.85)',
+            backdropFilter: 'blur(12px)',
+            borderTop: '1px solid var(--border)',
+          }}
         >
-          <button
-            onClick={goBack}
-            disabled={step === 1}
-            className="flex items-center gap-2 text-sm transition-colors disabled:opacity-30"
-            style={{ color: 'var(--text-2)' }}
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M19 12H5M12 19l-7-7 7-7" />
-            </svg>
-            Back
-          </button>
+          <div className="max-w-5xl mx-auto px-6 py-5 flex items-center justify-between">
+            <button
+              onClick={goBack}
+              disabled={step === 1}
+              className="flex items-center gap-2 font-bold transition-colors disabled:opacity-30"
+              style={{ color: 'var(--text-2)' }}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M19 12H5M12 19l-7-7 7-7" />
+              </svg>
+              Back
+            </button>
 
-          <button
-            onClick={goNext}
-            disabled={!canProceed(step, answers)}
-            className="flex items-center gap-2 px-7 py-3 rounded-full text-sm font-medium transition-all disabled:opacity-30"
-            style={{
-              background: canProceed(step, answers) ? 'var(--teal)' : 'var(--surface)',
-              color: canProceed(step, answers) ? '#FFFFFF' : 'var(--text-2)',
-              border: canProceed(step, answers) ? 'none' : '1px solid var(--border)',
-            }}
-          >
-            {step === TOTAL_STEPS - 1 ? 'See My Protocol' : 'Continue'}
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <path d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
-          </button>
+            <button
+              onClick={goNext}
+              disabled={!canProceed(step, answers)}
+              className="flex items-center justify-center gap-2 rounded-xl font-extrabold transition-all disabled:opacity-40"
+              style={{
+                minWidth: '160px',
+                padding: '14px 32px',
+                background: canProceed(step, answers) ? 'var(--teal)' : 'var(--surface-2)',
+                color: canProceed(step, answers) ? '#FFFFFF' : 'var(--text-2)',
+                boxShadow: canProceed(step, answers) ? '0 4px 20px rgba(37,87,54,0.25)' : 'none',
+                fontSize: '0.9rem',
+              }}
+            >
+              {step === TOTAL_STEPS - 1 ? 'See My Protocol' : 'Continue'}
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
         </footer>
       )}
 
       {/* ── Back from results ────────────────────────────────────── */}
       {step === TOTAL_STEPS && (
         <footer
-          className="flex-shrink-0 px-6 py-5 flex items-center"
-          style={{ borderTop: '1px solid var(--border)' }}
+          className="sticky bottom-0 z-50 flex-shrink-0 w-full"
+          style={{
+            background: 'rgba(255,255,255,0.85)',
+            backdropFilter: 'blur(12px)',
+            borderTop: '1px solid var(--border)',
+          }}
         >
-          <button
-            onClick={goBack}
-            className="flex items-center gap-2 text-sm transition-colors"
-            style={{ color: 'var(--text-2)' }}
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M19 12H5M12 19l-7-7 7-7" />
-            </svg>
-            Edit answers
-          </button>
+          <div className="max-w-5xl mx-auto px-6 py-5 flex items-center">
+            <button
+              onClick={goBack}
+              className="flex items-center gap-2 font-bold transition-colors"
+              style={{ color: 'var(--text-2)' }}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M19 12H5M12 19l-7-7 7-7" />
+              </svg>
+              Edit answers
+            </button>
+          </div>
         </footer>
       )}
     </div>
