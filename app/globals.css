@@ -16,8 +16,8 @@
 
   /* Text */
   --text:   #131811;
-  --text-2: rgba(19,24,17,0.55);
-  --text-3: rgba(19,24,17,0.35);
+  --text-2: rgba(19,24,17,0.70);
+  --text-3: rgba(19,24,17,0.50);
 
   /* Forest Green Primary */
   --teal:        #255736;
@@ -51,8 +51,8 @@
     --border-teal:  rgba(37,87,54,0.40);
 
     --text:   #E8EDE8;
-    --text-2: rgba(232,237,232,0.55);
-    --text-3: rgba(232,237,232,0.30);
+    --text-2: rgba(232,237,232,0.70);
+    --text-3: rgba(232,237,232,0.50);
 
     --teal-glow: rgba(37,87,54,0.12);
     --teal-dim:  rgba(37,87,54,0.18);
