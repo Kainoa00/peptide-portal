@@ -35,12 +35,7 @@ export default function LoginClient() {
   return (
     <div
       className="min-h-screen flex flex-col"
-      style={{
-        background: `
-          radial-gradient(ellipse 70% 50% at 50% 0%, rgba(37,87,54,0.07) 0%, transparent 60%),
-          var(--bg)
-        `,
-      }}
+      style={{ background: '#fdfcf8' }}
     >
       {/* ── Top bar ─────────────────────────────────────────────────── */}
       <div className="flex items-center justify-between px-6 py-5">
@@ -61,8 +56,8 @@ export default function LoginClient() {
           aria-label="Close"
           className="flex items-center justify-center w-9 h-9 rounded-full transition-colors"
           style={{
-            border: '1px solid var(--border)',
-            color: 'var(--text-2)',
+            border: '1px solid rgba(19,24,17,0.12)',
+            color: 'rgba(19,24,17,0.5)',
           }}
         >
           <svg
@@ -90,13 +85,13 @@ export default function LoginClient() {
                 fontSize: 'clamp(38px, 6vw, 58px)',
                 fontWeight: 300,
                 fontStyle: 'italic',
-                color: 'var(--text)',
+                color: '#131811',
                 lineHeight: 1.1,
               }}
             >
               Welcome back.
             </h1>
-            <p className="text-sm" style={{ color: 'var(--text-2)' }}>
+            <p className="text-sm" style={{ color: 'rgba(19,24,17,0.6)' }}>
               Sign in to access your protocol and physician messages.
             </p>
           </div>
@@ -105,8 +100,9 @@ export default function LoginClient() {
           <div
             className="rounded-2xl p-8 anim-fade-up d-100"
             style={{
-              background: 'var(--surface)',
-              border: '1px solid var(--border)',
+              background: '#FFFFFF',
+              border: '1px solid rgba(19,24,17,0.08)',
+              boxShadow: '0 4px 24px rgba(0,0,0,0.04)',
             }}
           >
             <form onSubmit={handleSubmit} className="space-y-5">
@@ -115,7 +111,7 @@ export default function LoginClient() {
                 <label
                   htmlFor="email"
                   className="block text-xs font-medium tracking-wide uppercase"
-                  style={{ color: 'var(--text-2)' }}
+                  style={{ color: 'rgba(19,24,17,0.5)' }}
                 >
                   Email
                 </label>
@@ -129,15 +125,15 @@ export default function LoginClient() {
                   placeholder="you@example.com"
                   className="w-full rounded-xl px-4 py-3 text-sm transition-colors outline-none"
                   style={{
-                    background: 'var(--surface-2)',
-                    border: '1px solid var(--border)',
-                    color: 'var(--text)',
+                    background: '#f4f7f4',
+                    border: '1px solid rgba(19,24,17,0.12)',
+                    color: '#131811',
                   }}
                   onFocus={(e) => {
-                    e.currentTarget.style.borderColor = 'var(--teal)'
+                    e.currentTarget.style.borderColor = '#255736'
                   }}
                   onBlur={(e) => {
-                    e.currentTarget.style.borderColor = 'var(--border)'
+                    e.currentTarget.style.borderColor = 'rgba(19,24,17,0.12)'
                   }}
                 />
               </div>
@@ -147,7 +143,7 @@ export default function LoginClient() {
                 <label
                   htmlFor="password"
                   className="block text-xs font-medium tracking-wide uppercase"
-                  style={{ color: 'var(--text-2)' }}
+                  style={{ color: 'rgba(19,24,17,0.5)' }}
                 >
                   Password
                 </label>
@@ -161,15 +157,15 @@ export default function LoginClient() {
                   placeholder="••••••••"
                   className="w-full rounded-xl px-4 py-3 text-sm transition-colors outline-none"
                   style={{
-                    background: 'var(--surface-2)',
-                    border: '1px solid var(--border)',
-                    color: 'var(--text)',
+                    background: '#f4f7f4',
+                    border: '1px solid rgba(19,24,17,0.12)',
+                    color: '#131811',
                   }}
                   onFocus={(e) => {
-                    e.currentTarget.style.borderColor = 'var(--teal)'
+                    e.currentTarget.style.borderColor = '#255736'
                   }}
                   onBlur={(e) => {
-                    e.currentTarget.style.borderColor = 'var(--border)'
+                    e.currentTarget.style.borderColor = 'rgba(19,24,17,0.12)'
                   }}
                 />
               </div>
@@ -194,7 +190,7 @@ export default function LoginClient() {
                 disabled={loading}
                 className="w-full rounded-full py-3.5 text-sm font-medium transition-all"
                 style={{
-                  background: loading ? 'rgba(37,87,54,0.5)' : 'var(--teal)',
+                  background: loading ? 'rgba(37,87,54,0.5)' : '#255736',
                   color: '#FFFFFF',
                   cursor: loading ? 'not-allowed' : 'pointer',
                 }}
@@ -205,11 +201,11 @@ export default function LoginClient() {
 
             {/* Divider */}
             <div className="my-6 flex items-center gap-3">
-              <div className="flex-1 h-px" style={{ background: 'var(--border)' }} />
-              <span className="text-xs" style={{ color: 'var(--text-3)' }}>
+              <div className="flex-1 h-px" style={{ background: 'rgba(19,24,17,0.08)' }} />
+              <span className="text-xs" style={{ color: 'rgba(19,24,17,0.35)' }}>
                 or
               </span>
-              <div className="flex-1 h-px" style={{ background: 'var(--border)' }} />
+              <div className="flex-1 h-px" style={{ background: 'rgba(19,24,17,0.08)' }} />
             </div>
 
             {/* Guest / catalog link */}
@@ -217,8 +213,8 @@ export default function LoginClient() {
               href="/catalog"
               className="flex items-center justify-center gap-2 w-full rounded-full py-3.5 text-sm transition-colors"
               style={{
-                border: '1px solid var(--border-hover)',
-                color: 'var(--text-2)',
+                border: '1px solid rgba(19,24,17,0.15)',
+                color: 'rgba(19,24,17,0.6)',
               }}
             >
               <svg
@@ -240,13 +236,13 @@ export default function LoginClient() {
           {/* Footer link */}
           <p
             className="mt-6 text-center text-sm anim-fade-up d-200"
-            style={{ color: 'var(--text-2)' }}
+            style={{ color: 'rgba(19,24,17,0.6)' }}
           >
             Don&apos;t have an account?{' '}
             <Link
               href="/signup"
               className="transition-colors"
-              style={{ color: 'var(--teal)' }}
+              style={{ color: '#255736' }}
             >
               Sign up →
             </Link>

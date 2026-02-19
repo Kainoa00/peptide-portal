@@ -79,21 +79,21 @@ function RadioCard({
       <div
         className="flex items-center justify-between rounded-xl p-6 transition-all duration-150"
         style={{
-          background: selected ? 'rgba(37,87,54,0.05)' : 'var(--surface)',
-          border: `2px solid ${selected ? '#255736' : 'rgba(19,24,17,0.12)'}`,
+          background: '#FFFFFF',
+          border: '2px solid rgba(19,24,17,0.12)',
           boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
         }}
       >
         <div className="flex flex-col gap-1 pr-4">
-          <span className="text-lg font-bold" style={{ color: 'var(--text)' }}>{label}</span>
-          <span className="text-sm leading-relaxed" style={{ color: 'var(--text-2)' }}>{sub}</span>
+          <span className="text-lg font-bold" style={{ color: '#131811' }}>{label}</span>
+          <span className="text-sm leading-relaxed" style={{ color: 'rgba(19,24,17,0.65)' }}>{sub}</span>
         </div>
         {/* Radio dot */}
         <div
           className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center transition-colors"
           style={{
-            border: `2px solid ${selected ? '#255736' : 'rgba(19,24,17,0.2)'}`,
-            background: selected ? '#255736' : 'transparent',
+            border: `2px solid ${selected ? '#3B82F6' : 'rgba(19,24,17,0.2)'}`,
+            background: selected ? '#3B82F6' : 'transparent',
           }}
         >
           {selected && <div className="w-2.5 h-2.5 rounded-full bg-white" />}
@@ -124,20 +124,20 @@ function CheckCard({
       <div
         className="flex items-center justify-between rounded-xl p-6 transition-all duration-150"
         style={{
-          background: selected ? 'rgba(37,87,54,0.05)' : 'var(--surface)',
-          border: `2px solid ${selected ? '#255736' : 'rgba(19,24,17,0.12)'}`,
+          background: '#FFFFFF',
+          border: '2px solid rgba(19,24,17,0.12)',
           boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
         }}
       >
         <div className="flex flex-col gap-1 pr-4">
-          <span className="text-base font-bold" style={{ color: 'var(--text)' }}>{label}</span>
-          <span className="text-sm" style={{ color: 'var(--text-2)' }}>{sub}</span>
+          <span className="text-base font-bold" style={{ color: '#131811' }}>{label}</span>
+          <span className="text-sm" style={{ color: 'rgba(19,24,17,0.65)' }}>{sub}</span>
         </div>
         <div
           className="flex-shrink-0 w-5 h-5 rounded flex items-center justify-center transition-colors"
           style={{
-            border: `2px solid ${selected ? '#255736' : 'rgba(19,24,17,0.2)'}`,
-            background: selected ? '#255736' : 'transparent',
+            border: `2px solid ${selected ? '#3B82F6' : 'rgba(19,24,17,0.2)'}`,
+            background: selected ? '#3B82F6' : 'transparent',
           }}
         >
           {selected && (
@@ -162,9 +162,9 @@ function Pill({
       onClick={onClick}
       className="px-5 py-2.5 rounded-full text-sm font-semibold transition-all"
       style={{
-        background: selected ? (accent ? `${accent}18` : 'rgba(37,87,54,0.1)') : 'var(--surface)',
+        background: selected ? (accent ? `${accent}18` : 'rgba(37,87,54,0.1)') : '#FFFFFF',
         border: `2px solid ${selected ? (accent ?? '#255736') : 'rgba(19,24,17,0.12)'}`,
-        color: selected ? (accent ?? '#255736') : 'var(--text-2)',
+        color: selected ? (accent ?? '#255736') : 'rgba(19,24,17,0.6)',
       }}
     >
       {children}
@@ -504,8 +504,8 @@ export default function QuizClient() {
                 className="font-display"
                 style={{
                   fontSize: 'clamp(36px, 5.5vw, 60px)',
-                  fontWeight: 400,
-                  color: 'var(--text)',
+                  fontWeight: 700,
+                  color: '#131811',
                   lineHeight: 1.15,
                   letterSpacing: '-0.01em',
                 }}
@@ -513,7 +513,7 @@ export default function QuizClient() {
                 {STEP_QUESTIONS[step - 1]}
               </h2>
               {step === 1 && (
-                <p className="mt-4 text-lg max-w-md mx-auto" style={{ color: 'var(--text-2)' }}>
+                <p className="mt-4 text-lg max-w-md mx-auto" style={{ color: 'rgba(19,24,17,0.6)' }}>
                   Select the option that best describes your current knowledge level.
                 </p>
               )}
@@ -527,7 +527,7 @@ export default function QuizClient() {
               </p>
               <h2
                 className="font-display"
-                style={{ fontSize: 'clamp(32px, 5vw, 52px)', fontWeight: 400, color: 'var(--text)', lineHeight: 1.15 }}
+                style={{ fontSize: 'clamp(32px, 5vw, 52px)', fontWeight: 700, color: '#131811', lineHeight: 1.15 }}
               >
                 {STEP_QUESTIONS[step - 1]}
               </h2>
@@ -573,7 +573,7 @@ export default function QuizClient() {
             onClick={goBack}
             disabled={step === 1}
             className="flex items-center gap-2 font-bold transition-colors disabled:opacity-30"
-            style={{ color: 'var(--text-2)' }}
+            style={{ color: 'rgba(19,24,17,0.5)' }}
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M19 12H5M12 19l-7-7 7-7" />
@@ -590,8 +590,8 @@ export default function QuizClient() {
                 minWidth: 160,
                 padding: '14px 32px',
                 fontSize: '0.95rem',
-                background: proceed ? '#255736' : 'var(--surface-2)',
-                color: proceed ? '#FFFFFF' : 'var(--text-2)',
+                background: proceed ? '#255736' : '#e9f0e9',
+                color: proceed ? '#FFFFFF' : 'rgba(19,24,17,0.4)',
                 boxShadow: proceed ? '0 8px 24px rgba(37,87,54,0.3)' : 'none',
                 transform: proceed ? 'translateY(0)' : undefined,
               }}
