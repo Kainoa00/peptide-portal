@@ -211,7 +211,7 @@ export default function SubscriptionPage() {
     <>
       <main
         style={{
-          background: 'var(--bg)',
+          background: '#fdfcf8',
           minHeight: '100vh',
           padding: '48px 24px 80px',
         }}

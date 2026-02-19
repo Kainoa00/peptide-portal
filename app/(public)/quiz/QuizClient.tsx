@@ -458,13 +458,13 @@ export default function QuizClient() {
   const proceed = canProceed(step, answers)
 
   return (
-    <div className="relative flex min-h-screen w-full flex-col" style={{ background: 'var(--bg)' }}>
+    <div className="relative flex min-h-screen w-full flex-col" style={{ background: '#fdfcf8' }}>
 
       {/* ── Header ───────────────────────────────────────────────── */}
       <header
         className="sticky top-0 z-50 w-full"
         style={{
-          background: 'rgba(246,248,246,0.85)',
+          background: 'rgba(253,252,248,0.88)',
           backdropFilter: 'blur(16px)',
           borderBottom: '1px solid rgba(19,24,17,0.08)',
         }}
@@ -485,7 +485,7 @@ export default function QuizClient() {
         </div>
 
         {/* Thin progress bar */}
-        <div className="w-full h-1" style={{ background: 'var(--surface-2)' }}>
+        <div className="w-full h-1" style={{ background: '#e9f0e9' }}>
           <div
             className="h-full transition-all duration-500 ease-out"
             style={{ width: `${(step / TOTAL_STEPS) * 100}%`, background: '#255736' }}

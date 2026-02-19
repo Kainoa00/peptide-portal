@@ -145,7 +145,7 @@ export default function MessagesPage() {
   return (
     <main
       style={{
-        background: 'var(--bg)',
+        background: '#fdfcf8',
         minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column',

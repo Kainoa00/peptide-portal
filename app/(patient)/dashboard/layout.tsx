@@ -90,7 +90,7 @@ function TabLink({ href, label, Icon }: { href: string; label: string; Icon: () 
 /* ── Layout ──────────────────────────────────────────────────────── */
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: 'var(--bg)' }}>
+    <div className="min-h-screen flex flex-col" style={{ background: '#fdfcf8' }}>
 
       {/* ── Navbar ──────────────────────────────────────────────────── */}
       <header
@@ -160,7 +160,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         {/* ── Main content ─────────────────────────────────────────── */}
         <main
           className="flex-1 overflow-y-auto p-6 md:p-10"
-          style={{ background: 'var(--bg)' }}
+          style={{ background: '#fdfcf8' }}
         >
           {children}
         </main>
