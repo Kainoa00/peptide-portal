@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState } from 'react'
 import Link from 'next/link'
@@ -27,7 +27,7 @@ export default function PrescriptionPanel({ peptide }: Props) {
       style={{
         background: 'var(--surface)',
         border: `1px solid ${meta.border}`,
-        boxShadow: `0 0 60px ${meta.dim}`,
+        boxShadow: '0 2px 20px rgba(0,0,0,0.07)',
       }}
     >
       {/* Header accent bar */}

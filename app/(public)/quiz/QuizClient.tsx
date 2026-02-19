@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useCallback } from 'react'
 import Link from 'next/link'
@@ -653,12 +653,16 @@ export default function QuizClient() {
         className="flex-shrink-0 px-6 py-4 flex items-center justify-between"
         style={{ borderBottom: '1px solid var(--border)' }}
       >
-        <Link
-          href="/"
-          className="font-display text-lg"
-          style={{ color: 'var(--text)', fontStyle: 'italic', fontWeight: 400 }}
-        >
-          peptide<span style={{ color: 'var(--teal)', fontStyle: 'normal', fontWeight: 300 }}>portal</span>
+        <Link href="/" className="flex items-center gap-2" style={{ textDecoration: 'none' }}>
+          <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: '#255736' }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
+              <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v11" />
+              <circle cx="12" cy="17" r="4" />
+            </svg>
+          </div>
+          <span className="text-lg font-extrabold tracking-tight" style={{ color: '#131811' }}>
+            Peptide Portal
+          </span>
         </Link>
 
         <div className="flex items-center gap-4">
@@ -852,7 +856,7 @@ export default function QuizClient() {
             className="flex items-center gap-2 px-7 py-3 rounded-full text-sm font-medium transition-all disabled:opacity-30"
             style={{
               background: canProceed(step, answers) ? 'var(--teal)' : 'var(--surface)',
-              color: canProceed(step, answers) ? '#06060F' : 'var(--text-2)',
+              color: canProceed(step, answers) ? '#FFFFFF' : 'var(--text-2)',
               border: canProceed(step, answers) ? 'none' : '1px solid var(--border)',
             }}
           >

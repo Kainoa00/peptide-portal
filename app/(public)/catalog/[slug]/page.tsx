@@ -1,4 +1,4 @@
-import Link from 'next/link'
+﻿import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getPeptideBySlug, CATEGORY_META, type Peptide } from '@/lib/peptide-data'
 
@@ -75,18 +75,22 @@ export default async function PeptideDetailPage({
       <header
         className="sticky top-0 z-50"
         style={{
-          background: 'rgba(246,248,246,0.92)',
+          background: 'rgba(255,255,255,0.85)',
           backdropFilter: 'blur(16px)',
           borderBottom: '1px solid var(--border)',
         }}
       >
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
-          <Link
-            href="/"
-            className="font-display text-xl tracking-tight"
-            style={{ color: 'var(--text)', fontStyle: 'italic', fontWeight: 400 }}
-          >
-            peptide<span style={{ color: 'var(--teal)', fontStyle: 'normal', fontWeight: 300 }}>portal</span>
+          <Link href="/" className="flex items-center gap-2.5" style={{ textDecoration: 'none' }}>
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: '#255736' }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
+                <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v11" />
+                <circle cx="12" cy="17" r="4" />
+              </svg>
+            </div>
+            <span className="text-xl font-extrabold tracking-tight" style={{ color: '#131811' }}>
+              Peptide Portal
+            </span>
           </Link>
 
           <nav className="flex items-center gap-6">
