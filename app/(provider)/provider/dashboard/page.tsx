@@ -88,7 +88,7 @@ export default async function ProviderDashboardPage() {
       <main style={{ maxWidth: '1200px', margin: '0 auto', padding: '40px 24px' }}>
         <h1 style={{ fontSize: '28px', fontWeight: '700', marginBottom: '8px' }}>Review Queue</h1>
         <p style={{ color: '#666', marginBottom: '32px' }}>
-          {intakes?.length || 0} pending intake{submissions?.length !== 1 ? 's' : ''}
+          {intakes?.length || 0} pending intake{intakes?.length !== 1 ? 's' : ''}
         </p>
 
         {intakes && intakes.length > 0 ? (

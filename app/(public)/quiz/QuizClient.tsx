@@ -229,7 +229,7 @@ function StepConditions({ value, onChange }: { value: Condition[]; onChange: (v:
     <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
       <p style={{ fontSize: '14px', color: '#666', marginBottom: '8px' }}>Select all that apply</p>
       {opts.map(o => (
-        <CheckCard key={o.value} selected={value.includes(o.value)} onClick={() => toggle(o.value)} label={o.label} sub={o.note} />
+        <CheckCard key={o.value} selected={value.includes(o.value as Condition)} onClick={() => toggle(o.value as Condition)} label={o.label} sub={o.note} />
       ))}
     </div>
   )

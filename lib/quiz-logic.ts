@@ -168,14 +168,10 @@ const SCORING_WEIGHTS: ScoringWeight[] = [
       'tb-500': 90,
       'cjc-1295-ipamorelin': 80,
       
-      // Moderate - weight loss + some recovery
-      'tirzepatide': 80,
-      'semaglutide': 80,
+      // Moderate/Sedentary - weight loss focus
+      'tirzepatide': 85,
+      'semaglutide': 85,
       'mk-677': 70,
-      
-      // Sedentary - weight loss, then ease into others
-      'tirzepatide': 90,
-      'semaglutide': 90,
       'ghk-cu': 65,
     },
   },
@@ -329,7 +325,6 @@ function scoreGoalMatch(goals: string[], category: Category): { score: number; r
     recovery: ['recovery', 'healing', 'injury', 'muscle'],
     longevity: ['longevity', 'anti_aging', 'vitality', 'health'],
     cognitive: ['cognitive', 'focus', 'memory', 'mental'],
-    other: [],
   }
   
   const matchingGoals = goals.filter(g => categoryGoals[category]?.includes(g))

@@ -16,6 +16,7 @@ export interface Peptide {
   benefits: string[]
   considerations: string[]
   num: number
+  is_available?: boolean
 }
 
 export const CATEGORY_META: Record<Category, { label: string; accent: string; dim: string; border: string }> = {
