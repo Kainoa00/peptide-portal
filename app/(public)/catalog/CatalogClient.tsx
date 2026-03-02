@@ -2,330 +2,190 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { useRouter, useSearchParams } from 'next/navigation'
-import Image from 'next/image'
-import { PEPTIDES, CATEGORY_META, getPeptidesByCategory, type Category, type Peptide } from '@/lib/peptide-data'
+import { useSearchParams } from 'next/navigation'
+import { PEPTIDES, getPeptidesByCategory, type Category, type Peptide } from '@/lib/peptide-data'
 
-/* ─── Science-themed Unsplash images per slug ────────────────────── */
+const ACCENT = '#D4A574'
+const ACCENT_DARK = '#8B7355'
+
+const CATEGORIES: { value: Category | 'all'; label: string }[] = [
+  { value: 'all', label: 'All' },
+  { value: 'weight_loss', label: 'Weight Loss' },
+  { value: 'recovery', label: 'Recovery' },
+  { value: 'longevity', label: 'Longevity' },
+  { value: 'cognitive', label: 'Cognitive' },
+]
+
 const CARD_IMG: Record<string, string> = {
-  'tirzepatide':
-    'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=800&q=80',
-  'semaglutide':
-    'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=800&q=80',
-  'bpc-157':
-    'https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=800&q=80',
-  'tb-500':
-    'https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&w=800&q=80',
-  'bpc-157-tb-500':
-    'https://images.unsplash.com/photo-1530026405186-ed1f139313f8?auto=format&fit=crop&w=800&q=80',
-  'cjc-1295-ipamorelin':
-    'https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=800&q=80',
-  'epitalon':
-    'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?auto=format&fit=crop&w=800&q=80',
-  'ss-31':
-    'https://images.unsplash.com/photo-1507413245164-6160d8298b31?auto=format&fit=crop&w=800&q=80',
-  'ghk-cu':
-    'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=800&q=80',
-  'mk-677':
-    'https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&w=800&q=80',
-  'semax':
-    'https://images.unsplash.com/photo-1557682260-96773eb01377?auto=format&fit=crop&w=800&q=80',
-  'selank':
-    'https://images.unsplash.com/photo-1518152006812-edab29b069ac?auto=format&fit=crop&w=800&q=80',
-  'dihexa':
-    'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80',
+  'tirzepatide': 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&q=80',
+  'semaglutide': 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=800&q=80',
+  'bpc-157': 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=800&q=80',
+  'tb-500': 'https://images.unsplash.com/photo-1576086213369-97a306d36557?w=800&q=80',
+  'bpc-157-tb-500': 'https://images.unsplash.com/photo-1530026405186-ed1f139313f8?w=800&q=80',
+  'cjc-1295-ipamorelin': 'https://images.unsplash.com/photo-1448375240586-882707db888b?w=800&q=80',
+  'epitalon': 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&q=80',
+  'ss-31': 'https://images.unsplash.com/photo-1507413245164-6160d8298b31?w=800&q=80',
+  'ghk-cu': 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=800&q=80',
+  'mk-677': 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=800&q=80',
+  'semax': 'https://images.unsplash.com/photo-1557682260-96773eb01377?w=800&q=80',
+  'selank': 'https://images.unsplash.com/photo-1518152006812-edab29b069ac?w=800&q=80',
+  'dihexa': 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&q=80',
 }
 
-/* ─── Peptide card ── exact stitch 2 card structure ─────────────── */
 function PeptideCard({ peptide }: { peptide: Peptide }) {
-  const meta = CATEGORY_META[peptide.category]
-  const imgSrc = CARD_IMG[peptide.slug] ?? `https://picsum.photos/seed/${peptide.slug}/800/450`
+  const imgSrc = CARD_IMG[peptide.slug] || `https://picsum.photos/seed/${peptide.slug}/800/450`
 
   return (
-    <Link
-      href={`/catalog/${peptide.slug}`}
-      className="group flex flex-col rounded-xl transition-all duration-300 hover:shadow-xl"
-      style={{
-        background: '#FFFFFF',
-        border: '1px solid rgba(19,24,17,0.07)',
-        boxShadow: '0 4px 20px rgba(0,0,0,0.03)',
-        padding: '1.5rem',
-        textDecoration: 'none',
+    <Link href={`/catalog/${peptide.slug}`} style={{ textDecoration: 'none' }}>
+      <div style={{
+        background: '#fff',
+        borderRadius: '16px',
+        overflow: 'hidden',
+        transition: 'all 0.3s ease',
+        cursor: 'pointer',
       }}
-    >
-      {/* Category badge */}
-      <div className="mb-4">
-        <span
-          className="text-[10px] font-bold tracking-widest uppercase px-2 py-1 rounded"
-          style={{ background: '#e9f0e9', color: '#4a6741' }}
-        >
-          {meta.label}
-        </span>
-      </div>
-
-      {/* Photo */}
-      <div
-        className="mb-6 rounded-lg overflow-hidden"
-        style={{ aspectRatio: '16/9', background: '#e9f0e9' }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.transform = 'translateY(-4px)'
+        e.currentTarget.style.boxShadow = '0 20px 40px rgba(42, 157, 110, 0.15)'
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = 'translateY(0)'
+        e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.04)'
+      }}
       >
-        <Image
-          src={imgSrc}
-          alt={peptide.name}
-          width={800}
-          height={450}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          unoptimized
-        />
-      </div>
-
-      {/* Name */}
-      <h3
-        className="font-display mb-2"
-        style={{ fontSize: 24, fontWeight: 700, color: '#131811', lineHeight: 1.2 }}
-      >
-        {peptide.name}
-      </h3>
-
-      {/* Description */}
-      <p
-        className="text-sm leading-relaxed mb-6 flex-grow"
-        style={{
-          color: 'rgba(19,24,17,0.65)',
-          display: '-webkit-box',
-          WebkitLineClamp: 3,
-          WebkitBoxOrient: 'vertical',
-          overflow: 'hidden',
-        }}
-      >
-        {peptide.description}
-      </p>
-
-      {/* Learn More */}
-      <div
-        className="flex items-center justify-between text-sm font-bold"
-        style={{ color: '#131811' }}
-      >
-        <span>Learn More</span>
-        <svg
-          width="18" height="18" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" strokeWidth="2"
-          className="transform group-hover:translate-x-1 transition-transform duration-200"
-        >
-          <path d="M5 12h14M12 5l7 7-7 7" />
-        </svg>
+        <div style={{ height: '180px', overflow: 'hidden', background: '#f0f0f0' }}>
+          <img src={imgSrc} alt={peptide.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        </div>
+        <div style={{ padding: '20px' }}>
+          <span style={{
+            fontSize: '11px',
+            fontWeight: '700',
+            textTransform: 'uppercase',
+            letterSpacing: '1px',
+            color: ACCENT,
+          }}>
+            {peptide.category.replace('_', ' ')}
+          </span>
+          <h3 style={{ fontSize: '18px', fontWeight: '600', color: '#1A1A1A', margin: '8px 0' }}>
+            {peptide.name}
+          </h3>
+          <p style={{ fontSize: '13px', color: '#666', lineHeight: 1.5, marginBottom: '12px' }}>
+            {peptide.description?.slice(0, 100)}...
+          </p>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <span style={{ fontSize: '20px', fontWeight: '700', color: '#1A1A1A' }}>
+              ${Math.floor(peptide.priceMonthly)}
+            </span>
+            <span style={{ fontSize: '13px', color: ACCENT, fontWeight: '600' }}>
+              View →
+            </span>
+          </div>
+        </div>
       </div>
     </Link>
   )
 }
 
-/* ─── Catalog Client ─────────────────────────────────────────────── */
 export default function CatalogClient() {
   const searchParams = useSearchParams()
-  const router = useRouter()
+  const initialCat = (searchParams.get('cat') as Category) || 'all'
+  const [category, setCategory] = useState<Category | 'all'>(initialCat)
 
-  const initialCat = (searchParams.get('cat') ?? 'all') as Category | 'all'
-  const [activeCategory, setActiveCategory] = useState<Category | 'all'>(initialCat)
-
-  function selectCategory(cat: Category | 'all') {
-    setActiveCategory(cat)
-    router.replace(cat === 'all' ? '/catalog' : `/catalog?cat=${cat}`, { scroll: false })
-  }
-
-  const filtered = getPeptidesByCategory(activeCategory)
-
-  const CATS: { value: Category | 'all'; label: string }[] = [
-    { value: 'all',         label: 'All Protocols' },
-    { value: 'weight_loss', label: 'Weight Loss' },
-    { value: 'recovery',    label: 'Recovery' },
-    { value: 'longevity',   label: 'Longevity' },
-    { value: 'cognitive',   label: 'Cognitive Health' },
-  ]
+  const peptides = getPeptidesByCategory(category)
 
   return (
-    /* ── Warm cream bg — matches stitch 2 #fdfcf8 ───────────────── */
-    <div style={{ background: '#fdfcf8', minHeight: '100vh' }}>
-
-      {/* ── Sticky navbar ────────────────────────────────────────── */}
-      <header
-        className="sticky top-0 z-50"
-        style={{
-          background: 'rgba(253,252,248,0.88)',
-          backdropFilter: 'blur(16px)',
-          borderBottom: '1px solid rgba(19,24,17,0.08)',
-        }}
-      >
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3" style={{ textDecoration: 'none' }}>
-            <div
-              className="w-9 h-9 rounded-lg flex-shrink-0"
-              style={{
-                backgroundImage: 'url(/peptide-icon.jpg)',
-                backgroundSize: '72px auto',
-                backgroundPosition: '0 50%',
-                overflow: 'hidden',
-                border: '1px solid rgba(19,24,17,0.1)',
-              }}
-            />
-            <span className="text-xl font-bold tracking-tight" style={{ color: '#131811' }}>
-              Peptide<span style={{ color: '#255736' }}>Portal</span>
-            </span>
+    <div style={{ minHeight: '100vh', background: '#FAFAF8', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+      
+      {/* Navbar */}
+      <header style={{ background: '#fff', borderBottom: '1px solid #E5E5E5' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '16px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: ACCENT, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <span style={{ color: '#fff', fontWeight: '700', fontSize: '14px' }}>P</span>
+            </div>
+            <span style={{ fontWeight: '600', fontSize: '18px', color: '#1A1A1A' }}>Peptide Portal</span>
           </Link>
-
-          <nav className="hidden md:flex items-center gap-10">
-            <span className="text-sm font-semibold" style={{ color: '#255736', borderBottom: '2px solid #255736', paddingBottom: 4 }}>
-              Library
-            </span>
-            <Link href="/quiz" className="text-sm font-medium" style={{ color: 'rgba(19,24,17,0.6)' }}>
-              Take the Quiz
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+            <Link href="/login" style={{ textDecoration: 'none', fontSize: '14px', fontWeight: '500', color: '#666' }}>Log in</Link>
+            <Link href="/quiz" style={{ textDecoration: 'none', background: ACCENT, color: '#fff', padding: '10px 20px', borderRadius: '24px', fontSize: '14px', fontWeight: '600' }}>
+              Get started
             </Link>
-            <Link href="/login" className="text-sm font-medium" style={{ color: 'rgba(19,24,17,0.6)' }}>
-              My Portal
-            </Link>
-          </nav>
-
-          <Link
-            href="/quiz"
-            className="text-sm font-bold px-6 py-2.5 rounded-full"
-            style={{ background: '#255736', color: '#FFFFFF' }}
-          >
-            Get Started →
-          </Link>
+          </div>
         </div>
       </header>
 
-      {/* ── Hero ─────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden pt-20 pb-16 px-6">
-        {/* Very subtle warm glows — not green-tinted */}
-        <div
-          className="absolute top-0 right-0 pointer-events-none"
-          style={{
-            width: 600, height: 600, borderRadius: '50%',
-            background: 'rgba(37,87,54,0.05)',
-            filter: 'blur(120px)',
-            transform: 'translate(30%, -50%)',
-          }}
-        />
-        <div
-          className="absolute bottom-0 left-0 pointer-events-none"
-          style={{
-            width: 600, height: 600, borderRadius: '50%',
-            background: 'rgba(180,200,180,0.08)',
-            filter: 'blur(120px)',
-            transform: 'translate(-30%, 50%)',
-          }}
-        />
-
-        <div className="max-w-4xl mx-auto text-center space-y-6 relative">
-          {/* Badge */}
-          <div
-            className="inline-flex items-center gap-2 px-4 py-1 rounded-full text-xs font-bold tracking-widest uppercase"
-            style={{ background: 'rgba(37,87,54,0.1)', color: '#131811' }}
-          >
-            Protocol Catalog
-          </div>
-
-          {/* Bold serif heading — matches stitch 2 font-bold */}
-          <h1
-            className="font-display leading-tight"
-            style={{ fontSize: 'clamp(40px, 7vw, 80px)', fontWeight: 700, color: '#131811' }}
-          >
-            {PEPTIDES.length} protocols.{' '}
-            <br />
-            <span style={{ fontStyle: 'italic', fontWeight: 300 }}>One platform.</span>
-          </h1>
-
-          <p
-            className="text-lg max-w-2xl mx-auto leading-relaxed"
-            style={{ color: 'rgba(19,24,17,0.65)', fontWeight: 300 }}
-          >
-            Explore our physician-vetted catalog of advanced peptide treatments designed
-            for holistic wellness, longevity, and peak performance.
-          </p>
-        </div>
+      {/* Hero */}
+      <section style={{ background: '#fff', padding: '60px 24px', textAlign: 'center', borderBottom: '1px solid #E5E5E5' }}>
+        <h1 style={{ fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: '700', color: '#1A1A1A', marginBottom: '12px' }}>
+          Our Protocols
+        </h1>
+        <p style={{ fontSize: '16px', color: '#666', maxWidth: '500px', margin: '0 auto' }}>
+          Browse our physician-prescribed peptide treatments. Every protocol is reviewed by a licensed doctor.
+        </p>
       </section>
 
-      {/* ── Filter bar ───────────────────────────────────────────── */}
-      <section className="max-w-7xl mx-auto px-6 mb-12">
-        <div
-          className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-8"
-          style={{ borderBottom: '1px solid rgba(19,24,17,0.08)' }}
-        >
-          <div className="flex gap-3 overflow-x-auto pb-1">
-            {CATS.map((cat) => {
-              const isActive = activeCategory === cat.value
-              return (
-                <button
-                  key={cat.value}
-                  onClick={() => selectCategory(cat.value)}
-                  className="whitespace-nowrap px-6 py-2 rounded-full text-sm font-bold transition-all"
-                  style={{
-                    background: isActive ? '#255736' : '#e9f0e9',
-                    color: isActive ? '#FFFFFF' : 'rgba(19,24,17,0.65)',
-                  }}
-                >
-                  {cat.label}
-                </button>
-              )
-            })}
-          </div>
-
-          <div className="flex items-center gap-2 text-sm" style={{ color: 'rgba(19,24,17,0.5)' }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M4 6h16M7 12h10M10 18h4" />
-            </svg>
-            <span className="font-medium">Sort by: Popular</span>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Protocol grid ────────────────────────────────────────── */}
-      <section className="max-w-7xl mx-auto px-6 pb-24">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          {filtered.map((peptide) => (
-            <PeptideCard key={peptide.slug} peptide={peptide} />
+      {/* Category Tabs */}
+      <div style={{ background: '#fff', padding: '20px 0', borderBottom: '1px solid #E5E5E5', position: 'sticky', top: 0, zIndex: 50 }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px', display: 'flex', gap: '12px', overflowX: 'auto' }}>
+          {CATEGORIES.map((cat) => (
+            <button
+              key={cat.value}
+              onClick={() => setCategory(cat.value)}
+              style={{
+                padding: '10px 20px',
+                borderRadius: '24px',
+                border: 'none',
+                fontSize: '14px',
+                fontWeight: '600',
+                background: category === cat.value ? ACCENT : '#f5f5f5',
+                color: category === cat.value ? '#fff' : '#666',
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
+                transition: 'all 0.2s',
+              }}
+            >
+              {cat.label}
+            </button>
           ))}
         </div>
+      </div>
 
-        {/* Bottom CTA */}
-        <div className="mt-20 text-center">
-          <Link
-            href="/quiz"
-            className="inline-block px-10 py-4 rounded-xl text-sm font-bold hover:opacity-90 transition-opacity"
-            style={{ background: '#131811', color: '#FFFFFF' }}
-          >
-            Show All Protocols
-          </Link>
-          <p className="mt-4 text-sm" style={{ color: 'rgba(19,24,17,0.5)' }}>
-            Discover all {PEPTIDES.length} clinical treatments
-          </p>
+      {/* Grid */}
+      <main style={{ padding: '60px 24px' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '24px' }}>
+            {peptides.map((peptide) => (
+              <PeptideCard key={peptide.slug} peptide={peptide} />
+            ))}
+          </div>
         </div>
+      </main>
+
+      {/* CTA */}
+      <section style={{ background: ACCENT_DARK, padding: '80px 24px', textAlign: 'center', color: '#fff' }}>
+        <h2 style={{ fontSize: 'clamp(24px, 4vw, 36px)', fontWeight: '700', marginBottom: '16px' }}>
+          Not sure which is right for you?
+        </h2>
+        <p style={{ fontSize: '16px', opacity: 0.8, marginBottom: '24px', maxWidth: '400px', margin: '0 auto 24px' }}>
+          Take our free consultation. A physician will help you find the perfect protocol.
+        </p>
+        <Link href="/quiz" style={{
+          display: 'inline-block',
+          background: '#fff',
+          color: ACCENT_DARK,
+          padding: '14px 32px',
+          borderRadius: '32px',
+          fontSize: '15px',
+          fontWeight: '600',
+          textDecoration: 'none',
+        }}>
+          Start Free Consultation
+        </Link>
       </section>
 
-      {/* ── Footer ───────────────────────────────────────────────── */}
-      <footer
-        className="py-12"
-        style={{ background: '#f4f7f4', borderTop: '1px solid rgba(19,24,17,0.08)' }}
-      >
-        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
-          <div className="flex items-center gap-2">
-            <div
-              className="w-7 h-7 rounded-lg flex-shrink-0"
-              style={{
-                backgroundImage: 'url(/peptide-icon.jpg)',
-                backgroundSize: '56px auto',
-                backgroundPosition: '0 50%',
-                overflow: 'hidden',
-                border: '1px solid rgba(19,24,17,0.1)',
-              }}
-            />
-            <p className="text-sm font-bold" style={{ color: '#131811' }}>Peptide Portal © 2025</p>
-          </div>
-          <div className="flex gap-8 text-sm" style={{ color: 'rgba(19,24,17,0.55)' }}>
-            <Link href="/privacy" style={{ color: 'rgba(19,24,17,0.55)' }}>Privacy Policy</Link>
-            <Link href="/terms" style={{ color: 'rgba(19,24,17,0.55)' }}>Terms of Service</Link>
-            <span>Medical Disclaimer</span>
-          </div>
-        </div>
+      {/* Footer */}
+      <footer style={{ background: '#1A1A1A', color: '#fff', padding: '40px 24px', textAlign: 'center' }}>
+        <p style={{ fontSize: '14px', opacity: 0.6 }}>© 2026 Peptide Portal. All rights reserved.</p>
       </footer>
     </div>
   )

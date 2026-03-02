@@ -3,173 +3,166 @@
 import Link from 'next/link'
 import { useState } from 'react'
 
-/* ─── Data ──────────────────────────────────────────────────────── */
+/* ─── Design: Warm Cream + Gold Accents ───────────────────────────────── */
+
+const ACCENT = '#D4A574' // Gold/terracotta
+const ACCENT_DARK = '#8B7355'
+const ACCENT_LIGHT = '#F5F0E8'
+
 const CATEGORIES = [
   {
     label: 'Weight Loss',
     tag: 'Metabolism',
-    desc: 'Advanced metabolic support protocols designed to optimize blood sugar and support healthy fat loss while maintaining muscle mass.',
+    desc: 'Doctor-prescribed GLP-1 treatments to help you reach your goals.',
     href: '/catalog?cat=weight_loss',
-    img: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=700&auto=format&fit=crop&q=80',
+    img: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&auto=format&fit=crop&q=80',
   },
   {
     label: 'Longevity',
     tag: 'Vitality',
-    desc: 'Targeted cellular repair and anti-aging protocols focusing on mitochondrial health, cognitive function, and cellular resilience.',
+    desc: 'Science-backed protocols designed to help you feel your best at any age.',
     href: '/catalog?cat=longevity',
-    img: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=700&auto=format&fit=crop&q=80',
+    img: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&auto=format&fit=crop&q=80',
   },
   {
     label: 'Recovery',
-    tag: 'Strength',
-    desc: 'Optimizing physical recovery, lean muscle growth, and injury repair for high-performing individuals and athletes.',
+    tag: 'Performance',
+    desc: 'Advanced peptide therapies to help you bounce back faster.',
     href: '/catalog?cat=recovery',
-    img: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=700&auto=format&fit=crop&q=80',
+    img: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&auto=format&fit=crop&q=80',
   },
   {
     label: 'Cognitive',
-    tag: 'Performance',
-    desc: 'Upregulate BDNF expression and drive synaptogenesis for sharper focus, memory, and mental performance.',
+    tag: 'Focus',
+    desc: 'Nootropic protocols to sharpen your mind and boost mental clarity.',
     href: '/catalog?cat=cognitive',
-    img: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=700&auto=format&fit=crop&q=80',
+    img: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&auto=format&fit=crop&q=80',
   },
 ]
 
-/* Molecular-inspired SVG icons matching the reference icon pack */
-const STEPS = [
+const BENEFITS = [
   {
     icon: (
-      /* Peptide chain — circles linked by bonds */
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
-        <circle cx="4" cy="12" r="3" />
-        <line x1="7" y1="12" x2="10" y2="12" />
-        <circle cx="12" cy="8" r="2.5" />
-        <line x1="12" y1="10.5" x2="12" y2="13.5" />
-        <circle cx="12" cy="16" r="2.5" />
-        <line x1="14" y1="12" x2="17" y2="12" />
-        <circle cx="20" cy="12" r="3" />
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+        <polyline points="22 4 12 14.01 9 11.01" />
       </svg>
     ),
-    n: '01',
-    title: 'Digital Consultation',
-    body: 'Tell us about your health goals and history through our secure HIPAA-compliant platform.',
+    title: 'Licensed Providers',
+    desc: 'Every prescription is reviewed by a board-certified physician.',
   },
   {
     icon: (
-      /* Hexagonal molecule — benzene ring */
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <polygon points="12,2 20,7 20,17 12,22 4,17 4,7" />
-        <circle cx="12" cy="12" r="3" />
-        <line x1="12" y1="2" x2="12" y2="9" />
-        <line x1="20" y1="7" x2="14.2" y2="10.5" />
-        <line x1="20" y1="17" x2="14.2" y2="13.5" />
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
       </svg>
     ),
-    n: '02',
-    title: 'Physician Review',
-    body: 'A board-certified physician reviews your intake within 24–48 hours and issues your prescription.',
+    title: 'HIPAA Compliant',
+    desc: 'Your health data is encrypted and securely stored.',
   },
   {
     icon: (
-      /* DNA double helix — simplified */
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
-        <path d="M5 3c3.5 1.5 10.5 1.5 14 0" />
-        <path d="M5 21c3.5-1.5 10.5-1.5 14 0" />
-        <path d="M5 3c0 4.5 4 6.5 7 9-3 2.5-7 4.5-7 9" />
-        <path d="M19 3c0 4.5-4 6.5-7 9 3 2.5 7 4.5 7 9" />
-        <line x1="7.5" y1="9" x2="16.5" y2="9" />
-        <line x1="7.5" y1="15" x2="16.5" y2="15" />
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <rect x="1" y="3" width="15" height="13" rx="2" ry="2" />
+        <path d="M16 8h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H7" />
+        <circle cx="5.5" cy="18.5" r="2.5" />
+        <circle cx="18.5" cy="18.5" r="2.5" />
       </svg>
     ),
-    n: '03',
-    title: 'Direct Delivery',
-    body: 'Your compounded protocol ships from a PCAB-accredited pharmacy in discreet, temperature-controlled packaging.',
-  },
-]
-
-const FAQ_ITEMS = [
-  {
-    q: 'Are peptides safe?',
-    a: 'Yes, our protocols are physician-supervised and use peptides with established safety profiles. Each prescription is reviewed by a board-certified MD.',
+    title: 'Free Shipping',
+    desc: 'Discreet delivery to your door, always free.',
   },
   {
-    q: 'How is this different from buying peptides online?',
-    a: 'Peptide Portal provides licensed physician oversight, pharmaceutical-grade compounding pharmacy partners, and ongoing medical support — not research-grade products.',
-  },
-  {
-    q: 'How long until I see results?',
-    a: 'Most patients notice improvements within 4–8 weeks. Longevity and recovery protocols typically show measurable results in 6–12 weeks.',
-  },
-  {
-    q: 'What states do you operate in?',
-    a: 'We currently serve patients in 42 states. Enter your state during the intake assessment to confirm eligibility.',
-  },
-  {
-    q: 'Can I cancel my subscription?',
-    a: 'Yes, cancel anytime from your patient dashboard with no cancellation fees.',
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <circle cx="12" cy="12" r="10" />
+        <path d="M12 6v6l4 2" />
+      </svg>
+    ),
+    title: 'Cancel Anytime',
+    desc: 'No contracts, no commitments. Pause or cancel anytime.',
   },
 ]
 
 const TESTIMONIALS = [
   {
-    quote: "I've tried everything for recovery. Six weeks on CJC-1295 and my joint pain is down 80%. I sleep like I did in my 20s.",
-    name: 'Marcus T.',
-    protocol: 'Recovery Protocol',
-    protocolColor: '#255736',
-    protocolDim: 'rgba(37,87,54,0.08)',
-    protocolBorder: 'rgba(37,87,54,0.20)',
-  },
-  {
-    quote: 'Lost 22 lbs in 3 months. The physician check-ins made me feel safe and supported throughout.',
-    name: 'Jennifer R.',
+    quote: "I've tried everything for weight loss. Tirzepatide changed everything. Down 28 lbs and feeling better than I have in years.",
+    name: 'Sarah M.',
     protocol: 'Weight Loss',
-    protocolColor: '#C0514A',
-    protocolDim: 'rgba(192,81,74,0.08)',
-    protocolBorder: 'rgba(192,81,74,0.20)',
+    rating: 5,
   },
   {
-    quote: "My mental clarity improved within 2 weeks of starting Semax. I'm sharper at work than I've been in years.",
+    quote: "The recovery stack has been game-changing for my training. Joint pain is gone, energy is up.",
+    name: 'Marcus T.',
+    protocol: 'Recovery',
+    rating: 5,
+  },
+  {
+    quote: "Cognitive focus is on another level. My work productivity has skyrocketed since starting Semax.",
     name: 'David K.',
-    protocol: 'Cognitive Protocol',
-    protocolColor: '#6B6FA8',
-    protocolDim: 'rgba(107,111,168,0.08)',
-    protocolBorder: 'rgba(107,111,168,0.20)',
+    protocol: 'Cognitive',
+    rating: 5,
   },
 ]
 
-/* ─── FAQ accordion item ─────────────────────────────────────────── */
-function FAQItem({
-  item,
-  isOpen,
-  onToggle,
-}: {
-  item: (typeof FAQ_ITEMS)[0]
-  isOpen: boolean
-  onToggle: () => void
-}) {
+const FAQ_ITEMS = [
+  {
+    q: 'How does this work?',
+    a: 'Start with a free consultation. Answer a few questions about your health goals, and a licensed physician will review and prescribe if appropriate. Your treatment ships free to your door.',
+  },
+  {
+    q: 'Are peptides safe?',
+    a: 'Our peptides are prescribed by licensed physicians and compounded by FDA-regulated pharmacies. Every treatment plan is physician-supervised.',
+  },
+  {
+    q: 'How much does it cost?',
+    a: 'Treatments start at $119/month. No hidden fees, cancel anytime. You\'ll see the exact price before checkout.',
+  },
+  {
+    q: 'What if I need to cancel?',
+    a: 'No problem. Cancel anytime from your dashboard with one click. No fees, no hassle.',
+  },
+]
+
+/* ─── Components ─────────────────────────────────────────────────── */
+
+function StarRating({ rating }: { rating: number }) {
   return (
-    <div style={{ borderBottom: '1px solid rgba(19,24,17,0.08)' }}>
+    <div className="flex gap-0.5">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <svg
+          key={i}
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill={i < rating ? ACCENT : 'none'}
+          stroke={ACCENT}
+          strokeWidth="2"
+        >
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+        </svg>
+      ))}
+    </div>
+  )
+}
+
+function FAQItem({ item, isOpen, onToggle }: { item: typeof FAQ_ITEMS[0]; isOpen: boolean; onToggle: () => void }) {
+  return (
+    <div style={{ borderBottom: '1px solid #E5E5E5' }}>
       <button
         onClick={onToggle}
         className="w-full flex items-center justify-between py-5 text-left"
         style={{ background: 'none', border: 'none', cursor: 'pointer' }}
-        aria-expanded={isOpen}
       >
-        <span className="text-base font-semibold pr-4" style={{ color: '#131811' }}>
+        <span className="text-base font-medium" style={{ color: '#1A1A1A' }}>
           {item.q}
         </span>
-        <span className="flex-shrink-0 text-xl font-light" style={{ color: '#255736', lineHeight: 1 }}>
+        <span style={{ color: ACCENT, fontSize: '20px', lineHeight: 1 }}>
           {isOpen ? '−' : '+'}
         </span>
       </button>
-      <div
-        style={{
-          maxHeight: isOpen ? '200px' : '0px',
-          overflow: 'hidden',
-          transition: 'max-height 0.35s cubic-bezier(0.16,1,0.3,1)',
-        }}
-      >
-        <p className="text-sm leading-relaxed pb-5" style={{ color: 'rgba(19,24,17,0.70)' }}>
+      <div style={{ maxHeight: isOpen ? '200px' : '0px', overflow: 'hidden', transition: 'all 0.3s ease' }}>
+        <p className="text-sm pb-5" style={{ color: '#666', lineHeight: 1.7 }}>
           {item.a}
         </p>
       </div>
@@ -177,354 +170,241 @@ function FAQItem({
   )
 }
 
-/* ─── Page ───────────────────────────────────────────────────────── */
+/* ─── Main Page ─────────────────────────────────────────────────── */
 export default function LandingPage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null)
 
   return (
-    <div style={{ background: '#F6F8F6', color: '#131811' }}>
+    <div style={{ background: '#FAFAF8', color: '#1A1A1A', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
 
       {/* ── Navbar ── */}
-      <header
-        className="fixed top-0 left-0 right-0 z-50"
-        style={{
-          background: 'rgba(255,255,255,0.85)',
-          backdropFilter: 'blur(16px)',
-          WebkitBackdropFilter: 'blur(16px)',
-          borderBottom: '1px solid rgba(19,24,17,0.08)',
-        }}
-      >
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-3" style={{ textDecoration: 'none' }}>
-            <div
-              className="w-8 h-8 rounded-lg flex-shrink-0"
-              style={{
-                backgroundImage: 'url(/peptide-icon.jpg)',
-                backgroundSize: '64px auto',
-                backgroundPosition: '0 50%',
-                overflow: 'hidden',
-                border: '1px solid rgba(19,24,17,0.1)',
-              }}
-            />
-            <span className="text-xl font-extrabold tracking-tight" style={{ color: '#131811' }}>
-              Peptide Portal
-            </span>
+      <header className="fixed top-0 left-0 right-0 z-50" style={{ background: 'rgba(250,250,248,0.95)', backdropFilter: 'blur(10px)', borderBottom: '1px solid #E5E5E5' }}>
+        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+          <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: ACCENT, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <span style={{ color: '#fff', fontWeight: '700', fontSize: '14px' }}>P</span>
+            </div>
+            <span style={{ fontWeight: '600', fontSize: '18px', color: '#1A1A1A' }}>Peptide Portal</span>
           </Link>
 
-          {/* Nav links */}
-          <nav className="hidden md:flex items-center gap-10">
-            {[
-              { label: 'Protocols', href: '/catalog' },
-              { label: 'How it Works', href: '#how-it-works' },
-              { label: 'About', href: '#' },
-              { label: 'Science', href: '#' },
-            ].map(({ label, href }) => (
+          <nav className="hidden md:flex items-center gap-8">
+            {['Protocols', 'How it Works', 'Pricing'].map((label) => (
               <Link
                 key={label}
-                href={href}
-                className="text-sm font-semibold transition-colors"
-                style={{ color: 'rgba(19,24,17,0.70)', textDecoration: 'none' }}
-                onMouseEnter={(e) => { e.currentTarget.style.color = '#255736' }}
-                onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(19,24,17,0.70)' }}
+                href={label === 'Protocols' ? '/catalog' : '#'}
+                style={{ textDecoration: 'none', fontSize: '14px', color: '#666', fontWeight: '500' }}
               >
                 {label}
               </Link>
             ))}
           </nav>
 
-          {/* CTAs */}
           <div className="flex items-center gap-4">
-            <Link
-              href="/login"
-              className="hidden sm:block text-sm font-bold px-6 py-2.5 rounded-full transition-all"
-              style={{ color: '#131811', textDecoration: 'none' }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = '#F1F4F0' }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent' }}
-            >
-              Log In
+            <Link href="/login" style={{ textDecoration: 'none', fontSize: '14px', fontWeight: '500', color: '#1A1A1A' }}>
+              Log in
             </Link>
             <Link
               href="/quiz"
-              className="text-sm font-bold px-8 py-3 rounded-full transition-all"
               style={{
-                background: '#255736',
-                color: '#FFFFFF',
                 textDecoration: 'none',
-                boxShadow: '0 4px 14px rgba(37,87,54,0.25)',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'scale(1.02)'
-                ;(e.currentTarget as HTMLAnchorElement).style.filter = 'brightness(1.12)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'scale(1)'
-                ;(e.currentTarget as HTMLAnchorElement).style.filter = 'brightness(1)'
+                background: ACCENT,
+                color: '#fff',
+                padding: '10px 20px',
+                borderRadius: '24px',
+                fontSize: '14px',
+                fontWeight: '600',
               }}
             >
-              Get Started
+              Get started
             </Link>
           </div>
         </div>
       </header>
 
-      {/* ── Hero — image + left gradient overlay, matching stitch reference ── */}
-      <section className="relative flex items-center overflow-hidden" style={{ minHeight: '85vh', paddingTop: 80 }}>
-        {/* Full-bleed image with left-to-right white fade */}
-        <div className="absolute inset-0 z-0">
-          <div
-            className="absolute inset-0 z-10"
-            style={{
-              background:
-                'linear-gradient(to right, rgba(255,255,255,1) 0%, rgba(255,255,255,0.92) 35%, rgba(255,255,255,0.50) 65%, rgba(255,255,255,0) 100%)',
-            }}
-          />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=1800&auto=format&fit=crop&q=80"
-            alt="Peaceful wellness background"
-            className="w-full h-full object-cover"
-          />
-        </div>
+      {/* ── Hero Section ── */}
+      <section style={{ paddingTop: '100px', paddingBottom: '80px', background: 'linear-gradient(to bottom, #FAFAF8 0%, #F5F0E8 100%)' }}>
+        <div className="max-w-6xl mx-auto px-6">
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '60px', alignItems: 'center' }}>
+            
+            {/* Left: Copy */}
+            <div style={{ maxWidth: '520px' }}>
+              <div style={{ 
+                display: 'inline-block', 
+                background: ACCENT_LIGHT, 
+                padding: '6px 14px', 
+                borderRadius: '20px', 
+                fontSize: '12px', 
+                fontWeight: '600',
+                color: ACCENT_DARK,
+                marginBottom: '20px'
+              }}>
+                Physician-prescribed peptide therapy
+              </div>
+              
+              <h1 style={{ fontSize: 'clamp(36px, 5vw, 52px)', fontWeight: '700', lineHeight: 1.1, marginBottom: '20px', color: '#1A1A1A' }}>
+                Health care that
+                <br />
+                actually works.
+              </h1>
+              
+              <p style={{ fontSize: '18px', lineHeight: 1.6, color: '#666', marginBottom: '32px' }}>
+                Personalized peptide protocols, prescribed by licensed doctors and delivered to your door. Start your journey today.
+              </p>
 
-        <div className="relative z-20 max-w-7xl mx-auto px-6 w-full py-20">
-          <div className="max-w-2xl space-y-8">
-            {/* Badge */}
-            <div
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full"
-              style={{
-                background: 'rgba(37,87,54,0.10)',
-                border: '1px solid rgba(37,87,54,0.20)',
-              }}
-            >
-              <span className="w-2 h-2 rounded-full" style={{ background: '#255736' }} />
-              <span className="text-xs font-bold tracking-widest uppercase" style={{ color: '#255736' }}>
-                Medical Excellence
-              </span>
-            </div>
-
-            {/* Headline */}
-            <h1
-              className="font-display"
-              style={{
-                fontSize: 'clamp(48px, 7vw, 80px)',
-                fontWeight: 400,
-                color: '#131811',
-                lineHeight: 1.1,
-              }}
-            >
-              Your biology,
-              <br />
-              <em style={{ fontStyle: 'italic', color: '#255736' }}>optimized</em> for life.
-            </h1>
-
-            {/* Sub */}
-            <p
-              className="text-lg leading-relaxed"
-              style={{ color: 'rgba(19,24,17,0.70)', maxWidth: '42rem' }}
-            >
-              Personalized peptide protocols overseen by licensed physicians. Science-backed solutions
-              designed to help you reach your peak performance.
-            </p>
-
-            {/* CTAs */}
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Link
-                href="/quiz"
-                className="inline-flex items-center justify-center px-10 py-4 rounded-xl text-lg font-bold transition-all"
-                style={{
-                  background: '#255736',
-                  color: '#FFFFFF',
-                  textDecoration: 'none',
-                  boxShadow: '0 8px 28px rgba(37,87,54,0.25)',
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)' }}
-                onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)' }}
-              >
-                Find Your Protocol
-              </Link>
-              <Link
-                href="/catalog"
-                className="inline-flex items-center justify-center px-10 py-4 rounded-xl text-lg font-bold transition-all"
-                style={{
-                  background: 'rgba(255,255,255,0.80)',
-                  border: '1px solid rgba(19,24,17,0.12)',
-                  color: '#131811',
-                  textDecoration: 'none',
-                  backdropFilter: 'blur(8px)',
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = '#FFFFFF' }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.80)' }}
-              >
-                Browse Catalog
-              </Link>
-            </div>
-
-            {/* Trust chips */}
-            <div className="flex flex-wrap gap-3">
-              {['HIPAA Compliant', 'Licensed Physicians', 'Lab Tested'].map((label) => (
-                <div
-                  key={label}
-                  className="flex items-center gap-2 px-4 py-2 rounded-full"
+              <div style={{ display: 'flex', gap: '12px', marginBottom: '32px' }}>
+                <Link
+                  href="/quiz"
                   style={{
-                    background: 'rgba(255,255,255,0.65)',
-                    border: '1px solid rgba(19,24,17,0.10)',
-                    backdropFilter: 'blur(8px)',
+                    textDecoration: 'none',
+                    background: ACCENT,
+                    color: '#fff',
+                    padding: '14px 28px',
+                    borderRadius: '28px',
+                    fontSize: '15px',
+                    fontWeight: '600',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '8px',
                   }}
                 >
-                  <span className="text-xs font-bold tracking-wide" style={{ color: '#131811' }}>
-                    {label}
-                  </span>
+                  Start free consultation
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
+                </Link>
+                <Link
+                  href="/catalog"
+                  style={{
+                    textDecoration: 'none',
+                    background: 'transparent',
+                    color: '#1A1A1A',
+                    padding: '14px 28px',
+                    borderRadius: '28px',
+                    fontSize: '15px',
+                    fontWeight: '600',
+                    border: '1px solid #E5E5E5',
+                  }}
+                >
+                  View protocols
+                </Link>
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontSize: '13px', color: '#888' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={ACCENT} strokeWidth="2">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                    <polyline points="22 4 12 14.01 9 11.01" />
+                  </svg>
+                  <span>Licensed physicians</span>
                 </div>
-              ))}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={ACCENT} strokeWidth="2">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                    <polyline points="22 4 12 14.01 9 11.01" />
+                  </svg>
+                  <span>Cancel anytime</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right: Image */}
+            <div style={{ position: 'relative' }}>
+              <div style={{ 
+                borderRadius: '24px', 
+                overflow: 'hidden',
+                boxShadow: '0 40px 80px rgba(212, 165, 116, 0.2)',
+              }}>
+                <img
+                  src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&auto=format&fit=crop&q=80"
+                  alt="Wellness"
+                  style={{ width: '100%', height: '500px', objectFit: 'cover' }}
+                />
+              </div>
+              {/* Floating card */}
+              <div style={{
+                position: 'absolute',
+                bottom: '-30px',
+                left: '-30px',
+                background: '#fff',
+                padding: '20px 24px',
+                borderRadius: '16px',
+                boxShadow: '0 20px 40px rgba(212, 165, 116, 0.2)',
+              }}>
+                <div style={{ fontSize: '13px', color: '#888', marginBottom: '4px' }}>Patients served</div>
+                <div style={{ fontSize: '28px', fontWeight: '700', color: ACCENT_DARK }}>4,200+</div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── Stats ── */}
-      <section
-        className="py-16 bg-white"
-        style={{
-          borderTop: '1px solid rgba(19,24,17,0.08)',
-          borderBottom: '1px solid rgba(19,24,17,0.08)',
-        }}
-      >
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
-            {[
-              { n: '4,200+', l: 'Patients Optimized' },
-              { n: '48 hr', l: 'Physician Review Time' },
-              { n: '13', l: 'Clinical Protocols' },
-            ].map((s, i) => (
-              <div
-                key={s.l}
-                className="space-y-2"
-                style={
-                  i === 1
-                    ? {
-                        borderLeft: '1px solid rgba(19,24,17,0.08)',
-                        borderRight: '1px solid rgba(19,24,17,0.08)',
-                        paddingLeft: '2rem',
-                        paddingRight: '2rem',
-                      }
-                    : {}
-                }
-              >
-                <p className="text-4xl font-extrabold" style={{ color: '#131811' }}>
-                  {s.n}
-                </p>
-                <p
-                  className="text-xs font-bold uppercase tracking-widest"
-                  style={{ color: 'rgba(19,24,17,0.50)' }}
-                >
-                  {s.l}
-                </p>
+      {/* ── Benefits Bar ── */}
+      <section style={{ background: '#fff', padding: '40px 0', borderTop: '1px solid #E5E5E5', borderBottom: '1px solid #E5E5E5' }}>
+        <div className="max-w-6xl mx-auto px-6">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '40px' }}>
+            {BENEFITS.map((benefit) => (
+              <div key={benefit.title} style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
+                <div style={{ color: ACCENT }}>{benefit.icon}</div>
+                <div>
+                  <div style={{ fontWeight: '600', fontSize: '15px', marginBottom: '4px' }}>{benefit.title}</div>
+                  <div style={{ fontSize: '14px', color: '#666' }}>{benefit.desc}</div>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── Protocol Cards — image-based, matching stitch reference ── */}
-      <section className="py-32">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex flex-col md:flex-row justify-between items-end gap-6 mb-16">
-            <div className="max-w-xl space-y-4">
-              <span
-                className="text-sm font-bold uppercase tracking-[0.2em]"
-                style={{ color: '#255736' }}
-              >
-                Our Offerings
-              </span>
-              <h2
-                className="font-display"
-                style={{ fontSize: 'clamp(36px, 4vw, 52px)', fontWeight: 400, color: '#131811', lineHeight: 1.1 }}
-              >
-                Featured Pathways
-              </h2>
-              <p style={{ color: 'rgba(19,24,17,0.60)', fontSize: '1.1rem', lineHeight: 1.6 }}>
-                Every body is unique. We provide the pathways to unlock your specific biological
-                potential through clinical precision.
-              </p>
-            </div>
-            <Link
-              href="/catalog"
-              className="flex items-center gap-2 font-bold transition-colors"
-              style={{ color: '#255736', textDecoration: 'none' }}
-              onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.75' }}
-              onMouseLeave={(e) => { e.currentTarget.style.opacity = '1' }}
-            >
-              View all protocols
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
-            </Link>
+      {/* ── Protocol Categories ── */}
+      <section style={{ padding: '100px 0', background: '#FAFAF8' }}>
+        <div className="max-w-6xl mx-auto px-6">
+          <div style={{ textAlign: 'center', marginBottom: '60px' }}>
+            <h2 style={{ fontSize: 'clamp(32px, 4vw, 42px)', fontWeight: '700', marginBottom: '16px' }}>
+              Treatments for every goal
+            </h2>
+            <p style={{ fontSize: '18px', color: '#666', maxWidth: '500px', margin: '0 auto' }}>
+              Browse our physician-prescribed protocols tailored to your health goals.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '24px' }}>
             {CATEGORIES.map((cat) => (
               <Link
                 key={cat.label}
                 href={cat.href}
-                className="group block bg-white rounded-2xl overflow-hidden transition-all duration-500"
                 style={{
-                  border: '1px solid rgba(19,24,17,0.08)',
-                  boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
                   textDecoration: 'none',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.boxShadow = '0 20px 60px rgba(0,0,0,0.12)'
-                  e.currentTarget.style.transform = 'translateY(-4px)'
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.boxShadow = '0 1px 4px rgba(0,0,0,0.04)'
-                  e.currentTarget.style.transform = 'translateY(0)'
+                  display: 'block',
+                  background: '#fff',
+                  borderRadius: '20px',
+                  overflow: 'hidden',
+                  transition: 'all 0.3s ease',
                 }}
               >
-                {/* Image thumbnail */}
-                <div className="h-48 overflow-hidden relative">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                <div style={{ height: '200px', overflow: 'hidden' }}>
                   <img
                     src={cat.img}
                     alt={cat.label}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   />
-                  <div
-                    className="absolute top-3 left-3 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter"
-                    style={{
-                      background: 'rgba(255,255,255,0.92)',
-                      backdropFilter: 'blur(4px)',
-                      color: '#131811',
-                    }}
-                  >
+                </div>
+                <div style={{ padding: '24px' }}>
+                  <div style={{ 
+                    fontSize: '11px', 
+                    fontWeight: '700', 
+                    textTransform: 'uppercase', 
+                    letterSpacing: '1px',
+                    color: ACCENT,
+                    marginBottom: '8px'
+                  }}>
                     {cat.tag}
                   </div>
-                </div>
-
-                {/* Content */}
-                <div className="p-6 flex flex-col space-y-3">
-                  <h3
-                    className="font-display text-2xl font-bold"
-                    style={{ color: '#131811' }}
-                  >
+                  <div style={{ fontSize: '20px', fontWeight: '600', marginBottom: '8px', color: '#1A1A1A' }}>
                     {cat.label}
-                  </h3>
-                  <p className="text-sm leading-relaxed" style={{ color: 'rgba(19,24,17,0.60)' }}>
+                  </div>
+                  <p style={{ fontSize: '14px', color: '#666', lineHeight: 1.5 }}>
                     {cat.desc}
                   </p>
-                  <div className="pt-3">
-                    <div
-                      className="w-full py-3 rounded-lg text-center font-bold text-sm transition-all"
-                      style={{
-                        border: '2px solid #F1F4F0',
-                        color: '#131811',
-                        background: 'transparent',
-                      }}
-                    >
-                      Explore Protocol
-                    </div>
-                  </div>
                 </div>
               </Link>
             ))}
@@ -532,120 +412,94 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── How It Works — with molecular icon accent ── */}
-      <section
-        id="how-it-works"
-        className="py-24 relative overflow-hidden"
-        style={{ background: '#F1F4F0' }}
-      >
-        {/* Molecular icons decorative — very faint */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/molecules.jpg"
-          alt=""
-          aria-hidden="true"
-          className="absolute right-0 top-0 h-full pointer-events-none select-none"
-          style={{ width: 'auto', objectFit: 'cover', opacity: 0.05 }}
-        />
-
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="text-center mb-20 space-y-4">
-            <h2
-              className="font-display"
-              style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 400, color: '#131811' }}
-            >
-              Seamless Healthcare
+      {/* ── How It Works ── */}
+      <section style={{ padding: '100px 0', background: '#1A1A1A', color: '#fff' }}>
+        <div className="max-w-6xl mx-auto px-6">
+          <div style={{ textAlign: 'center', marginBottom: '60px' }}>
+            <h2 style={{ fontSize: 'clamp(32px, 4vw, 42px)', fontWeight: '700', marginBottom: '16px' }}>
+              How it works
             </h2>
-            <p style={{ color: 'rgba(19,24,17,0.60)', maxWidth: '520px', margin: '0 auto', lineHeight: 1.7 }}>
-              Accessing advanced biotechnology should be simple. Our three-step process is
-              physician-led from start to finish.
+            <p style={{ fontSize: '18px', color: 'rgba(255,255,255,0.7)', maxWidth: '500px', margin: '0 auto' }}>
+              Get started in minutes. No hidden fees, no commitment.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-12">
-            {STEPS.map((step) => (
-              <div key={step.n} className="relative p-8 text-center space-y-6">
-                <div
-                  className="w-16 h-16 rounded-full flex items-center justify-center mx-auto"
-                  style={{
-                    background: '#FFFFFF',
-                    boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
-                    color: '#255736',
-                  }}
-                >
-                  {step.icon}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '40px' }}>
+            {[
+              { n: '1', title: 'Free consultation', desc: 'Answer a few questions about your health goals. Takes 2 minutes.' },
+              { n: '2', title: 'Doctor review', desc: 'A licensed physician reviews your info and prescribes if appropriate.' },
+              { n: '3', title: 'Free delivery', desc: 'Your treatment arrives at your door in discreet packaging.' },
+            ].map((step) => (
+              <div key={step.n} style={{ textAlign: 'center' }}>
+                <div style={{ 
+                  width: '64px', 
+                  height: '64px', 
+                  borderRadius: '50%', 
+                  background: 'rgba(255,255,255,0.15)', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center',
+                  fontSize: '24px',
+                  fontWeight: '700',
+                  margin: '0 auto 20px',
+                  border: `2px solid ${ACCENT}`,
+                  color: '#fff'
+                }}>
+                  {step.n}
                 </div>
-                <h4 className="text-xl font-bold" style={{ color: '#131811' }}>
-                  {step.n}. {step.title}
-                </h4>
-                <p className="text-sm leading-relaxed" style={{ color: 'rgba(19,24,17,0.60)' }}>
-                  {step.body}
-                </p>
+                <h3 style={{ fontSize: '20px', fontWeight: '600', marginBottom: '12px' }}>{step.title}</h3>
+                <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.7)', lineHeight: 1.6 }}>{step.desc}</p>
               </div>
             ))}
+          </div>
+
+          <div style={{ textAlign: 'center', marginTop: '48px' }}>
+            <Link
+              href="/quiz"
+              style={{
+                textDecoration: 'none',
+                background: ACCENT,
+                color: '#fff',
+                padding: '16px 32px',
+                borderRadius: '32px',
+                fontSize: '16px',
+                fontWeight: '600',
+                display: 'inline-block',
+              }}
+            >
+              Start your consultation
+            </Link>
           </div>
         </div>
       </section>
 
       {/* ── Testimonials ── */}
-      <section className="py-32" style={{ background: '#FFFFFF' }}>
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16 space-y-4">
-            <span
-              className="text-sm font-bold uppercase tracking-[0.2em]"
-              style={{ color: '#255736' }}
-            >
-              Patient Stories
-            </span>
-            <h2
-              className="font-display"
-              style={{
-                fontSize: 'clamp(32px, 4vw, 48px)',
-                fontWeight: 400,
-                fontStyle: 'italic',
-                color: '#131811',
-              }}
-            >
-              Real results, real people.
+      <section style={{ padding: '100px 0', background: '#FAFAF8' }}>
+        <div className="max-w-6xl mx-auto px-6">
+          <div style={{ textAlign: 'center', marginBottom: '60px' }}>
+            <h2 style={{ fontSize: 'clamp(32px, 4vw, 42px)', fontWeight: '700', marginBottom: '16px' }}>
+              Real people, real results
             </h2>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
             {TESTIMONIALS.map((t, i) => (
               <div
                 key={i}
-                className="p-8 rounded-2xl"
                 style={{
-                  background: '#FFFFFF',
-                  border: '1px solid rgba(19,24,17,0.08)',
-                  boxShadow: '0 2px 12px rgba(0,0,0,0.04)',
+                  background: '#fff',
+                  padding: '32px',
+                  borderRadius: '20px',
+                  boxShadow: '0 4px 20px rgba(212, 165, 116, 0.1)',
                 }}
               >
-                {/* Stars */}
-                <div className="flex mb-4">
-                  {Array.from({ length: 5 }).map((_, j) => (
-                    <svg key={j} width="14" height="14" viewBox="0 0 24 24" fill="#255736">
-                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                    </svg>
-                  ))}
-                </div>
-                <p className="text-sm leading-relaxed mb-6" style={{ color: 'rgba(19,24,17,0.70)' }}>
-                  &ldquo;{t.quote}&rdquo;
+                <StarRating rating={t.rating} />
+                <p style={{ fontSize: '16px', lineHeight: 1.6, margin: '20px 0', color: '#1A1A1A' }}>
+                  "{t.quote}"
                 </p>
-                <div className="flex items-center justify-between gap-3">
-                  <span className="text-sm font-semibold" style={{ color: '#131811' }}>
-                    — {t.name}
-                  </span>
-                  <span
-                    className="text-xs font-semibold px-2.5 py-1 rounded-full"
-                    style={{
-                      background: t.protocolDim,
-                      color: t.protocolColor,
-                      border: `1px solid ${t.protocolBorder}`,
-                    }}
-                  >
-                    {t.protocol}
-                  </span>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <span style={{ fontWeight: '600', color: '#1A1A1A' }}>{t.name}</span>
+                  <span style={{ fontSize: '13px', color: ACCENT, fontWeight: '600' }}>{t.protocol}</span>
                 </div>
               </div>
             ))}
@@ -654,148 +508,84 @@ export default function LandingPage() {
       </section>
 
       {/* ── FAQ ── */}
-      <section className="py-32" style={{ background: '#F1F4F0' }}>
-        <div className="max-w-4xl mx-auto px-6">
-          <div className="text-center mb-16 space-y-4">
-            <span
-              className="text-sm font-bold uppercase tracking-[0.2em]"
-              style={{ color: '#255736' }}
-            >
-              Common Questions
-            </span>
-            <h2
-              className="font-display"
-              style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 400, color: '#131811' }}
-            >
-              Everything you need to know.
+      <section style={{ padding: '100px 0', background: '#fff' }}>
+        <div className="max-w-3xl mx-auto px-6">
+          <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+            <h2 style={{ fontSize: 'clamp(32px, 4vw, 42px)', fontWeight: '700' }}>
+              Frequently asked questions
             </h2>
           </div>
-          <div
-            className="rounded-2xl p-8"
-            style={{ background: '#FFFFFF', border: '1px solid rgba(19,24,17,0.08)' }}
-          >
-            <div style={{ borderTop: '1px solid rgba(19,24,17,0.08)' }}>
-              {FAQ_ITEMS.map((item, i) => (
-                <FAQItem
-                  key={i}
-                  item={item}
-                  isOpen={openFaq === i}
-                  onToggle={() => setOpenFaq(openFaq === i ? null : i)}
-                />
-              ))}
-            </div>
+
+          <div style={{ background: '#FAFAF8', borderRadius: '20px', padding: '8px 32px' }}>
+            {FAQ_ITEMS.map((item, i) => (
+              <FAQItem
+                key={i}
+                item={item}
+                isOpen={openFaq === i}
+                onToggle={() => setOpenFaq(openFaq === i ? null : i)}
+              />
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ── CTA Banner ── */}
-      <section className="py-32 px-6" style={{ background: '#F6F8F6' }}>
-        <div
-          className="max-w-5xl mx-auto relative overflow-hidden text-center"
-          style={{
-            background: '#131811',
-            borderRadius: '3rem',
-            padding: 'clamp(48px, 8vw, 96px) clamp(32px, 6vw, 96px)',
-          }}
-        >
-          <div
-            className="absolute inset-0 pointer-events-none"
+      {/* ── CTA ── */}
+      <section style={{ padding: '100px 0', background: ACCENT_LIGHT }}>
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <h2 style={{ fontSize: 'clamp(36px, 5vw, 48px)', fontWeight: '700', marginBottom: '20px', color: ACCENT_DARK }}>
+            Ready to feel your best?
+          </h2>
+          <p style={{ fontSize: '18px', color: '#666', marginBottom: '32px' }}>
+            Join thousands who've transformed their health with peptide therapy.
+          </p>
+          <Link
+            href="/quiz"
             style={{
-              backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px)',
-              backgroundSize: '24px 24px',
+              textDecoration: 'none',
+              background: ACCENT,
+              color: '#fff',
+              padding: '18px 40px',
+              borderRadius: '36px',
+              fontSize: '17px',
+              fontWeight: '600',
+              display: 'inline-block',
             }}
-          />
-          <div className="relative z-10 space-y-8">
-            <h2
-              className="font-display"
-              style={{
-                fontSize: 'clamp(36px, 5vw, 60px)',
-                fontWeight: 400,
-                color: '#FFFFFF',
-                lineHeight: 1.1,
-              }}
-            >
-              Ready to optimize
-              <br />
-              your human potential?
-            </h2>
-            <p
-              style={{
-                color: 'rgba(255,255,255,0.70)',
-                fontSize: '1.1rem',
-                maxWidth: '480px',
-                margin: '0 auto',
-                lineHeight: 1.7,
-              }}
-            >
-              Join thousands of high-performers who are taking control of their biology with
-              science-backed peptide therapy.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-              <Link
-                href="/quiz"
-                className="inline-flex items-center justify-center px-12 py-5 rounded-2xl font-extrabold text-xl transition-all"
-                style={{
-                  background: '#255736',
-                  color: '#FFFFFF',
-                  textDecoration: 'none',
-                  boxShadow: '0 0 40px rgba(37,87,54,0.35)',
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.04)' }}
-                onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)' }}
-              >
-                Get Your Protocol
-              </Link>
-            </div>
-          </div>
+          >
+            Start free consultation
+          </Link>
         </div>
       </section>
 
       {/* ── Footer ── */}
-      <footer style={{ background: '#FFFFFF', borderTop: '1px solid rgba(19,24,17,0.08)' }}>
-        <div className="max-w-7xl mx-auto px-6 py-20">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-16">
-            {/* Brand */}
-            <div className="col-span-2 md:col-span-1 space-y-5">
-              <div className="flex items-center gap-2">
-                <div
-                  className="w-6 h-6 rounded flex items-center justify-center"
-                  style={{ background: '#255736' }}
-                >
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
-                    <circle cx="12" cy="17" r="4" />
-                    <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v11" />
-                  </svg>
+      <footer style={{ background: '#1A1A1A', color: '#fff', padding: '60px 0 40px' }}>
+        <div className="max-w-6xl mx-auto px-6">
+          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: '60px', marginBottom: '60px' }}>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
+                <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: ACCENT, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <span style={{ color: '#fff', fontWeight: '700', fontSize: '14px' }}>P</span>
                 </div>
-                <span className="text-lg font-extrabold tracking-tight" style={{ color: '#131811' }}>
-                  Peptide Portal
-                </span>
+                <span style={{ fontWeight: '600', fontSize: '18px' }}>Peptide Portal</span>
               </div>
-              <p className="text-sm leading-relaxed" style={{ color: 'rgba(19,24,17,0.50)' }}>
-                Science-led protocols for the modern world. Precision medicine, personalized for you.
+              <p style={{ fontSize: '14px', color: '#888', lineHeight: 1.6, maxWidth: '280px' }}>
+                Physician-prescribed peptide therapy, delivered to your door.
               </p>
             </div>
-
-            {/* Link columns */}
+            
             {[
-              { heading: 'Protocols', links: ['Weight Loss', 'Longevity', 'Recovery', 'Cognitive'] },
-              { heading: 'Company', links: ['About Us', 'Our Doctors', 'Science', 'Contact'] },
-              { heading: 'Legal', links: ['Privacy Policy', 'Terms of Service', 'Medical Disclaimer', 'HIPAA Policy'] },
-            ].map(({ heading, links }) => (
-              <div key={heading}>
-                <h4 className="font-bold mb-6" style={{ color: '#131811' }}>
-                  {heading}
-                </h4>
-                <ul className="space-y-4 text-sm">
-                  {links.map((l) => (
-                    <li key={l}>
-                      <Link
-                        href={heading === 'Protocols' ? '/catalog' : '#'}
-                        style={{ color: 'rgba(19,24,17,0.60)', textDecoration: 'none' }}
-                        onMouseEnter={(e) => { e.currentTarget.style.color = '#255736' }}
-                        onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(19,24,17,0.60)' }}
-                      >
-                        {l}
+              { heading: 'Treatments', links: ['Weight Loss', 'Longevity', 'Recovery', 'Cognitive'] },
+              { heading: 'Company', links: ['About', 'Careers', 'Press', 'Contact'] },
+              { heading: 'Legal', links: ['Privacy', 'Terms', 'Accessibility'] },
+            ].map((col) => (
+              <div key={col.heading}>
+                <div style={{ fontSize: '13px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '1px', color: '#666', marginBottom: '20px' }}>
+                  {col.heading}
+                </div>
+                <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                  {col.links.map((link) => (
+                    <li key={link} style={{ marginBottom: '12px' }}>
+                      <Link href="#" style={{ textDecoration: 'none', fontSize: '14px', color: '#999' }}>
+                        {link}
                       </Link>
                     </li>
                   ))}
@@ -804,13 +594,8 @@ export default function LandingPage() {
             ))}
           </div>
 
-          <div
-            className="pt-8 flex flex-col md:flex-row justify-between items-center gap-4"
-            style={{ borderTop: '1px solid rgba(19,24,17,0.08)' }}
-          >
-            <p className="text-xs" style={{ color: 'rgba(19,24,17,0.40)' }}>
-              © 2026 Peptide Portal. All rights reserved. · Not medical advice.
-            </p>
+          <div style={{ borderTop: '1px solid #333', paddingTop: '24px', fontSize: '13px', color: '#666' }}>
+            © 2026 Peptide Portal. All rights reserved. This site does not provide medical advice.
           </div>
         </div>
       </footer>
