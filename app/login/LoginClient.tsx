@@ -32,7 +32,8 @@ export default function LoginClient() {
       return
     }
 
-    router.push('/dashboard')
+    // Use hard redirect to ensure session is properly loaded
+    window.location.href = '/dashboard'
   }
 
   return (

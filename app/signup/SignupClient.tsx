@@ -55,7 +55,8 @@ export default function SignupClient() {
       return
     }
 
-    router.push('/quiz')
+    // Use hard redirect to ensure session is properly loaded
+    window.location.href = '/quiz'
   }
 
   return (

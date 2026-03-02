@@ -318,9 +318,8 @@ function StepRecommendation({ answers }: { answers: Answers }) {
       const { data: { user } } = await supabase.auth.getUser()
 
       if (!user) {
-        // Not logged in - redirect to signup
-        alert('Please create an account first.')
-        window.location.href = '/signup'
+        // Not logged in - redirect to login
+        window.location.href = '/login'
         return
       }
 
