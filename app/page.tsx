@@ -188,13 +188,17 @@ export default function LandingPage() {
           </Link>
 
           <nav className="hidden md:flex items-center gap-8">
-            {['Protocols', 'How it Works', 'Pricing'].map((label) => (
+            {[
+              { label: 'Protocols', href: '/catalog' },
+              { label: 'How it Works', href: '#how-it-works' },
+              { label: 'Pricing', href: '#faq' },
+            ].map((item) => (
               <Link
-                key={label}
-                href={label === 'Protocols' ? '/catalog' : '#'}
+                key={item.label}
+                href={item.href}
                 style={{ textDecoration: 'none', fontSize: '14px', color: '#666', fontWeight: '500' }}
               >
-                {label}
+                {item.label}
               </Link>
             ))}
           </nav>
@@ -413,7 +417,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── How It Works ── */}
-      <section style={{ padding: '100px 0', background: '#1A1A1A', color: '#fff' }}>
+      <section id="how-it-works" style={{ padding: '100px 0', background: '#1A1A1A', color: '#fff' }}>
         <div className="max-w-6xl mx-auto px-6">
           <div style={{ textAlign: 'center', marginBottom: '60px' }}>
             <h2 style={{ fontSize: 'clamp(32px, 4vw, 42px)', fontWeight: '700', marginBottom: '16px' }}>
@@ -508,7 +512,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── FAQ ── */}
-      <section style={{ padding: '100px 0', background: '#fff' }}>
+      <section id="faq" style={{ padding: '100px 0', background: '#fff' }}>
         <div className="max-w-3xl mx-auto px-6">
           <div style={{ textAlign: 'center', marginBottom: '48px' }}>
             <h2 style={{ fontSize: 'clamp(32px, 4vw, 42px)', fontWeight: '700' }}>
@@ -573,9 +577,23 @@ export default function LandingPage() {
             </div>
             
             {[
-              { heading: 'Treatments', links: ['Weight Loss', 'Longevity', 'Recovery', 'Cognitive'] },
-              { heading: 'Company', links: ['About', 'Careers', 'Press', 'Contact'] },
-              { heading: 'Legal', links: ['Privacy', 'Terms', 'Accessibility'] },
+              { heading: 'Treatments', links: [
+                { label: 'Weight Loss', href: '/catalog?cat=weight_loss' },
+                { label: 'Longevity', href: '/catalog?cat=longevity' },
+                { label: 'Recovery', href: '/catalog?cat=recovery' },
+                { label: 'Cognitive', href: '/catalog?cat=cognitive' },
+              ]},
+              { heading: 'Company', links: [
+                { label: 'About', href: '#' },
+                { label: 'Careers', href: '#' },
+                { label: 'Press', href: '#' },
+                { label: 'Contact', href: '#' },
+              ]},
+              { heading: 'Legal', links: [
+                { label: 'Privacy', href: '/privacy' },
+                { label: 'Terms', href: '/terms' },
+                { label: 'Accessibility', href: '#' },
+              ]},
             ].map((col) => (
               <div key={col.heading}>
                 <div style={{ fontSize: '13px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '1px', color: '#666', marginBottom: '20px' }}>
@@ -583,9 +601,9 @@ export default function LandingPage() {
                 </div>
                 <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                   {col.links.map((link) => (
-                    <li key={link} style={{ marginBottom: '12px' }}>
-                      <Link href="#" style={{ textDecoration: 'none', fontSize: '14px', color: '#999' }}>
-                        {link}
+                    <li key={link.label} style={{ marginBottom: '12px' }}>
+                      <Link href={link.href} style={{ textDecoration: 'none', fontSize: '14px', color: '#999' }}>
+                        {link.label}
                       </Link>
                     </li>
                   ))}
