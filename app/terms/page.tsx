@@ -1,6 +1,10 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
 
+const ACCENT = '#D4A574'
+const ACCENT_DARK = '#8B7355'
+const ACCENT_LIGHT = '#F5F0E8'
+
 export const metadata: Metadata = {
   title: 'Terms of Service — Peptide Portal',
   description: 'Review the Terms of Service for Peptide Portal, including service description, medical disclaimer, prescription policy, and user obligations.',
@@ -8,25 +12,32 @@ export const metadata: Metadata = {
 
 export default function TermsPage() {
   return (
-    <div style={{ background: 'var(--bg)', minHeight: '100vh' }}>
+    <div style={{ background: '#FAFAF8', minHeight: '100vh', color: '#1A1A1A', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
       {/* Header */}
       <header
         style={{
-          borderBottom: '1px solid var(--border)',
+          borderBottom: '1px solid #E5E5E5',
           padding: '20px 24px',
+          background: 'rgba(250,250,248,0.95)',
+          backdropFilter: 'blur(10px)',
+          position: 'sticky',
+          top: 0,
+          zIndex: 50,
         }}
       >
         <div style={{ maxWidth: 720, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Link
             href="/"
-            className="font-display text-xl"
-            style={{ color: 'var(--text)', fontStyle: 'italic', fontWeight: 400, textDecoration: 'none' }}
+            style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}
           >
-            peptide<span style={{ color: 'var(--teal)', fontStyle: 'normal', fontWeight: 300 }}>portal</span>
+            <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: ACCENT, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <span style={{ color: '#fff', fontWeight: '700', fontSize: '14px' }}>P</span>
+            </div>
+            <span style={{ fontWeight: '600', fontSize: '18px', color: '#1A1A1A' }}>Peptide Portal</span>
           </Link>
           <Link
             href="/"
-            style={{ fontSize: 13, color: 'var(--text-2)', textDecoration: 'none' }}
+            style={{ fontSize: 13, color: '#666', textDecoration: 'none' }}
           >
             ← Back to home
           </Link>
@@ -37,16 +48,15 @@ export default function TermsPage() {
       <main id="main-content" style={{ maxWidth: 720, margin: '0 auto', padding: '64px 24px 96px' }}>
         {/* Title */}
         <div style={{ marginBottom: 48 }}>
-          <p style={{ fontSize: 12, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--text-3)', marginBottom: 12 }}>
+          <p style={{ fontSize: 12, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#888', marginBottom: 12 }}>
             Legal
           </p>
           <h1
-            className="font-display"
-            style={{ fontSize: 'clamp(36px, 5vw, 52px)', fontWeight: 300, color: 'var(--text)', lineHeight: 1.1, marginBottom: 16 }}
+            style={{ fontSize: 'clamp(36px, 5vw, 52px)', fontWeight: '700', color: '#1A1A1A', lineHeight: 1.1, marginBottom: 16 }}
           >
             Terms of Service
           </h1>
-          <p style={{ fontSize: 14, color: 'var(--text-2)' }}>
+          <p style={{ fontSize: 14, color: '#666' }}>
             Effective date: January 1, 2026 &nbsp;·&nbsp; Last updated: February 1, 2026
           </p>
         </div>
@@ -56,15 +66,14 @@ export default function TermsPage() {
           {/* Service Description */}
           <section>
             <h2
-              className="font-display"
-              style={{ fontSize: 24, fontWeight: 400, color: 'var(--text)', marginBottom: 16 }}
+              style={{ fontSize: 24, fontWeight: '600', color: '#1A1A1A', marginBottom: 16 }}
             >
               1. Service Description
             </h2>
-            <p style={{ fontSize: 15, color: 'var(--text-2)', lineHeight: 1.8, marginBottom: 12 }}>
+            <p style={{ fontSize: 15, color: '#666', lineHeight: 1.8, marginBottom: 12 }}>
               Peptide Portal, Inc. (&quot;Peptide Portal,&quot; &quot;we,&quot; &quot;us,&quot; or &quot;our&quot;) operates a telehealth platform that facilitates connections between patients and independent, licensed physicians who may evaluate, diagnose, and prescribe treatments including peptide therapy protocols. Peptide Portal itself is not a pharmacy or prescriber. Prescriptions are issued solely by licensed physicians on our platform.
             </p>
-            <p style={{ fontSize: 15, color: 'var(--text-2)', lineHeight: 1.8, marginBottom: 12 }}>
+            <p style={{ fontSize: 15, color: '#666', lineHeight: 1.8, marginBottom: 12 }}>
               Our services include:
             </p>
             <ul style={{ paddingLeft: 20, display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -75,7 +84,7 @@ export default function TermsPage() {
                 'Patient portal for tracking protocol status and physician communications',
                 'Educational content about peptide therapy (for informational purposes only)',
               ].map((item) => (
-                <li key={item} style={{ fontSize: 15, color: 'var(--text-2)', lineHeight: 1.7 }}>
+                <li key={item} style={{ fontSize: 15, color: '#666', lineHeight: 1.7 }}>
                   {item}
                 </li>
               ))}
@@ -87,30 +96,29 @@ export default function TermsPage() {
             style={{
               padding: '28px 32px',
               borderRadius: 16,
-              background: 'rgba(212,151,90,0.05)',
-              border: '1px solid rgba(212,151,90,0.2)',
+              background: ACCENT_LIGHT,
+              border: '1px solid rgba(212,165,116,0.3)',
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" strokeWidth="1.5">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={ACCENT} strokeWidth="1.5">
                 <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
                 <line x1="12" y1="9" x2="12" y2="13" />
                 <line x1="12" y1="17" x2="12.01" y2="17" />
               </svg>
               <h2
-                className="font-display"
-                style={{ fontSize: 24, fontWeight: 400, color: 'var(--text)', margin: 0 }}
+                style={{ fontSize: 24, fontWeight: '600', color: '#1A1A1A', margin: 0 }}
               >
                 2. Medical Disclaimer
               </h2>
             </div>
-            <p style={{ fontSize: 15, color: 'var(--text-2)', lineHeight: 1.8, marginBottom: 12 }}>
-              <strong style={{ color: 'var(--amber)' }}>Peptide Portal is not an emergency medical service.</strong> If you are experiencing a medical emergency, call 911 or your local emergency number immediately, or go to your nearest emergency room.
+            <p style={{ fontSize: 15, color: '#666', lineHeight: 1.8, marginBottom: 12 }}>
+              <strong style={{ color: ACCENT_DARK }}>Peptide Portal is not an emergency medical service.</strong> If you are experiencing a medical emergency, call 911 or your local emergency number immediately, or go to your nearest emergency room.
             </p>
-            <p style={{ fontSize: 15, color: 'var(--text-2)', lineHeight: 1.8, marginBottom: 12 }}>
+            <p style={{ fontSize: 15, color: '#666', lineHeight: 1.8, marginBottom: 12 }}>
               The content on our platform, including educational articles, protocol descriptions, and any AI-generated guidance, is for informational purposes only and does not constitute medical advice. A licensed physician&#39;s evaluation is required before any prescription is issued.
             </p>
-            <p style={{ fontSize: 15, color: 'var(--text-2)', lineHeight: 1.8 }}>
+            <p style={{ fontSize: 15, color: '#666', lineHeight: 1.8 }}>
               Telehealth services may not be appropriate for all medical conditions. Our physicians may determine that in-person evaluation is required and may decline to prescribe based on their clinical judgment.
             </p>
           </section>
@@ -118,12 +126,11 @@ export default function TermsPage() {
           {/* Prescription and Medication Policy */}
           <section>
             <h2
-              className="font-display"
-              style={{ fontSize: 24, fontWeight: 400, color: 'var(--text)', marginBottom: 16 }}
+              style={{ fontSize: 24, fontWeight: '600', color: '#1A1A1A', marginBottom: 16 }}
             >
               3. Prescription and Medication Policy
             </h2>
-            <p style={{ fontSize: 15, color: 'var(--text-2)', lineHeight: 1.8, marginBottom: 16 }}>
+            <p style={{ fontSize: 15, color: '#666', lineHeight: 1.8, marginBottom: 16 }}>
               All prescriptions issued through Peptide Portal are subject to the following terms:
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -149,9 +156,9 @@ export default function TermsPage() {
                   body: 'Peptide Portal does not prescribe controlled substances (DEA Schedule I–V).',
                 },
               ].map((item) => (
-                <div key={item.title} style={{ paddingLeft: 16, borderLeft: '2px solid var(--border)' }}>
-                  <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)', marginBottom: 4 }}>{item.title}</div>
-                  <p style={{ fontSize: 14, color: 'var(--text-2)', lineHeight: 1.7, margin: 0 }}>{item.body}</p>
+                <div key={item.title} style={{ paddingLeft: 16, borderLeft: `2px solid ${ACCENT}` }}>
+                  <div style={{ fontSize: 14, fontWeight: 600, color: '#1A1A1A', marginBottom: 4 }}>{item.title}</div>
+                  <p style={{ fontSize: 14, color: '#666', lineHeight: 1.7, margin: 0 }}>{item.body}</p>
                 </div>
               ))}
             </div>
@@ -160,12 +167,11 @@ export default function TermsPage() {
           {/* Payment Terms */}
           <section>
             <h2
-              className="font-display"
-              style={{ fontSize: 24, fontWeight: 400, color: 'var(--text)', marginBottom: 16 }}
+              style={{ fontSize: 24, fontWeight: '600', color: '#1A1A1A', marginBottom: 16 }}
             >
               4. Payment Terms
             </h2>
-            <p style={{ fontSize: 15, color: 'var(--text-2)', lineHeight: 1.8, marginBottom: 12 }}>
+            <p style={{ fontSize: 15, color: '#666', lineHeight: 1.8, marginBottom: 12 }}>
               By subscribing to a protocol, you agree to the following payment terms:
             </p>
             <ul style={{ paddingLeft: 20, display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -177,7 +183,7 @@ export default function TermsPage() {
                 'We reserve the right to adjust pricing with 30 days\' written notice to active subscribers.',
                 'All prices are in U.S. dollars. We do not currently serve patients outside the United States.',
               ].map((item) => (
-                <li key={item} style={{ fontSize: 15, color: 'var(--text-2)', lineHeight: 1.7 }}>
+                <li key={item} style={{ fontSize: 15, color: '#666', lineHeight: 1.7 }}>
                   {item}
                 </li>
               ))}
@@ -187,12 +193,11 @@ export default function TermsPage() {
           {/* Account Termination */}
           <section>
             <h2
-              className="font-display"
-              style={{ fontSize: 24, fontWeight: 400, color: 'var(--text)', marginBottom: 16 }}
+              style={{ fontSize: 24, fontWeight: '600', color: '#1A1A1A', marginBottom: 16 }}
             >
               5. Account Termination
             </h2>
-            <p style={{ fontSize: 15, color: 'var(--text-2)', lineHeight: 1.8, marginBottom: 12 }}>
+            <p style={{ fontSize: 15, color: '#666', lineHeight: 1.8, marginBottom: 12 }}>
               We reserve the right to suspend or terminate your account immediately and without prior notice if we determine, in our sole discretion, that you have:
             </p>
             <ul style={{ paddingLeft: 20, display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -203,12 +208,12 @@ export default function TermsPage() {
                 'Engaged in abusive, harassing, or threatening conduct toward staff or physicians',
                 'Breached any material provision of these Terms',
               ].map((item) => (
-                <li key={item} style={{ fontSize: 15, color: 'var(--text-2)', lineHeight: 1.7 }}>
+                <li key={item} style={{ fontSize: 15, color: '#666', lineHeight: 1.7 }}>
                   {item}
                 </li>
               ))}
             </ul>
-            <p style={{ fontSize: 15, color: 'var(--text-2)', lineHeight: 1.8, marginTop: 12 }}>
+            <p style={{ fontSize: 15, color: '#666', lineHeight: 1.8, marginTop: 12 }}>
               Upon termination, your right to use the platform ceases immediately. Sections of these Terms that by their nature should survive termination (including limitation of liability, governing law, and dispute resolution) will remain in effect.
             </p>
           </section>
@@ -218,23 +223,22 @@ export default function TermsPage() {
             style={{
               padding: '28px 32px',
               borderRadius: 16,
-              background: 'var(--surface)',
-              border: '1px solid var(--border)',
+              background: '#fff',
+              border: '1px solid #E5E5E5',
             }}
           >
             <h2
-              className="font-display"
-              style={{ fontSize: 24, fontWeight: 400, color: 'var(--text)', marginBottom: 16 }}
+              style={{ fontSize: 24, fontWeight: '600', color: '#1A1A1A', marginBottom: 16 }}
             >
               6. Limitation of Liability
             </h2>
-            <p style={{ fontSize: 15, color: 'var(--text-2)', lineHeight: 1.8, marginBottom: 12 }}>
+            <p style={{ fontSize: 15, color: '#666', lineHeight: 1.8, marginBottom: 12 }}>
               TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, PEPTIDE PORTAL, ITS OFFICERS, DIRECTORS, EMPLOYEES, AND AGENTS SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING LOSS OF PROFITS, DATA, OR GOODWILL, ARISING OUT OF OR IN CONNECTION WITH YOUR USE OF OUR SERVICES.
             </p>
-            <p style={{ fontSize: 15, color: 'var(--text-2)', lineHeight: 1.8, marginBottom: 12 }}>
+            <p style={{ fontSize: 15, color: '#666', lineHeight: 1.8, marginBottom: 12 }}>
               OUR TOTAL LIABILITY TO YOU FOR ANY CLAIM ARISING OUT OF THESE TERMS OR YOUR USE OF THE SERVICES SHALL NOT EXCEED THE AMOUNT PAID BY YOU TO PEPTIDE PORTAL IN THE THREE (3) MONTHS PRECEDING THE CLAIM.
             </p>
-            <p style={{ fontSize: 15, color: 'var(--text-2)', lineHeight: 1.8 }}>
+            <p style={{ fontSize: 15, color: '#666', lineHeight: 1.8 }}>
               Some jurisdictions do not allow the exclusion of certain warranties or limitation of liability. In such jurisdictions, our liability shall be limited to the maximum extent permitted by law.
             </p>
           </section>
@@ -242,18 +246,17 @@ export default function TermsPage() {
           {/* Governing Law */}
           <section>
             <h2
-              className="font-display"
-              style={{ fontSize: 24, fontWeight: 400, color: 'var(--text)', marginBottom: 16 }}
+              style={{ fontSize: 24, fontWeight: '600', color: '#1A1A1A', marginBottom: 16 }}
             >
               7. Governing Law &amp; Dispute Resolution
             </h2>
-            <p style={{ fontSize: 15, color: 'var(--text-2)', lineHeight: 1.8, marginBottom: 12 }}>
+            <p style={{ fontSize: 15, color: '#666', lineHeight: 1.8, marginBottom: 12 }}>
               These Terms shall be governed by and construed in accordance with the laws of the State of Delaware, without regard to its conflict of law provisions.
             </p>
-            <p style={{ fontSize: 15, color: 'var(--text-2)', lineHeight: 1.8, marginBottom: 12 }}>
+            <p style={{ fontSize: 15, color: '#666', lineHeight: 1.8, marginBottom: 12 }}>
               Any dispute arising out of or relating to these Terms or our services shall be resolved by binding arbitration administered by the American Arbitration Association (AAA) in accordance with its Commercial Arbitration Rules. The arbitration shall be conducted in English and the arbitrator&#39;s decision shall be final and binding.
             </p>
-            <p style={{ fontSize: 15, color: 'var(--text-2)', lineHeight: 1.8 }}>
+            <p style={{ fontSize: 15, color: '#666', lineHeight: 1.8 }}>
               You waive any right to a jury trial or to participate in a class action lawsuit with respect to any claim related to these Terms or our services.
             </p>
           </section>
@@ -263,28 +266,27 @@ export default function TermsPage() {
             style={{
               padding: '28px 32px',
               borderRadius: 16,
-              background: 'var(--surface)',
-              border: '1px solid var(--border)',
+              background: '#fff',
+              border: '1px solid #E5E5E5',
             }}
           >
             <h2
-              className="font-display"
-              style={{ fontSize: 24, fontWeight: 400, color: 'var(--text)', marginBottom: 16 }}
+              style={{ fontSize: 24, fontWeight: '600', color: '#1A1A1A', marginBottom: 16 }}
             >
               Contact Us
             </h2>
-            <p style={{ fontSize: 15, color: 'var(--text-2)', lineHeight: 1.8, marginBottom: 12 }}>
+            <p style={{ fontSize: 15, color: '#666', lineHeight: 1.8, marginBottom: 12 }}>
               If you have questions about these Terms of Service, please contact us:
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              <p style={{ fontSize: 14, color: 'var(--text-2)', margin: 0 }}>
-                <strong style={{ color: 'var(--text)' }}>Peptide Portal, Inc.</strong>
+              <p style={{ fontSize: 14, color: '#666', margin: 0 }}>
+                <strong style={{ color: '#1A1A1A' }}>Peptide Portal, Inc.</strong>
               </p>
-              <a href="mailto:legal@peptideportal.com" style={{ fontSize: 14, color: 'var(--teal)' }}>
+              <a href="mailto:legal@peptideportal.com" style={{ fontSize: 14, color: ACCENT }}>
                 legal@peptideportal.com
               </a>
             </div>
-            <p style={{ fontSize: 13, color: 'var(--text-3)', marginTop: 16, lineHeight: 1.7 }}>
+            <p style={{ fontSize: 13, color: '#888', marginTop: 16, lineHeight: 1.7 }}>
               We reserve the right to modify these Terms at any time. We will provide notice of material changes by email or through the platform. Continued use of our services after such changes constitutes acceptance of the revised Terms.
             </p>
           </section>
