@@ -194,6 +194,7 @@ export default function LandingPage() {
               { label: 'Protocols', href: '/catalog' },
               { label: 'How it Works', href: '#how-it-works' },
               { label: 'Pricing', href: '#faq' },
+              { label: 'For Providers', href: '/provider' },
             ].map((item) => (
               <Link
                 key={item.label}
@@ -603,14 +604,13 @@ export default function LandingPage() {
               ]},
               { heading: 'Company', links: [
                 { label: 'About', href: '#' },
-                { label: 'Careers', href: '#' },
-                { label: 'Press', href: '#' },
+                { label: 'For Providers', href: '/provider' },
                 { label: 'Contact', href: '#' },
               ]},
               { heading: 'Legal', links: [
                 { label: 'Privacy', href: '/privacy' },
                 { label: 'Terms', href: '/terms' },
-                { label: 'Accessibility', href: '#' },
+                { label: 'HIPAA', href: '/hipaa' },
               ]},
             ].map((col) => (
               <div key={col.heading}>
