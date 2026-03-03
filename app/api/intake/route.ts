@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase'
+import { createAdminClient } from '@/lib/supabase'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(request: NextRequest) {
@@ -10,7 +10,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Authentication required' }, { status: 401 })
     }
 
-    const supabase = createClient()
+    // Use admin client to bypass RLS
+    const supabase = createAdminClient()
 
     // Get user profile
     const { data: profile } = await supabase
