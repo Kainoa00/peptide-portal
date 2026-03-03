@@ -1,8 +1,20 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import MessageThread, { type Message } from '@/components/dashboard/MessageThread'
+import { useState, useEffect, useRef } from 'react'
 import { createClient, isSupabaseConfigured } from '@/lib/supabase'
+
+const ACCENT = '#D4A574'
+const ACCENT_DARK = '#8B7355'
+
+/* ─── Types ─────────────────────────────────────────────────────── */
+interface Message {
+  id: string
+  senderId: string
+  senderName: string
+  body: string
+  createdAt: string
+  isProvider: boolean
+}
 
 /* ─── Mock Data ──────────────────────────────────────────────────── */
 const INITIAL_MESSAGES: Message[] = [
@@ -35,247 +47,161 @@ const INITIAL_MESSAGES: Message[] = [
 /* ─── Page ───────────────────────────────────────────────────────── */
 export default function MessagesPage() {
   const [messages, setMessages] = useState<Message[]>(INITIAL_MESSAGES)
+  const [newMessage, setNewMessage] = useState('')
+  const [sending, setSending] = useState(false)
+  const messagesEndRef = useRef<HTMLDivElement>(null)
 
-  /* ── Real-time Supabase subscription (soft enhancement) ── */
   useEffect(() => {
-    if (!isSupabaseConfigured) return // no-op if Supabase not set up
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages])
 
-    const supabase = createClient()
-    let userId: string | null = null
+  async function handleSend() {
+    if (!newMessage.trim() || sending) return
+    setSending(true)
 
-    async function setup() {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) return
-
-      userId = user.id
-
-      // Load existing messages from DB
-      const { data: rows } = await supabase
-        .from('messages')
-        .select('*')
-        .eq('patient_id', userId)
-        .order('created_at', { ascending: true })
-
-      if (rows && rows.length > 0) {
-        setMessages(
-          rows.map((row) => ({
-            id: row.id as string,
-            senderId: row.sender_id as string,
-            senderName: (row.is_provider ? 'Dr. Sarah Chen' : 'You') as string,
-            body: row.body as string,
-            createdAt: row.created_at as string,
-            isProvider: row.is_provider as boolean,
-          }))
-        )
-      }
-
-      // Subscribe to new messages for this patient
-      supabase
-        .channel(`messages:patient:${userId}`)
-        .on(
-          'postgres_changes',
-          {
-            event: 'INSERT',
-            schema: 'public',
-            table: 'messages',
-            filter: `patient_id=eq.${userId}`,
-          },
-          (payload) => {
-            const row = payload.new as {
-              id: string
-              sender_id: string
-              body: string
-              created_at: string
-              is_provider: boolean
-            }
-            setMessages((prev) => [
-              ...prev,
-              {
-                id: row.id,
-                senderId: row.sender_id,
-                senderName: row.is_provider ? 'Dr. Sarah Chen' : 'You',
-                body: row.body,
-                createdAt: row.created_at,
-                isProvider: row.is_provider,
-              },
-            ])
-          }
-        )
-        .subscribe()
-    }
-
-    setup()
-
-    return () => {
-      if (userId) {
-        supabase.channel(`messages:patient:${userId}`).unsubscribe()
-      }
-    }
-  }, [])
-
-  async function handleSend(body: string) {
     if (isSupabaseConfigured) {
-      // Write to Supabase — the real-time subscription will update local state
       const supabase = createClient()
       const { data: { user } } = await supabase.auth.getUser()
       if (user) {
         await supabase.from('messages').insert({
           patient_id: user.id,
           sender_id: user.id,
-          body,
+          body: newMessage,
           is_provider: false,
         })
-        return
       }
     }
 
-    // Fallback: local state only (mock mode)
-    await new Promise((resolve) => setTimeout(resolve, 200))
-    const newMessage: Message = {
+    // Add to local state
+    const msg: Message = {
       id: `msg-${Date.now()}`,
       senderId: 'patient',
       senderName: 'You',
-      body,
+      body: newMessage,
       createdAt: new Date().toISOString(),
       isProvider: false,
     }
-    setMessages((prev) => [...prev, newMessage])
+    setMessages(prev => [...prev, msg])
+    setNewMessage('')
+    setSending(false)
+  }
+
+  function handleKeyDown(e: React.KeyboardEvent) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      handleSend()
+    }
   }
 
   return (
-    <main
-      style={{
-        background: '#fdfcf8',
-        minHeight: '100vh',
+    <div style={{ maxWidth: '800px', margin: '0 auto', height: 'calc(100vh - 180px)', display: 'flex', flexDirection: 'column' }}>
+      {/* Header */}
+      <div style={{ marginBottom: '24px' }}>
+        <p style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#888', marginBottom: '8px' }}>
+          Patient Dashboard
+        </p>
+        <h1 style={{ fontSize: 'clamp(32px, 4vw, 42px)', fontWeight: 700, color: '#1A1A1A', lineHeight: 1.1, marginBottom: '8px' }}>
+          Messages
+        </h1>
+        <p style={{ fontSize: '14px', color: '#666' }}>Dr. Sarah Chen, MD</p>
+      </div>
+
+      {/* Disclaimer */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
+        padding: '10px 16px',
+        background: '#FEF3C7',
+        borderRadius: '12px',
+        marginBottom: '16px',
+        fontSize: '12px',
+        color: '#92400E',
+      }}>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="8" x2="12" y2="12" />
+          <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>
+        Secure clinical messaging — responses typically within 24 hours on business days.
+      </div>
+
+      {/* Messages Thread */}
+      <div style={{
+        flex: 1,
+        overflowY: 'auto',
+        background: '#fff',
+        border: '1px solid #E5E5E5',
+        borderRadius: '16px',
+        padding: '24px',
+        marginBottom: '16px',
         display: 'flex',
         flexDirection: 'column',
-        padding: '48px 24px 32px',
-      }}
-    >
-      <div
-        style={{
-          maxWidth: 760,
-          margin: '0 auto',
-          width: '100%',
-          flex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          minHeight: 0,
-        }}
-      >
-
-        {/* ── Header ── */}
-        <div className="flex items-start justify-between gap-4 mb-8 anim-fade-up flex-wrap">
-          <div>
-            <p
-              className="text-xs uppercase tracking-widest mb-2"
-              style={{ color: 'var(--text-3)' }}
-            >
-              Patient Dashboard
-            </p>
-            <h1
-              className="font-display"
-              style={{
-                fontSize: 'clamp(32px, 4vw, 46px)',
-                fontWeight: 300,
-                fontStyle: 'italic',
-                color: 'var(--text)',
-                lineHeight: 1.1,
-                marginBottom: 6,
-              }}
-            >
-              Messages
-            </h1>
-            <p className="text-sm" style={{ color: 'var(--text-2)' }}>
-              Dr. Sarah Chen, MD
-            </p>
-          </div>
-
-          {/* Provider info + online badge */}
-          <div
-            className="flex items-center gap-3"
-            style={{
-              background: 'var(--surface)',
-              border: '1px solid var(--border)',
-              borderRadius: 'var(--r)',
-              padding: '10px 16px',
-            }}
-          >
-            {/* Avatar */}
-            <div
-              style={{
-                width: 38,
-                height: 38,
-                borderRadius: '50%',
-                background: 'var(--teal-dim)',
-                border: '1px solid var(--border-teal)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: 13,
-                fontWeight: 600,
-                color: 'var(--teal)',
-                letterSpacing: '0.02em',
-                flexShrink: 0,
-              }}
-            >
-              SC
+        gap: '16px',
+      }}>
+        {messages.map((msg) => (
+          <div key={msg.id} style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: msg.isProvider ? 'flex-start' : 'flex-end',
+          }}>
+            <div style={{
+              maxWidth: '75%',
+              padding: '12px 16px',
+              borderRadius: '16px',
+              background: msg.isProvider ? '#FAFAF8' : ACCENT,
+              color: msg.isProvider ? '#1A1A1A' : '#fff',
+            }}>
+              <p style={{ fontSize: '14px', lineHeight: 1.5 }}>{msg.body}</p>
             </div>
-
-            <div>
-              <div className="text-sm font-medium" style={{ color: 'var(--text)' }}>
-                Dr. Sarah Chen
-              </div>
-              <div className="flex items-center gap-1.5 mt-0.5">
-                <span
-                  style={{
-                    width: 7,
-                    height: 7,
-                    borderRadius: '50%',
-                    background: '#4ade80',
-                    display: 'inline-block',
-                    boxShadow: '0 0 6px rgba(74,222,128,0.6)',
-                  }}
-                />
-                <span className="text-xs" style={{ color: '#4ade80' }}>
-                  Online
-                </span>
-              </div>
-            </div>
+            <span style={{ fontSize: '11px', color: '#888', marginTop: '4px' }}>
+              {new Date(msg.createdAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}
+            </span>
           </div>
-        </div>
+        ))}
+        <div ref={messagesEndRef} />
+      </div>
 
-        {/* Disclaimer strip */}
-        <div
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl mb-5 anim-fade-up d-100"
+      {/* Input */}
+      <div style={{ display: 'flex', gap: '12px' }}>
+        <input
+          type="text"
+          value={newMessage}
+          onChange={(e) => setNewMessage(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder="Type your message..."
           style={{
-            background: 'var(--amber-dim)',
-            border: '1px solid rgba(212,151,90,0.2)',
+            flex: 1,
+            padding: '14px 18px',
+            fontSize: '14px',
+            border: '1px solid #E5E5E5',
+            borderRadius: '12px',
+            outline: 'none',
+            background: '#fff',
+          }}
+        />
+        <button
+          onClick={handleSend}
+          disabled={!newMessage.trim() || sending}
+          style={{
+            padding: '14px 24px',
+            fontSize: '14px',
+            fontWeight: 600,
+            background: ACCENT,
+            color: '#fff',
+            border: 'none',
+            borderRadius: '12px',
+            cursor: sending ? 'not-allowed' : 'pointer',
+            opacity: sending ? 0.7 : 1,
           }}
         >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ color: 'var(--amber)', flexShrink: 0 }}>
-            <circle cx="12" cy="12" r="10" />
-            <line x1="12" y1="8" x2="12" y2="12" />
-            <line x1="12" y1="16" x2="12.01" y2="16" />
-          </svg>
-          <span className="text-xs" style={{ color: 'var(--amber)' }}>
-            Secure clinical messaging — responses typically within 24 hours on business days.
-          </span>
-        </div>
-
-        {/* ── Thread ── */}
-        <div
-          className="anim-fade-up d-200"
-          style={{ flex: 1, minHeight: 480 }}
-        >
-          <MessageThread messages={messages} onSend={handleSend} />
-        </div>
-
-        {/* Footer note */}
-        <p className="text-xs text-center mt-5" style={{ color: 'var(--text-3)' }}>
-          Messages are end-to-end encrypted and stored in your HIPAA-compliant patient record.
-        </p>
+          {sending ? 'Sending...' : 'Send'}
+        </button>
       </div>
-    </main>
+
+      <p style={{ fontSize: '12px', color: '#888', textAlign: 'center', marginTop: '12px' }}>
+        Messages are end-to-end encrypted and stored in record.
+       your HIPAA-compliant patient</p>
+    </div>
   )
 }

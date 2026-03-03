@@ -2,7 +2,11 @@
 
 import Link from 'next/link'
 
-/* ─── Mock Timeline Data ─────────────────────────────────────────── */
+const ACCENT = '#D4A574'
+const ACCENT_DARK = '#8B7355'
+const ACCENT_LIGHT = '#F5F0E8'
+
+/* ─── Types ─────────────────────────────────────────────────────── */
 interface TimelineEvent {
   id: string
   date: string
@@ -13,6 +17,7 @@ interface TimelineEvent {
   meta?: Record<string, string>
 }
 
+/* ─── Mock Data ──────────────────────────────────────────────────── */
 const MOCK_TIMELINE: TimelineEvent[] = [
   {
     id: 'ev-010',
@@ -103,120 +108,28 @@ const MOCK_TIMELINE: TimelineEvent[] = [
   },
 ]
 
-/* ─── Icon + Color by event type ─────────────────────────────────── */
-function eventIcon(type: TimelineEvent['type']): React.ReactNode {
-  switch (type) {
-    case 'intake':
-      return (
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" />
-          <rect x="9" y="3" width="6" height="4" rx="1" />
-        </svg>
-      )
-    case 'approval':
-      return (
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
-          <polyline points="22 4 12 14.01 9 11.01" />
-        </svg>
-      )
-    case 'shipment':
-      return (
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <rect x="1" y="3" width="15" height="13" rx="1" />
-          <path d="M16 8h4l3 3v5h-7V8z" />
-          <circle cx="5.5" cy="18.5" r="2.5" />
-          <circle cx="18.5" cy="18.5" r="2.5" />
-        </svg>
-      )
-    case 'delivery':
-      return (
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" />
-          <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
-          <line x1="12" y1="22.08" x2="12" y2="12" />
-        </svg>
-      )
-    case 'refill':
-      return (
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v11m0 0H5a2 2 0 00-2 2v4a2 2 0 002 2h10a2 2 0 002-2v-4a2 2 0 00-2-2h-4" />
-        </svg>
-      )
-    case 'message':
-      return (
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
-        </svg>
-      )
-    case 'lab':
-      return (
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M14.5 2v6.5L20 22H4l5.5-13.5V2" />
-          <line x1="8.5" y1="2" x2="15.5" y2="2" />
-          <line x1="7" y1="16" x2="17" y2="16" />
-        </svg>
-      )
-  }
-}
-
-function eventAccent(type: TimelineEvent['type']): { color: string; dim: string; border: string } {
+/* ─── Helper Functions ───────────────────────────────────────────── */
+function eventAccent(type: TimelineEvent['type']): { color: string; dim: string } {
   switch (type) {
     case 'approval':
-      return { color: 'var(--teal)', dim: 'var(--teal-dim)', border: 'var(--border-teal)' }
+      return { color: ACCENT, dim: ACCENT_LIGHT }
     case 'shipment':
     case 'delivery':
-      return { color: 'var(--amber)', dim: 'var(--amber-dim)', border: 'rgba(212,151,90,0.3)' }
+      return { color: '#D97706', dim: '#FEF3C7' }
     case 'lab':
-      return { color: 'var(--lavender)', dim: 'var(--lavender-dim)', border: 'rgba(155,142,232,0.3)' }
+      return { color: '#7C3AED', dim: '#EDE9FE' }
     case 'message':
-      return { color: 'var(--teal)', dim: 'var(--teal-dim)', border: 'var(--border-teal)' }
+      return { color: ACCENT, dim: ACCENT_LIGHT }
     case 'refill':
-      return { color: 'var(--amber)', dim: 'var(--amber-dim)', border: 'rgba(212,151,90,0.3)' }
+      return { color: '#D97706', dim: '#FEF3C7' }
     case 'intake':
     default:
-      return { color: 'var(--text-2)', dim: 'var(--surface-3)', border: 'var(--border)' }
-  }
-}
-
-function statusBadge(status: TimelineEvent['status']): React.CSSProperties {
-  switch (status) {
-    case 'active':
-      return {
-        background: 'var(--teal-dim)',
-        color: 'var(--teal)',
-        border: '1px solid var(--border-teal)',
-      }
-    case 'upcoming':
-      return {
-        background: 'var(--amber-dim)',
-        color: 'var(--amber)',
-        border: '1px solid rgba(212,151,90,0.3)',
-      }
-    case 'completed':
-    default:
-      return {
-        background: 'var(--surface-3)',
-        color: 'var(--text-2)',
-        border: '1px solid var(--border)',
-      }
-  }
-}
-
-function statusLabel(status: TimelineEvent['status']): string {
-  switch (status) {
-    case 'active': return 'In Progress'
-    case 'upcoming': return 'Upcoming'
-    case 'completed': return 'Completed'
+      return { color: '#666', dim: '#F5F5F5' }
   }
 }
 
 function formatDate(dateStr: string): string {
-  return new Date(dateStr).toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-  })
+  return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
 }
 
 function formatRelative(dateStr: string): string {
@@ -233,53 +146,47 @@ function formatRelative(dateStr: string): string {
 /* ─── Empty State ────────────────────────────────────────────────── */
 function EmptyState() {
   return (
-    <div
-      className="flex flex-col items-center justify-center py-20 text-center"
-      style={{
-        background: 'var(--surface)',
-        border: '1px solid var(--border)',
-        borderRadius: 'var(--r-xl)',
-      }}
-    >
-      <div
-        style={{
-          width: 56,
-          height: 56,
-          borderRadius: '50%',
-          background: 'var(--surface-3)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginBottom: 16,
-        }}
-      >
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{ color: 'var(--text-3)' }}>
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      textAlign: 'center',
+      padding: '80px 24px',
+      background: '#fff',
+      border: '1px solid #E5E5E5',
+      borderRadius: '20px',
+    }}>
+      <div style={{
+        width: '56px',
+        height: '56px',
+        borderRadius: '50%',
+        background: '#F5F5F5',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: '16px',
+      }}>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="1.5">
           <circle cx="12" cy="12" r="10" />
           <path d="M12 6v6l4 2" />
         </svg>
       </div>
-      <h3
-        className="font-display mb-2"
-        style={{ fontSize: 26, fontWeight: 400, fontStyle: 'italic', color: 'var(--text)' }}
-      >
+      <h2 style={{ fontSize: '26px', fontWeight: 700, color: '#1A1A1A', marginBottom: '8px' }}>
         No history yet
-      </h3>
-      <p className="text-sm mb-6 max-w-xs" style={{ color: 'var(--text-2)' }}>
+      </h2>
+      <p style={{ fontSize: '14px', color: '#666', marginBottom: '24px', maxWidth: '320px' }}>
         Your treatment timeline will appear here once you begin your protocol.
       </p>
-      <Link
-        href="/quiz"
-        style={{
-          background: 'var(--teal)',
-          color: '#FFFFFF',
-          borderRadius: 999,
-          padding: '10px 28px',
-          fontSize: 14,
-          fontWeight: 500,
-          textDecoration: 'none',
-          boxShadow: '0 0 24px rgba(37,87,54,0.2)',
-        }}
-      >
+      <Link href="/quiz" style={{
+        background: ACCENT,
+        color: '#fff',
+        borderRadius: '999px',
+        padding: '10px 28px',
+        fontSize: '14px',
+        fontWeight: 600,
+        textDecoration: 'none',
+      }}>
         Start Assessment
       </Link>
     </div>
@@ -289,28 +196,28 @@ function EmptyState() {
 /* ─── Summary Stats ──────────────────────────────────────────────── */
 function SummaryStats() {
   return (
-    <div
-      className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-10 anim-fade-up d-100"
-    >
+    <div style={{
+      display: 'grid',
+      gridTemplateColumns: 'repeat(2, 1fr)',
+      gap: '12px',
+      marginBottom: '40px',
+    }}>
       {[
-        { label: 'Protocol', value: 'CJC-1295 / Ipamorelin', accent: 'var(--amber)' },
-        { label: 'Duration', value: '34 days', accent: 'var(--teal)' },
-        { label: 'Shipments', value: '2', accent: 'var(--text)' },
-        { label: 'Status', value: 'Active', accent: 'var(--teal)' },
+        { label: 'Protocol', value: 'CJC-1295 / Ipamorelin', accent: ACCENT },
+        { label: 'Duration', value: '34 days', color: ACCENT },
+        { label: 'Shipments', value: '2', color: '#1A1A1A' },
+        { label: 'Status', value: 'Active', color: ACCENT },
       ].map((stat) => (
-        <div
-          key={stat.label}
-          style={{
-            background: 'var(--surface)',
-            border: '1px solid var(--border)',
-            borderRadius: 'var(--r)',
-            padding: '16px 18px',
-          }}
-        >
-          <p className="text-xs uppercase tracking-widest mb-1.5" style={{ color: 'var(--text-3)' }}>
+        <div key={stat.label} style={{
+          background: '#fff',
+          border: '1px solid #E5E5E5',
+          borderRadius: '12px',
+          padding: '16px 18px',
+        }}>
+          <p style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#888', marginBottom: '6px' }}>
             {stat.label}
           </p>
-          <p className="text-sm font-medium" style={{ color: stat.accent }}>
+          <p style={{ fontSize: '14px', fontWeight: 600, color: stat.color || '#1A1A1A' }}>
             {stat.value}
           </p>
         </div>
@@ -336,191 +243,142 @@ export default function HistoryPage() {
   }
 
   return (
-    <main
-      style={{
-        background: '#fdfcf8',
-        minHeight: '100vh',
-        padding: '48px 24px 80px',
-      }}
-    >
-      <div style={{ maxWidth: 760, margin: '0 auto' }}>
-
-        {/* ── Page Header ── */}
-        <div className="mb-10 anim-fade-up">
-          <p
-            className="text-xs uppercase tracking-widest mb-2"
-            style={{ color: 'var(--text-3)' }}
-          >
-            Patient Dashboard
-          </p>
-          <h1
-            className="font-display"
-            style={{
-              fontSize: 'clamp(36px, 5vw, 52px)',
-              fontWeight: 300,
-              fontStyle: 'italic',
-              color: 'var(--text)',
-              lineHeight: 1.1,
-              marginBottom: 8,
-            }}
-          >
-            Treatment History
-          </h1>
-          <p className="text-sm" style={{ color: 'var(--text-2)' }}>
-            A complete timeline of your care
-          </p>
-        </div>
-
-        {events.length === 0 ? (
-          <EmptyState />
-        ) : (
-          <>
-            {/* Summary stats */}
-            <SummaryStats />
-
-            {/* Timeline */}
-            <div className="anim-fade-up d-200">
-              {grouped.map((group, gi) => (
-                <div key={group.month} className="mb-8">
-                  {/* Month header */}
-                  <div className="flex items-center gap-3 mb-5">
-                    <h2 className="text-xs font-medium uppercase tracking-widest" style={{ color: 'var(--text-2)', whiteSpace: 'nowrap' }}>
-                      {group.month}
-                    </h2>
-                    <div style={{ flex: 1, height: 1, background: 'var(--border)' }} />
-                  </div>
-
-                  {/* Events */}
-                  <div className="relative" style={{ paddingLeft: 28 }}>
-                    {/* Vertical line */}
-                    <div
-                      className="absolute top-0 bottom-0"
-                      style={{
-                        left: 11,
-                        width: 1,
-                        background: 'linear-gradient(180deg, var(--border-teal) 0%, var(--border) 100%)',
-                      }}
-                    />
-
-                    {group.events.map((event, ei) => {
-                      const accent = eventAccent(event.type)
-                      const isLast = gi === grouped.length - 1 && ei === group.events.length - 1
-
-                      return (
-                        <div
-                          key={event.id}
-                          className="relative mb-6"
-                          style={{ paddingBottom: isLast ? 0 : undefined }}
-                        >
-                          {/* Timeline node */}
-                          <div
-                            className="absolute flex items-center justify-center"
-                            style={{
-                              left: -28,
-                              top: 4,
-                              width: 22,
-                              height: 22,
-                              borderRadius: '50%',
-                              background: event.status === 'active' ? accent.color : accent.dim,
-                              border: `1px solid ${accent.border}`,
-                              color: event.status === 'active' ? '#06060F' : accent.color,
-                              boxShadow: event.status === 'active' ? `0 0 12px ${accent.dim}` : 'none',
-                              zIndex: 1,
-                            }}
-                          >
-                            <div style={{ transform: 'scale(0.65)' }}>
-                              {eventIcon(event.type)}
-                            </div>
-                          </div>
-
-                          {/* Event card */}
-                          <div
-                            style={{
-                              background: 'var(--surface)',
-                              border: `1px solid ${event.status === 'active' ? accent.border : 'var(--border)'}`,
-                              borderRadius: 'var(--r)',
-                              padding: '16px 20px',
-                              transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
-                            }}
-                            onMouseEnter={(e) => {
-                              e.currentTarget.style.borderColor = accent.border
-                              e.currentTarget.style.boxShadow = `0 0 24px ${accent.dim}`
-                            }}
-                            onMouseLeave={(e) => {
-                              e.currentTarget.style.borderColor = event.status === 'active' ? accent.border : 'var(--border)'
-                              e.currentTarget.style.boxShadow = 'none'
-                            }}
-                          >
-                            {/* Top row: date + status */}
-                            <div className="flex items-center justify-between gap-3 mb-2 flex-wrap">
-                              <div className="flex items-center gap-3">
-                                <span className="text-xs" style={{ color: 'var(--text-3)' }}>
-                                  {formatDate(event.date)}
-                                </span>
-                                <span className="text-xs" style={{ color: 'var(--text-3)' }}>
-                                  {formatRelative(event.date)}
-                                </span>
-                              </div>
-                              <span
-                                className="text-xs font-medium px-2.5 py-0.5 rounded-full"
-                                style={statusBadge(event.status)}
-                              >
-                                {statusLabel(event.status)}
-                              </span>
-                            </div>
-
-                            {/* Title */}
-                            <h3
-                              className="text-sm font-medium mb-1.5"
-                              style={{ color: 'var(--text)' }}
-                            >
-                              {event.title}
-                            </h3>
-
-                            {/* Description */}
-                            <p className="text-xs leading-relaxed" style={{ color: 'var(--text-2)' }}>
-                              {event.description}
-                            </p>
-
-                            {/* Meta details */}
-                            {event.meta && (
-                              <div className="flex flex-wrap gap-2 mt-3">
-                                {Object.entries(event.meta).map(([key, value]) => (
-                                  <span
-                                    key={key}
-                                    className="text-xs px-2.5 py-1 rounded-lg"
-                                    style={{
-                                      background: 'var(--surface-2)',
-                                      border: '1px solid var(--border)',
-                                      color: 'var(--text-2)',
-                                    }}
-                                  >
-                                    <span style={{ color: 'var(--text-3)', textTransform: 'capitalize' }}>{key}: </span>
-                                    {value}
-                                  </span>
-                                ))}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      )
-                    })}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Record count */}
-            <p
-              className="text-xs text-center mt-6 anim-fade-up d-300"
-              style={{ color: 'var(--text-3)' }}
-            >
-              {events.length} event{events.length !== 1 ? 's' : ''} in your treatment history
-            </p>
-          </>
-        )}
-
+    <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+      {/* Header */}
+      <div style={{ marginBottom: '40px' }}>
+        <p style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#888', marginBottom: '8px' }}>
+          Patient Dashboard
+        </p>
+        <h1 style={{ fontSize: 'clamp(36px, 5vw, 48px)', fontWeight: 700, color: '#1A1A1A', lineHeight: 1.1, marginBottom: '8px' }}>
+          Treatment History
+        </h1>
+        <p style={{ fontSize: '14px', color: '#666' }}>A complete timeline of your care</p>
       </div>
-    </main>
+
+      {events.length === 0 ? (
+        <EmptyState />
+      ) : (
+        <>
+          <SummaryStats />
+
+          {/* Timeline */}
+          <div>
+            {grouped.map((group, gi) => (
+              <div key={group.month} style={{ marginBottom: '32px' }}>
+                {/* Month header */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
+                  <h2 style={{ fontSize: '12px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#666', whiteSpace: 'nowrap' }}>
+                    {group.month}
+                  </h2>
+                  <div style={{ flex: 1, height: '1px', background: '#E5E5E5' }} />
+                </div>
+
+                {/* Events */}
+                <div style={{ position: 'relative', paddingLeft: '28px' }}>
+                  {/* Vertical line */}
+                  <div style={{
+                    position: 'absolute',
+                    top: 0,
+                    bottom: 0,
+                    left: '11px',
+                    width: '1px',
+                    background: 'linear-gradient(180deg, #D4A574 0%, #E5E5E5 100%)',
+                  }} />
+
+                  {group.events.map((event, ei) => {
+                    const accent = eventAccent(event.type)
+                    const isLast = gi === grouped.length - 1 && ei === group.events.length - 1
+
+                    return (
+                      <div key={event.id} style={{ position: 'relative', marginBottom: '24px', paddingBottom: isLast ? 0 : undefined }}>
+                        {/* Timeline node */}
+                        <div style={{
+                          position: 'absolute',
+                          left: '-28px',
+                          top: '4px',
+                          width: '22px',
+                          height: '22px',
+                          borderRadius: '50%',
+                          background: event.status === 'active' ? accent.color : accent.dim,
+                          border: `1px solid ${event.status === 'active' ? accent.color : '#E5E5E5'}`,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          zIndex: 1,
+                        }}>
+                          {event.status === 'active' && (
+                            <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#fff' }} />
+                          )}
+                        </div>
+
+                        {/* Event card */}
+                        <div style={{
+                          background: '#fff',
+                          border: `1px solid ${event.status === 'active' ? accent.dim : '#E5E5E5'}`,
+                          borderRadius: '12px',
+                          padding: '16px 20px',
+                        }}>
+                          {/* Top row: date + status */}
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', flexWrap: 'wrap', gap: '8px' }}>
+                            <div style={{ display: 'flex', gap: '12px' }}>
+                              <span style={{ fontSize: '12px', color: '#888' }}>{formatDate(event.date)}</span>
+                              <span style={{ fontSize: '12px', color: '#888' }}>{formatRelative(event.date)}</span>
+                            </div>
+                            <span style={{
+                              fontSize: '11px',
+                              fontWeight: 600,
+                              padding: '4px 10px',
+                              borderRadius: '12px',
+                              background: event.status === 'active' ? accent.dim : '#F5F5F5',
+                              color: event.status === 'active' ? accent.color : '#666',
+                            }}>
+                              {event.status === 'active' ? 'In Progress' : event.status === 'upcoming' ? 'Upcoming' : 'Completed'}
+                            </span>
+                          </div>
+
+                          {/* Title */}
+                          <h3 style={{ fontSize: '14px', fontWeight: 600, color: '#1A1A1A', marginBottom: '6px' }}>
+                            {event.title}
+                          </h3>
+
+                          {/* Description */}
+                          <p style={{ fontSize: '12px', color: '#666', lineHeight: 1.6 }}>
+                            {event.description}
+                          </p>
+
+                          {/* Meta details */}
+                          {event.meta && (
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '12px' }}>
+                              {Object.entries(event.meta).map(([key, value]) => (
+                                <span key={key} style={{
+                                  fontSize: '11px',
+                                  padding: '4px 10px',
+                                  borderRadius: '8px',
+                                  background: '#FAFAF8',
+                                  border: '1px solid #E5E5E5',
+                                  color: '#666',
+                                }}>
+                                  <span style={{ color: '#888', textTransform: 'capitalize' }}>{key}: </span>
+                                  {value}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Record count */}
+          <p style={{ fontSize: '12px', color: '#888', textAlign: 'center', marginTop: '24px' }}>
+            {events.length} event{events.length !== 1 ? 's' : ''} in your treatment history
+          </p>
+        </>
+      )}
+    </div>
   )
 }
