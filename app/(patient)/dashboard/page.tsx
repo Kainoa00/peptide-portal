@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { createClient, isSupabaseConfigured } from '@/lib/supabase'
+import { createAdminClient } from '@/lib/supabase'
 
 const ACCENT = '#D4A574'
 const ACCENT_DARK = '#8B7355'
@@ -128,11 +128,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     async function fetchData() {
-      if (!isSupabaseConfigured) {
-        setLoading(false)
-        return
-      }
-      const supabase = createClient()
+      const supabase = createAdminClient()
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) {
         setLoading(false)
