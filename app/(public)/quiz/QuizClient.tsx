@@ -350,8 +350,9 @@ function StepRecommendation({ answers }: { answers: Answers }) {
       const result = await response.json()
 
       if (result.success) {
-        // Demo mode - would redirect to Stripe
-        alert('Intake submitted! In production, this would redirect to Stripe checkout.')
+        // Demo mode - redirect to dashboard
+        window.location.href = '/dashboard'
+        return
       } else {
         alert('Error: ' + (result.error || 'Failed to submit'))
       }
