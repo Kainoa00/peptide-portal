@@ -212,9 +212,9 @@ export default function DashboardPage() {
                   Active Protocol
                 </div>
                 <h2 style={{ fontSize: '24px', fontWeight: 700, color: '#1A1A1A', marginBottom: '4px' }}>
-                  {prescription.peptideName}
+                  {prescription?.peptideName}
                 </h2>
-                <p style={{ fontSize: '14px', color: '#666' }}>{prescription.category}</p>
+                <p style={{ fontSize: '14px', color: '#666' }}>{prescription?.category}</p>
               </div>
               <span style={{
                 fontSize: '12px',
@@ -231,15 +231,15 @@ export default function DashboardPage() {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', paddingTop: '16px', borderTop: '1px solid #E5E5E5' }}>
               <div>
                 <div style={{ fontSize: '12px', color: '#888', marginBottom: '4px' }}>Dosage</div>
-                <div style={{ fontSize: '14px', fontWeight: 600, color: '#1A1A1A' }}>{prescription.dosage}</div>
+                <div style={{ fontSize: '14px', fontWeight: 600, color: '#1A1A1A' }}>{prescription?.dosage}</div>
               </div>
               <div>
                 <div style={{ fontSize: '12px', color: '#888', marginBottom: '4px' }}>Frequency</div>
-                <div style={{ fontSize: '14px', fontWeight: 600, color: '#1A1A1A' }}>{prescription.frequency}</div>
+                <div style={{ fontSize: '14px', fontWeight: 600, color: '#1A1A1A' }}>{prescription?.frequency}</div>
               </div>
               <div>
                 <div style={{ fontSize: '12px', color: '#888', marginBottom: '4px' }}>Approved</div>
-                <div style={{ fontSize: '14px', fontWeight: 600, color: '#1A1A1A' }}>{new Date(prescription.approvedAt).toLocaleDateString()}</div>
+                <div style={{ fontSize: '14px', fontWeight: 600, color: '#1A1A1A' }}>{prescription ? new Date(prescription.approvedAt).toLocaleDateString() : ''}</div>
               </div>
             </div>
           </div>
