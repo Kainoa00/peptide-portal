@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Peptide Portal - Provider One-Pager</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: #1A1A1A;
+      line-height: 1.5;
+      font-size: 11pt;
+    }
+    .page {
+      width: 8.5in;
+      min-height: 11in;
+      padding: 0.5in;
+      margin: 0 auto;
+      background: white;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 20px;
+      border-bottom: 3px solid #D4A574;
+      margin-bottom: 24px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo-box {
+      width: 40px;
+      height: 40px;
+      background: #D4A574;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 18px;
+    }
+    .logo-text {
+      font-size: 20px;
+      font-weight: 700;
+    }
+    .tagline {
+      font-size: 11px;
+      color: #666;
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 28px;
+    }
+    .hero h1 {
+      font-size: 26px;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+    .hero h1 span {
+      color: #D4A574;
+    }
+    .hero p {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 16px;
+    }
+    .cta-box {
+      background: #D4A574;
+      color: white;
+      padding: 16px;
+      border-radius: 12px;
+      text-align: center;
+    }
+    .cta-box .price {
+      font-size: 28px;
+      font-weight: 700;
+    }
+    .cta-box .price span {
+      font-size: 14px;
+      font-weight: 400;
+      opacity: 0.9;
+    }
+    .cta-box .trial {
+      font-size: 10px;
+      margin-top: 4px;
+    }
+    .features {
+      margin-bottom: 24px;
+    }
+    .features h2 {
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #666;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #E5E5E5;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .feature {
+      display: flex;
+      gap: 10px;
+    }
+    .feature-icon {
+      width: 28px;
+      height: 28px;
+      background: #F5F0E8;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+    .feature h3 {
+      font-size: 11px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+    .feature p {
+      font-size: 9px;
+      color: #666;
+    }
+    .how-it-works {
+      margin-bottom: 24px;
+    }
+    .steps {
+      display: flex;
+      gap: 12px;
+    }
+    .step {
+      flex: 1;
+      text-align: center;
+      padding: 12px 8px;
+      background: #FAFAF8;
+      border-radius: 8px;
+    }
+    .step-num {
+      width: 24px;
+      height: 24px;
+      background: #D4A574;
+      color: white;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .step h3 {
+      font-size: 10px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .step p {
+      font-size: 8px;
+      color: #666;
+    }
+    .pricing {
+      background: #1A1A1A;
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+    }
+    .pricing h2 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+    }
+    .pricing-item {
+      text-align: center;
+    }
+    .pricing-item.featured {
+      background: rgba(212,165,116,0.2);
+      border-radius: 8px;
+      padding: 12px;
+    }
+    .pricing-item h3 {
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .pricing-item .price {
+      font-size: 20px;
+      font-weight: 700;
+      color: #D4A574;
+    }
+    .pricing-item .price span {
+      font-size: 10px;
+      color: #888;
+    }
+    .pricing-item ul {
+      font-size: 8px;
+      color: #AAA;
+      margin-top: 8px;
+      list-style: none;
+    }
+    .trust {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      padding-top: 16px;
+      border-top: 1px solid #E5E5E5;
+      font-size: 10px;
+      color: #666;
+    }
+    .trust span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .footer {
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid #E5E5E5;
+      display: flex;
+      justify-content: space-between;
+      font-size: 9px;
+      color: #888;
+    }
+    .contact {
+      text-align: right;
+    }
+    .contact a {
+      color: #D4A574;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    @media print {
+      .page { margin: 0; padding: 0.4in; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <!-- Header -->
+    <div class="header">
+      <div class="logo">
+        <div class="logo-box">P</div>
+        <div>
+          <div class="logo-text">Peptide Portal</div>
+          <div class="tagline">Physician-Prescribed Peptide Therapy</div>
+        </div>
+      </div>
+      <div style="text-align: right; font-size: 10px; color: #666;">
+        <strong>HIPAA Compliant</strong><br>
+        SOC 2 Type II Certified
+      </div>
+    </div>
+
+    <!-- Hero -->
+    <div class="hero">
+      <div>
+        <h1>Scale Your<br><span>Peptide Practice</span></h1>
+        <p>The all-in-one platform for peptide therapy. Automated patient intake, physician review, prescription management, and recurring revenue — all in one place.</p>
+        <p><strong>Perfect for:</strong> Concierge physicians, anti-aging clinics, wellness centers, and compounding pharmacy partners.</p>
+      </div>
+      <div class="cta-box">
+        <div class="price">$399<span>/month</span></div>
+        <div style="font-size: 11px; font-weight: 600;">Growth Plan</div>
+        <div class="trial">30-Day Free Pilot • No Credit Card Required</div>
+      </div>
+    </div>
+
+    <!-- Features -->
+    <div class="features">
+      <h2>Why Providers Choose Peptide Portal</h2>
+      <div class="features-grid">
+        <div class="feature">
+          <div class="feature-icon">📋</div>
+          <div>
+            <h3>Automated Intake</h3>
+            <p>Patients complete health assessment online. Review and prescribe in minutes.</p>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🔒</div>
+          <div>
+            <h3>HIPAA Compliant</h3>
+            <p>End-to-end encryption, secure messaging, full HIPAA compliance.</p>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">💰</div>
+          <div>
+            <h3>Recurring Revenue</h3>
+            <p>Subscription model means predictable monthly income.</p>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🏥</div>
+          <div>
+            <h3>Pharmacy Network</h3>
+            <p>We coordinate with PCAB-accredited pharmacies for fulfillment.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- How It Works -->
+    <div class="how-it-works">
+      <h2>How It Works</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <h3>Patient Quiz</h3>
+          <p>2-min online health assessment</p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <h3>You Review</h3>
+          <p>Approve/deny in dashboard</p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <h3>We Fulfill</h3>
+          <p>Pharmacy ships medication</p>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <h3>Get Paid</h3>
+          <p>Monthly subscriptions</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pricing -->
+    <div class="pricing">
+      <h2>Simple, Transparent Pricing</h2>
+      <div class="pricing-grid">
+        <div class="pricing-item">
+          <h3>Starter</h3>
+          <div class="price">$199<span>/mo</span></div>
+          <ul>
+            <li>Up to 25 patients</li>
+            <li>Dashboard</li>
+            <li>Email support</li>
+          </ul>
+        </div>
+        <div class="pricing-item featured">
+          <h3>Growth</h3>
+          <div class="price">$399<span>/mo</span></div>
+          <ul>
+            <li>Up to 100 patients</li>
+            <li>Analytics</li>
+            <li>Priority support</li>
+            <li>Custom branding</li>
+          </ul>
+        </div>
+        <div class="pricing-item">
+          <h3>Enterprise</h3>
+          <div class="price">Custom</div>
+          <ul>
+            <li>Unlimited patients</li>
+            <li>White-label</li>
+            <li>API access</li>
+            <li>Dedicated support</li>
+          </ul>
+        </div>
+      </div>
+      <div class="trust">
+        <span>🔒 HIPAA Compliant</span>
+        <span>✓ BAA Available</span>
+        <span>🏥 PCAB Pharmacies</span>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <div>
+        <strong>Peptide Portal</strong><br>
+        peptideportal.com/provider
+      </div>
+      <div class="contact">
+        <strong>Ready to start?</strong><br>
+        <a href="mailto:providers@peptideportal.com">providers@peptideportal.com</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
