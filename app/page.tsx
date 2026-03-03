@@ -2,6 +2,8 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
+import { ContainerScroll } from '@/components/ui/container-scroll-animation'
+import Image from 'next/image'
 
 /* ─── Design: Warm Cream + Gold Accents ───────────────────────────────── */
 
@@ -416,6 +418,22 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ── App Preview Scroll Animation ── */}
+      <section style={{ padding: '100px 0', background: '#FAFAF8' }}>
+        <div className="max-w-6xl mx-auto px-6">
+          <div style={{ textAlign: 'center', marginBottom: '60px' }}>
+            <h2 style={{ fontSize: 'clamp(32px, 4vw, 42px)', fontWeight: '700', marginBottom: '16px', color: '#1A1A1A' }}>
+              Your health journey, simplified
+            </h2>
+            <p style={{ fontSize: '18px', color: '#666', maxWidth: '500px', margin: '0 auto' }}>
+              Track your protocol, message your physician, and manage everything from your personalized dashboard.
+            </p>
+          </div>
+        </div>
+        
+        <AppPreviewScroll />
+      </section>
+
       {/* ── How It Works ── */}
       <section id="how-it-works" style={{ padding: '100px 0', background: '#1A1A1A', color: '#fff' }}>
         <div className="max-w-6xl mx-auto px-6">
@@ -619,5 +637,54 @@ export default function LandingPage() {
       </footer>
 
     </div>
+  )
+}
+
+/* ─── App Preview Scroll Component ─────────────────────────────────── */
+function AppPreviewScroll() {
+  return (
+    <ContainerScroll
+      titleComponent={
+        <div className="text-4xl md:text-6xl font-bold text-[#1A1A1A]">
+          Your Personal <span className="text-[#D4A574]">Health Dashboard</span>
+        </div>
+      }
+    >
+      <div style={{ 
+        width: '100%', 
+        height: '100%', 
+        background: '#fff',
+        borderRadius: '12px',
+        overflow: 'hidden',
+        position: 'relative'
+      }}>
+        {/* Dashboard Preview */}
+        <div style={{ padding: '24px', background: '#FAFAF8', height: '100%' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
+            <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: '#D4A574', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <span style={{ color: '#fff', fontWeight: '700', fontSize: '16px' }}>P</span>
+            </div>
+            <span style={{ fontWeight: '600', color: '#1A1A1A' }}>My Protocol</span>
+          </div>
+          
+          <div style={{ background: '#fff', borderRadius: '12px', padding: '20px', marginBottom: '16px', border: '1px solid #D4A574' }}>
+            <div style={{ fontSize: '12px', color: '#D4A574', fontWeight: '600', marginBottom: '8px' }}>ACTIVE PROTOCOL</div>
+            <div style={{ fontSize: '20px', fontWeight: '700', color: '#1A1A1A', marginBottom: '4px' }}>Tirzepatide</div>
+            <div style={{ fontSize: '14px', color: '#666' }}>Weight Loss • $299/month</div>
+          </div>
+          
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+            <div style={{ background: '#fff', borderRadius: '12px', padding: '16px', border: '1px solid #E5E5E5' }}>
+              <div style={{ fontSize: '12px', color: '#888', marginBottom: '4px' }}>Next Shipment</div>
+              <div style={{ fontSize: '14px', fontWeight: '600', color: '#1A1A1A' }}>Mar 15, 2026</div>
+            </div>
+            <div style={{ background: '#fff', borderRadius: '12px', padding: '16px', border: '1px solid #E5E5E5' }}>
+              <div style={{ fontSize: '12px', color: '#888', marginBottom: '4px' }}>Messages</div>
+              <div style={{ fontSize: '14px', fontWeight: '600', color: '#1A1A1A' }}>1 unread</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ContainerScroll>
   )
 }
