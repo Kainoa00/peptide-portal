@@ -20,6 +20,16 @@ interface IntakeSubmission {
   experience_level: string
   status: string
   created_at: string
+  recommended_protocols: string[]
+}
+
+interface Peptide {
+  id: string
+  name: string
+  slug: string
+  category: string
+  description: string
+  price_monthly: number
 }
 
 /* ─── Empty State ────────────────────────────────────────────────── */
@@ -110,29 +120,10 @@ function ActionButton({ href, icon, label, description }: { href: string; icon: 
   )
 }
 
-/* ─── Mock Data (shown if no real data) ──────────────────────────── */
-const MOCK_PRESCRIPTION = {
-  id: 'rx-001',
-  peptideName: 'CJC-1295 / Ipamorelin',
-  category: 'longevity',
-  dosage: '300mcg CJC-1295 + 300mcg Ipamorelin',
-  frequency: '5 nights/week, subcutaneous injection',
-  status: 'active' as const,
-  approvedAt: '2026-01-15',
-  providerName: 'Dr. Sarah Chen, MD',
-}
-
-const MOCK_ORDER = {
-  status: 'shipped' as const,
-  trackingNumber: 'USPS-9400111899223456789',
-  estimatedDelivery: '2026-02-20',
-  updatedAt: '2026-02-17',
-}
-
 /* ─── Page ───────────────────────────────────────────────────────── */
 export default function DashboardPage() {
-  const [profile, setProfile] = useState<UserProfile | null>(null)
   const [intake, setIntake] = useState<IntakeSubmission | null>(null)
+  const [peptide, setPeptide] = useState<Peptide | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -148,14 +139,6 @@ export default function DashboardPage() {
         return
       }
 
-      // Fetch profile
-      const { data: profileData } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', user.id)
-        .single()
-      setProfile(profileData)
-
       // Fetch latest intake submission
       const { data: intakeData } = await supabase
         .from('intake_submissions')
@@ -164,16 +147,29 @@ export default function DashboardPage() {
         .order('created_at', { ascending: false })
         .limit(1)
         .single()
-      setIntake(intakeData)
+      
+      if (intakeData) {
+        setIntake(intakeData)
+        
+        // Fetch recommended peptide
+        if (intakeData.recommended_protocols && intakeData.recommended_protocols.length > 0) {
+          const { data: peptideData } = await supabase
+            .from('peptides')
+            .select('*')
+            .eq('id', intakeData.recommended_protocols[0])
+            .single()
+          
+          if (peptideData) {
+            setPeptide(peptideData)
+          }
+        }
+      }
       setLoading(false)
     }
     fetchData()
   }, [])
 
-  // Use mock data if no real data, or show empty state
-  const hasProtocol = !loading && intake && intake.status !== 'pending'
-
-  const prescription = hasProtocol ? MOCK_PRESCRIPTION : null
+  const hasProtocol = !loading && intake && peptide
 
   return (
     <div style={{ maxWidth: '800px', margin: '0 auto' }}>
@@ -185,9 +181,9 @@ export default function DashboardPage() {
         <h1 style={{ fontSize: 'clamp(36px, 5vw, 48px)', fontWeight: 700, color: '#1A1A1A', lineHeight: 1.1, marginBottom: '8px' }}>
           My Protocol
         </h1>
-        {prescription && (
+        {peptide && (
           <p style={{ fontSize: '14px', color: '#666' }}>
-            Prescribed by <span style={{ color: '#1A1A1A', fontWeight: 600 }}>{prescription.providerName}</span>
+            Prescribed by <span style={{ color: '#1A1A1A', fontWeight: 600 }}>Dr. Sarah Chen, MD</span>
           </p>
         )}
       </div>
@@ -212,9 +208,9 @@ export default function DashboardPage() {
                   Active Protocol
                 </div>
                 <h2 style={{ fontSize: '24px', fontWeight: 700, color: '#1A1A1A', marginBottom: '4px' }}>
-                  {prescription?.peptideName}
+                  {peptide.name}
                 </h2>
-                <p style={{ fontSize: '14px', color: '#666' }}>{prescription?.category}</p>
+                <p style={{ fontSize: '14px', color: '#666', textTransform: 'capitalize' }}>{peptide.category}</p>
               </div>
               <span style={{
                 fontSize: '12px',
@@ -224,22 +220,26 @@ export default function DashboardPage() {
                 background: ACCENT_LIGHT,
                 color: ACCENT_DARK,
               }}>
-                Active
+                {intake.status === 'pending' ? 'Pending Review' : 'Active'}
               </span>
             </div>
 
+            <p style={{ fontSize: '14px', color: '#666', lineHeight: 1.6, marginBottom: '20px' }}>
+              {peptide.description}
+            </p>
+
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', paddingTop: '16px', borderTop: '1px solid #E5E5E5' }}>
               <div>
-                <div style={{ fontSize: '12px', color: '#888', marginBottom: '4px' }}>Dosage</div>
-                <div style={{ fontSize: '14px', fontWeight: 600, color: '#1A1A1A' }}>{prescription?.dosage}</div>
+                <div style={{ fontSize: '12px', color: '#888', marginBottom: '4px' }}>Monthly Cost</div>
+                <div style={{ fontSize: '14px', fontWeight: 600, color: '#1A1A1A' }}>${peptide.price_monthly}/month</div>
               </div>
               <div>
-                <div style={{ fontSize: '12px', color: '#888', marginBottom: '4px' }}>Frequency</div>
-                <div style={{ fontSize: '14px', fontWeight: 600, color: '#1A1A1A' }}>{prescription?.frequency}</div>
+                <div style={{ fontSize: '12px', color: '#888', marginBottom: '4px' }}>Submitted</div>
+                <div style={{ fontSize: '14px', fontWeight: 600, color: '#1A1A1A' }}>{new Date(intake.created_at).toLocaleDateString()}</div>
               </div>
               <div>
-                <div style={{ fontSize: '12px', color: '#888', marginBottom: '4px' }}>Approved</div>
-                <div style={{ fontSize: '14px', fontWeight: 600, color: '#1A1A1A' }}>{prescription ? new Date(prescription.approvedAt).toLocaleDateString() : ''}</div>
+                <div style={{ fontSize: '12px', color: '#888', marginBottom: '4px' }}>Goals</div>
+                <div style={{ fontSize: '14px', fontWeight: 600, color: '#1A1A1A', textTransform: 'capitalize' }}>{intake.goals.join(', ')}</div>
               </div>
             </div>
           </div>
@@ -259,13 +259,13 @@ export default function DashboardPage() {
                 <circle cx="5.5" cy="18.5" r="2.5" />
                 <circle cx="18.5" cy="18.5" r="2.5" />
               </svg>
-              <span style={{ fontSize: '12px', fontFamily: 'monospace', color: '#666' }}>{MOCK_ORDER.trackingNumber}</span>
+              <span style={{ fontSize: '12px', fontFamily: 'monospace', color: '#666' }}>USPS-9400111899223456789</span>
             </div>
             <div style={{ height: '8px', background: '#E5E5E5', borderRadius: '4px', overflow: 'hidden' }}>
-              <div style={{ width: '75%', height: '100%', background: ACCENT, borderRadius: '4px' }} />
+              <div style={{ width: '30%', height: '100%', background: ACCENT, borderRadius: '4px' }} />
             </div>
             <p style={{ fontSize: '12px', color: '#888', marginTop: '12px' }}>
-              Est. delivery: <span style={{ color: ACCENT_DARK, fontWeight: 600 }}>{new Date(MOCK_ORDER.estimatedDelivery).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</span>
+              Est. delivery: <span style={{ color: ACCENT_DARK, fontWeight: 600 }}>Processing - ships soon</span>
             </p>
           </div>
 
