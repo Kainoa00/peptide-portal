@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { createAdminClient } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase'
 
 const ACCENT = '#D4A574'
 const ACCENT_DARK = '#8B7355'
@@ -128,38 +128,30 @@ export default function DashboardPage() {
 
   useEffect(() => {
     async function fetchData() {
-      const supabase = createAdminClient()
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) {
+      const supabase = createClient()
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) {
         setLoading(false)
         return
       }
 
-      // Fetch latest intake submission
-      const { data: intakeData } = await supabase
-        .from('intake_submissions')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
-        .limit(1)
-        .single()
-      
-      if (intakeData) {
-        setIntake(intakeData)
-        
-        // Fetch recommended peptide
-        if (intakeData.recommended_protocols && intakeData.recommended_protocols.length > 0) {
-          const { data: peptideData } = await supabase
-            .from('peptides')
-            .select('*')
-            .eq('id', intakeData.recommended_protocols[0])
-            .single()
-          
-          if (peptideData) {
-            setPeptide(peptideData)
+      // Fetch from API (server-side)
+      try {
+        const response = await fetch('/api/dashboard', {
+          headers: {
+            'Authorization': `Bearer ${session.access_token}`
           }
+        })
+        const data = await response.json()
+        
+        if (data.intake && data.peptide) {
+          setIntake(data.intake)
+          setPeptide(data.peptide)
         }
+      } catch (err) {
+        console.error('Error fetching dashboard data:', err)
       }
+      
       setLoading(false)
     }
     fetchData()
