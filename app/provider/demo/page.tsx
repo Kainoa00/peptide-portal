@@ -33,6 +33,12 @@ export default function RequestDemoPage() {
           <p style={{ fontSize: '14px', color: '#666', marginBottom: '24px' }}>
             Thanks {form.name.split(' ')[0]}! We'll be in touch within 24 hours to schedule your demo.
           </p>
+          <p style={{ fontSize: '14px', color: '#666', marginBottom: '24px' }}>
+            Or book a time directly:{' '}
+            <a href="https://calendly.com/kaishintaku08" target="_blank" rel="noopener noreferrer" style={{ color: ACCENT, fontWeight: '600' }}>
+              calendly.com/kaishintaku08
+            </a>
+          </p>
           <Link href="/" style={{ color: ACCENT, textDecoration: 'none' }}>← Back to home</Link>
         </div>
       </div>
@@ -121,6 +127,18 @@ export default function RequestDemoPage() {
             Request Demo
           </button>
         </form>
+
+        <div style={{ marginTop: '24px', textAlign: 'center' }}>
+          <p style={{ fontSize: '13px', color: '#666', marginBottom: '12px' }}>Or schedule directly:</p>
+          <a 
+            href="https://calendly.com/kaishintaku08" 
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: ACCENT, fontWeight: '600', textDecoration: 'none', fontSize: '14px' }}
+          >
+            📅 Book a time that works for you →
+          </a>
+        </div>
 
         <p style={{ textAlign: 'center', fontSize: '12px', color: '#999', marginTop: '16px' }}>
           No commitment. We'll work around your schedule.
