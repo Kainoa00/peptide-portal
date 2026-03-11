@@ -3,8 +3,6 @@
 import { useState } from 'react'
 import Link from 'next/link'
 
-const ACCENT = '#D4A574'
-
 /* ─── Types ─────────────────────────────────────────────────────── */
 interface Intake {
   id: string
@@ -83,92 +81,72 @@ function IntakeCard({ intake, peptide }: { intake: Intake; peptide?: Peptide }) 
 
   if (actionTaken) {
     return (
-      <div style={{
-        background: '#F0FDF4',
-        borderRadius: '16px',
-        padding: '24px',
-        border: '1px solid #86EFAC',
-      }}>
-        <p style={{ color: '#166534', fontWeight: 600 }}>✓ Action completed. This intake has been processed.</p>
+      <div className="bg-green-50 rounded-2xl p-6 border border-green-300">
+        <p className="text-green-700 font-semibold flex items-center gap-2">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+          Action completed. This intake has been processed.
+        </p>
       </div>
     )
   }
 
   return (
-    <div style={{
-      background: '#fff',
-      borderRadius: '16px',
-      padding: '24px',
-      boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
-      border: '1px solid #E5E5E5',
-    }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-        <div style={{ flex: 1 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
-            <span style={{ fontWeight: '600', fontSize: '16px' }}>
+    <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
+      <div className="flex flex-col lg:flex-row justify-between items-start gap-4">
+        <div className="flex-1">
+          <div className="flex flex-wrap items-center gap-3 mb-2">
+            <span className="font-semibold text-base text-[#131811]">
               {intake.profiles?.full_name || 'Unknown'}
             </span>
-            <span style={{ fontSize: '12px', color: '#888', background: '#f5f5f5', padding: '2px 8px', borderRadius: '4px' }}>
+            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#F6F8F6] text-[#6B7280]">
               {intake.profiles?.state || 'N/A'}
             </span>
-            <span style={{ fontSize: '12px', color: '#888' }}>
+            <span className="text-xs text-[#9CA3AF]">
               {intake.profiles?.email}
             </span>
           </div>
-          
-          <div style={{ display: 'flex', gap: '16px', marginBottom: '8px', fontSize: '14px', color: '#666' }}>
-            <span><strong>Goals:</strong> {intake.goals?.join(', ') || 'None'}</span>
-            <span><strong>Experience:</strong> {intake.experience_level || 'N/A'}</span>
+
+          <div className="flex flex-wrap gap-4 mb-2 text-sm text-[#6B7280]">
+            <span><strong className="text-[#131811]">Goals:</strong> {intake.goals?.join(', ') || 'None'}</span>
+            <span><strong className="text-[#131811]">Experience:</strong> {intake.experience_level || 'N/A'}</span>
           </div>
 
           {peptide && (
-            <p style={{ fontSize: '14px', color: ACCENT, fontWeight: '600', margin: '0 0 8px 0' }}>
+            <p className="text-sm text-[#D4A574] font-semibold mb-2">
               Recommended: {peptide.name}
             </p>
           )}
 
           {intake.contraindications && intake.contraindications.length > 0 && (
-            <div style={{ marginTop: '12px', background: '#FEF3C7', padding: '12px', borderRadius: '8px', fontSize: '13px' }}>
-              <strong>⚠️ Contraindications:</strong> {intake.contraindications.join(', ')}
+            <div className="mt-3 bg-amber-50 px-4 py-3 rounded-xl text-sm text-amber-800 flex items-start gap-2">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="shrink-0 mt-0.5" aria-hidden="true">
+                <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+                <line x1="12" y1="9" x2="12" y2="13" />
+                <line x1="12" y1="17" x2="12.01" y2="17" />
+              </svg>
+              <span><strong>Contraindications:</strong> {intake.contraindications.join(', ')}</span>
             </div>
           )}
 
-          <p style={{ fontSize: '12px', color: '#888', marginTop: '12px' }}>
+          <p className="text-xs text-[#9CA3AF] mt-3">
             Submitted: {new Date(intake.created_at).toLocaleString()}
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '12px', flexShrink: 0 }}>
+        <div className="flex gap-3 shrink-0">
           <button
             onClick={handleDeny}
             disabled={!!loading}
-            style={{
-              padding: '10px 20px',
-              borderRadius: '8px',
-              border: '1px solid #E5E5E5',
-              background: '#fff',
-              cursor: loading ? 'not-allowed' : 'pointer',
-              fontSize: '14px',
-              fontWeight: '600',
-              opacity: loading ? 0.5 : 1,
-            }}
+            className="px-5 py-2.5 rounded-full border border-[#E5E7EB] bg-white text-[#131811] text-sm font-semibold hover:bg-[#F6F8F6] transition-colors duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading === 'deny' ? 'Processing...' : 'Deny'}
           </button>
           <button
             onClick={handleApprove}
             disabled={!!loading}
-            style={{
-              padding: '10px 20px',
-              borderRadius: '8px',
-              border: 'none',
-              background: ACCENT,
-              color: '#fff',
-              cursor: loading ? 'not-allowed' : 'pointer',
-              fontSize: '14px',
-              fontWeight: '600',
-              opacity: loading ? 0.5 : 1,
-            }}
+            className="px-5 py-2.5 rounded-full bg-[#D4A574] text-white text-sm font-semibold hover:bg-[#B8864A] transition-colors duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading === 'approve' ? 'Processing...' : 'Approve'}
           </button>
@@ -185,44 +163,38 @@ export default function ProviderDashboardClient({ intakes, peptides, providerNam
   providerName: string
 }) {
   return (
-    <div style={{ minHeight: '100vh', background: '#FAFAF8', fontFamily: 'system-ui, sans-serif' }}>
+    <div className="max-w-4xl mx-auto">
       {/* Header */}
-      <header style={{ background: '#fff', borderBottom: '1px solid #E5E5E5', padding: '16px 24px' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
-            <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: ACCENT, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <span style={{ color: '#fff', fontWeight: '700', fontSize: '14px' }}>P</span>
-            </div>
-            <span style={{ fontWeight: '600', fontSize: '18px', color: '#1A1A1A' }}>Peptide Portal</span>
-            <span style={{ background: '#F5F0E8', padding: '4px 12px', borderRadius: '12px', fontSize: '12px', fontWeight: '600', color: '#8B7355' }}>Provider</span>
-          </Link>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-            <span style={{ fontSize: '14px', color: '#666' }}>{providerName}</span>
-            <Link href="/login" style={{ fontSize: '14px', color: '#666', textDecoration: 'none' }}>Sign out</Link>
-          </div>
-        </div>
-      </header>
-
-      {/* Main */}
-      <main style={{ maxWidth: '1200px', margin: '0 auto', padding: '40px 24px' }}>
-        <h1 style={{ fontSize: '28px', fontWeight: '700', marginBottom: '8px' }}>Review Queue</h1>
-        <p style={{ color: '#666', marginBottom: '32px' }}>
+      <div className="mb-10">
+        <p className="text-[10px] font-bold uppercase tracking-widest text-[#9CA3AF] mb-2">
+          Provider Dashboard
+        </p>
+        <h1 className="font-display text-3xl md:text-4xl font-normal tracking-tight text-[#131811] mb-2">
+          Review Queue
+        </h1>
+        <p className="text-sm text-[#6B7280]">
           {intakes?.length || 0} pending intake{intakes?.length !== 1 ? 's' : ''}
         </p>
+      </div>
 
-        {intakes && intakes.length > 0 ? (
-          <div style={{ display: 'grid', gap: '16px' }}>
-            {intakes.map((intake) => {
-              const peptide = peptides?.find(p => p.id === intake.recommended_protocols?.[0])
-              return <IntakeCard key={intake.id} intake={intake} peptide={peptide} />
-            })}
+      {intakes && intakes.length > 0 ? (
+        <div className="flex flex-col gap-4">
+          {intakes.map((intake) => {
+            const peptide = peptides?.find(p => p.id === intake.recommended_protocols?.[0])
+            return <IntakeCard key={intake.id} intake={intake} peptide={peptide} />
+          })}
+        </div>
+      ) : (
+        <div className="text-center py-16 bg-white rounded-2xl border border-[#E5E7EB]">
+          <div className="w-14 h-14 rounded-full bg-[#F6F8F6] flex items-center justify-center mx-auto mb-4">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="1.5" aria-hidden="true">
+              <polyline points="22 12 16 12 14 15 10 15 8 12 2 12" />
+              <path d="M5.45 5.11L2 12v6a2 2 0 002 2h16a2 2 0 002-2v-6l-3.45-6.89A2 2 0 0016.76 4H7.24a2 2 0 00-1.79 1.11z" />
+            </svg>
           </div>
-        ) : (
-          <div style={{ textAlign: 'center', padding: '60px', background: '#fff', borderRadius: '16px' }}>
-            <p style={{ color: '#666', fontSize: '16px' }}>No pending intakes. Check back later.</p>
-          </div>
-        )}
-      </main>
+          <p className="text-[#6B7280]">No pending intakes. Check back later.</p>
+        </div>
+      )}
     </div>
   )
 }

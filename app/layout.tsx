@@ -4,7 +4,7 @@ import './globals.css'
 import SkipLink from '@/components/ui/SkipLink'
 
 const playfair = Playfair_Display({
-  variable: '--font-playfair',
+  variable: '--font-display',
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
   style: ['normal', 'italic'],
@@ -12,7 +12,7 @@ const playfair = Playfair_Display({
 })
 
 const manrope = Manrope({
-  variable: '--font-manrope',
+  variable: '--font-body',
   subsets: ['latin'],
   display: 'swap',
 })
@@ -55,8 +55,8 @@ const organizationSchema = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${playfair.variable} ${manrope.variable}`}>
-      <body>
+    <html lang="en" className={`${playfair.variable} ${manrope.variable}`} data-scroll-behavior="smooth">
+      <body suppressHydrationWarning>
         <SkipLink />
         {children}
         <script

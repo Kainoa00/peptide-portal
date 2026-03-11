@@ -2,10 +2,6 @@
 
 import Link from 'next/link'
 
-const ACCENT = '#D4A574'
-const ACCENT_DARK = '#8B7355'
-const ACCENT_LIGHT = '#F5F0E8'
-
 /* ─── Types ─────────────────────────────────────────────────────── */
 interface TimelineEvent {
   id: string
@@ -109,22 +105,20 @@ const MOCK_TIMELINE: TimelineEvent[] = [
 ]
 
 /* ─── Helper Functions ───────────────────────────────────────────── */
-function eventAccent(type: TimelineEvent['type']): { color: string; dim: string } {
+function eventAccent(type: TimelineEvent['type']): { color: string; bg: string } {
   switch (type) {
     case 'approval':
-      return { color: ACCENT, dim: ACCENT_LIGHT }
+    case 'message':
+      return { color: 'text-[#D4A574]', bg: 'bg-[#F5F0E8]' }
     case 'shipment':
     case 'delivery':
-      return { color: '#D97706', dim: '#FEF3C7' }
-    case 'lab':
-      return { color: '#7C3AED', dim: '#EDE9FE' }
-    case 'message':
-      return { color: ACCENT, dim: ACCENT_LIGHT }
     case 'refill':
-      return { color: '#D97706', dim: '#FEF3C7' }
+      return { color: 'text-amber-600', bg: 'bg-amber-50' }
+    case 'lab':
+      return { color: 'text-violet-600', bg: 'bg-violet-50' }
     case 'intake':
     default:
-      return { color: '#666', dim: '#F5F5F5' }
+      return { color: 'text-[#6B7280]', bg: 'bg-[#F6F8F6]' }
   }
 }
 
@@ -146,47 +140,23 @@ function formatRelative(dateStr: string): string {
 /* ─── Empty State ────────────────────────────────────────────────── */
 function EmptyState() {
   return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      textAlign: 'center',
-      padding: '80px 24px',
-      background: '#fff',
-      border: '1px solid #E5E5E5',
-      borderRadius: '20px',
-    }}>
-      <div style={{
-        width: '56px',
-        height: '56px',
-        borderRadius: '50%',
-        background: '#F5F5F5',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginBottom: '16px',
-      }}>
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="1.5">
+    <div className="flex flex-col items-center justify-center text-center py-20 px-6 bg-white border border-[#E5E7EB] rounded-2xl">
+      <div className="w-14 h-14 rounded-full bg-[#F6F8F6] flex items-center justify-center mb-4">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="1.5" aria-hidden="true">
           <circle cx="12" cy="12" r="10" />
           <path d="M12 6v6l4 2" />
         </svg>
       </div>
-      <h2 style={{ fontSize: '26px', fontWeight: 700, color: '#1A1A1A', marginBottom: '8px' }}>
+      <h2 className="text-2xl font-semibold text-[#131811] mb-2">
         No history yet
       </h2>
-      <p style={{ fontSize: '14px', color: '#666', marginBottom: '24px', maxWidth: '320px' }}>
+      <p className="text-sm text-[#6B7280] mb-6 max-w-xs">
         Your treatment timeline will appear here once you begin your protocol.
       </p>
-      <Link href="/quiz" style={{
-        background: ACCENT,
-        color: '#fff',
-        borderRadius: '999px',
-        padding: '10px 28px',
-        fontSize: '14px',
-        fontWeight: 600,
-        textDecoration: 'none',
-      }}>
+      <Link
+        href="/quiz"
+        className="px-6 py-3 rounded-full bg-[#D4A574] text-white font-semibold hover:bg-[#B8864A] transition-colors duration-200 no-underline cursor-pointer"
+      >
         Start Assessment
       </Link>
     </div>
@@ -196,28 +166,18 @@ function EmptyState() {
 /* ─── Summary Stats ──────────────────────────────────────────────── */
 function SummaryStats() {
   return (
-    <div style={{
-      display: 'grid',
-      gridTemplateColumns: 'repeat(2, 1fr)',
-      gap: '12px',
-      marginBottom: '40px',
-    }}>
+    <div className="grid grid-cols-2 gap-3 mb-10">
       {[
-        { label: 'Protocol', value: 'CJC-1295 / Ipamorelin', accent: ACCENT },
-        { label: 'Duration', value: '34 days', color: ACCENT },
-        { label: 'Shipments', value: '2', color: '#1A1A1A' },
-        { label: 'Status', value: 'Active', color: ACCENT },
+        { label: 'Protocol', value: 'CJC-1295 / Ipamorelin', valueColor: 'text-[#D4A574]' },
+        { label: 'Duration', value: '34 days', valueColor: 'text-[#D4A574]' },
+        { label: 'Shipments', value: '2', valueColor: 'text-[#131811]' },
+        { label: 'Status', value: 'Active', valueColor: 'text-[#D4A574]' },
       ].map((stat) => (
-        <div key={stat.label} style={{
-          background: '#fff',
-          border: '1px solid #E5E5E5',
-          borderRadius: '12px',
-          padding: '16px 18px',
-        }}>
-          <p style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#888', marginBottom: '6px' }}>
+        <div key={stat.label} className="bg-white border border-[#E5E7EB] rounded-xl p-4">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-[#9CA3AF] mb-1.5">
             {stat.label}
           </p>
-          <p style={{ fontSize: '14px', fontWeight: 600, color: stat.color || '#1A1A1A' }}>
+          <p className={`text-sm font-semibold ${stat.valueColor}`}>
             {stat.value}
           </p>
         </div>
@@ -243,16 +203,16 @@ export default function HistoryPage() {
   }
 
   return (
-    <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+    <div className="max-w-3xl mx-auto">
       {/* Header */}
-      <div style={{ marginBottom: '40px' }}>
-        <p style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#888', marginBottom: '8px' }}>
+      <div className="mb-10">
+        <p className="text-[10px] font-bold uppercase tracking-widest text-[#9CA3AF] mb-2">
           Patient Dashboard
         </p>
-        <h1 style={{ fontSize: 'clamp(36px, 5vw, 48px)', fontWeight: 700, color: '#1A1A1A', lineHeight: 1.1, marginBottom: '8px' }}>
+        <h1 className="font-display text-4xl md:text-5xl font-normal tracking-tight text-[#131811] mb-2">
           Treatment History
         </h1>
-        <p style={{ fontSize: '14px', color: '#666' }}>A complete timeline of your care</p>
+        <p className="text-sm text-[#6B7280]">A complete timeline of your care</p>
       </div>
 
       {events.length === 0 ? (
@@ -264,101 +224,71 @@ export default function HistoryPage() {
           {/* Timeline */}
           <div>
             {grouped.map((group, gi) => (
-              <div key={group.month} style={{ marginBottom: '32px' }}>
+              <div key={group.month} className="mb-8">
                 {/* Month header */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
-                  <h2 style={{ fontSize: '12px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#666', whiteSpace: 'nowrap' }}>
+                <div className="flex items-center gap-3 mb-5">
+                  <h2 className="text-xs font-bold uppercase tracking-widest text-[#6B7280] whitespace-nowrap">
                     {group.month}
                   </h2>
-                  <div style={{ flex: 1, height: '1px', background: '#E5E5E5' }} />
+                  <div className="flex-1 h-px bg-[#E5E7EB]" aria-hidden="true" />
                 </div>
 
                 {/* Events */}
-                <div style={{ position: 'relative', paddingLeft: '28px' }}>
+                <div className="relative pl-7">
                   {/* Vertical line */}
-                  <div style={{
-                    position: 'absolute',
-                    top: 0,
-                    bottom: 0,
-                    left: '11px',
-                    width: '1px',
-                    background: 'linear-gradient(180deg, #D4A574 0%, #E5E5E5 100%)',
-                  }} />
+                  <div className="absolute top-0 bottom-0 left-[11px] w-px bg-gradient-to-b from-[#D4A574] to-[#E5E7EB]" aria-hidden="true" />
 
-                  {group.events.map((event, ei) => {
+                  {group.events.map((event) => {
                     const accent = eventAccent(event.type)
-                    const isLast = gi === grouped.length - 1 && ei === group.events.length - 1
 
                     return (
-                      <div key={event.id} style={{ position: 'relative', marginBottom: '24px', paddingBottom: isLast ? 0 : undefined }}>
+                      <div key={event.id} className="relative mb-6">
                         {/* Timeline node */}
-                        <div style={{
-                          position: 'absolute',
-                          left: '-28px',
-                          top: '4px',
-                          width: '22px',
-                          height: '22px',
-                          borderRadius: '50%',
-                          background: event.status === 'active' ? accent.color : accent.dim,
-                          border: `1px solid ${event.status === 'active' ? accent.color : '#E5E5E5'}`,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          zIndex: 1,
-                        }}>
+                        <div className={`absolute -left-7 top-1 w-[22px] h-[22px] rounded-full flex items-center justify-center z-10 border ${
+                          event.status === 'active'
+                            ? 'bg-[#D4A574] border-[#D4A574]'
+                            : `${accent.bg} border-[#E5E7EB]`
+                        }`}>
                           {event.status === 'active' && (
-                            <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#fff' }} />
+                            <div className="w-1.5 h-1.5 rounded-full bg-white" />
                           )}
                         </div>
 
                         {/* Event card */}
-                        <div style={{
-                          background: '#fff',
-                          border: `1px solid ${event.status === 'active' ? accent.dim : '#E5E5E5'}`,
-                          borderRadius: '12px',
-                          padding: '16px 20px',
-                        }}>
-                          {/* Top row: date + status */}
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', flexWrap: 'wrap', gap: '8px' }}>
-                            <div style={{ display: 'flex', gap: '12px' }}>
-                              <span style={{ fontSize: '12px', color: '#888' }}>{formatDate(event.date)}</span>
-                              <span style={{ fontSize: '12px', color: '#888' }}>{formatRelative(event.date)}</span>
+                        <div className={`bg-white border rounded-xl p-4 ${
+                          event.status === 'active' ? 'border-[#D4A574]/30' : 'border-[#E5E7EB]'
+                        }`}>
+                          {/* Top row */}
+                          <div className="flex justify-between items-center mb-2 flex-wrap gap-2">
+                            <div className="flex gap-3">
+                              <span className="text-xs text-[#9CA3AF]">{formatDate(event.date)}</span>
+                              <span className="text-xs text-[#9CA3AF]">{formatRelative(event.date)}</span>
                             </div>
-                            <span style={{
-                              fontSize: '11px',
-                              fontWeight: 600,
-                              padding: '4px 10px',
-                              borderRadius: '12px',
-                              background: event.status === 'active' ? accent.dim : '#F5F5F5',
-                              color: event.status === 'active' ? accent.color : '#666',
-                            }}>
+                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${
+                              event.status === 'active'
+                                ? 'bg-amber-50 text-amber-700'
+                                : event.status === 'upcoming'
+                                ? 'bg-blue-50 text-blue-700'
+                                : 'bg-[#F6F8F6] text-[#6B7280]'
+                            }`}>
                               {event.status === 'active' ? 'In Progress' : event.status === 'upcoming' ? 'Upcoming' : 'Completed'}
                             </span>
                           </div>
 
-                          {/* Title */}
-                          <h3 style={{ fontSize: '14px', fontWeight: 600, color: '#1A1A1A', marginBottom: '6px' }}>
+                          <h3 className="text-sm font-semibold text-[#131811] mb-1.5">
                             {event.title}
                           </h3>
 
-                          {/* Description */}
-                          <p style={{ fontSize: '12px', color: '#666', lineHeight: 1.6 }}>
+                          <p className="text-xs text-[#6B7280] leading-relaxed">
                             {event.description}
                           </p>
 
                           {/* Meta details */}
                           {event.meta && (
-                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '12px' }}>
+                            <div className="flex flex-wrap gap-2 mt-3">
                               {Object.entries(event.meta).map(([key, value]) => (
-                                <span key={key} style={{
-                                  fontSize: '11px',
-                                  padding: '4px 10px',
-                                  borderRadius: '8px',
-                                  background: '#FAFAF8',
-                                  border: '1px solid #E5E5E5',
-                                  color: '#666',
-                                }}>
-                                  <span style={{ color: '#888', textTransform: 'capitalize' }}>{key}: </span>
+                                <span key={key} className="text-[11px] px-2.5 py-1 rounded-lg bg-[#F6F8F6] border border-[#E5E7EB] text-[#6B7280]">
+                                  <span className="text-[#9CA3AF] capitalize">{key}: </span>
                                   {value}
                                 </span>
                               ))}
@@ -373,8 +303,7 @@ export default function HistoryPage() {
             ))}
           </div>
 
-          {/* Record count */}
-          <p style={{ fontSize: '12px', color: '#888', textAlign: 'center', marginTop: '24px' }}>
+          <p className="text-xs text-[#9CA3AF] text-center mt-6">
             {events.length} event{events.length !== 1 ? 's' : ''} in your treatment history
           </p>
         </>

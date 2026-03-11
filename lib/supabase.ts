@@ -21,5 +21,11 @@ export function createAdminClient() {
   )
 }
 
-// Helper to check if Supabase is configured
-export const isSupabaseConfigured = !!(supabaseUrl && supabaseAnonKey)
+// Helper to check if Supabase is properly configured (not placeholder values)
+export const isSupabaseConfigured = !!(
+  supabaseUrl &&
+  supabaseAnonKey &&
+  !supabaseUrl.includes('your-project') &&
+  supabaseAnonKey !== 'your-anon-key' &&
+  supabaseAnonKey !== 'placeholder'
+)

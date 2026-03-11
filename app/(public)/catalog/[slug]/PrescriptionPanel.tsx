@@ -59,9 +59,9 @@ export default function PrescriptionPanel({ peptide }: Props) {
         {/* Protocol specs */}
         <div className="space-y-3 mb-7">
           {[
-            { icon: '💊', label: 'Dosage', value: peptide.dosageRange },
-            { icon: '📍', label: 'Route', value: peptide.deliveryMethod.split('(')[0].trim() },
-            { icon: '🔄', label: 'Cycle', value: peptide.cycleLength },
+            { label: 'Dosage', value: peptide.dosageRange },
+            { label: 'Route', value: peptide.deliveryMethod.split('(')[0].trim() },
+            { label: 'Cycle', value: peptide.cycleLength },
           ].map((row) => (
             <div key={row.label} className="flex items-start justify-between gap-3">
               <span className="text-xs" style={{ color: 'var(--text-3)' }}>
@@ -78,12 +78,11 @@ export default function PrescriptionPanel({ peptide }: Props) {
         <button
           onClick={handleStartConsultation}
           disabled={loading}
-          className="w-full py-4 rounded-xl text-sm font-medium transition-all mb-3"
+          className="w-full py-4 rounded-xl text-sm font-medium transition-all mb-3 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
           style={{
             background: meta.accent,
             color: '#FFFFFF',
             boxShadow: `0 0 28px ${meta.dim}`,
-            opacity: loading ? 0.7 : 1,
           }}
         >
           {loading ? 'Redirecting…' : 'Start Consultation'}
@@ -92,7 +91,7 @@ export default function PrescriptionPanel({ peptide }: Props) {
         {/* Secondary CTA */}
         <Link
           href="/quiz"
-          className="w-full py-3.5 rounded-xl text-sm font-medium text-center block transition-colors"
+          className="w-full py-3.5 rounded-xl text-sm font-medium text-center block transition-colors cursor-pointer no-underline"
           style={{
             border: '1px solid var(--border)',
             color: 'var(--text-2)',

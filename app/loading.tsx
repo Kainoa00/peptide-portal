@@ -11,7 +11,7 @@ const LOADING_STYLES = `
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: var(--teal);
+  background: var(--accent);
   animation: dot-pulse 1.2s ease-in-out infinite;
 }
 .pulse-dot:nth-child(1) { animation-delay: 0ms; }
@@ -32,7 +32,7 @@ const LOADING_STYLES = `
   left: 0;
   width: 50%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, var(--teal), transparent);
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
   animation: shimmer-bar 1.6s ease-in-out infinite;
 }
 `
@@ -65,7 +65,7 @@ export default function Loading() {
           letterSpacing: '0.12em',
         }}
       >
-        peptide<span style={{ color: 'var(--teal)', fontStyle: 'normal', fontWeight: 300 }}>portal</span>
+        peptide<span style={{ color: 'var(--accent)', fontStyle: 'normal', fontWeight: 300 }}>portal</span>
       </span>
     </div>
   )

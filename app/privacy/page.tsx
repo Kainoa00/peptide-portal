@@ -1,9 +1,6 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
 
-const ACCENT = '#D4A574'
-const ACCENT_DARK = '#8B7355'
-
 export const metadata: Metadata = {
   title: 'Privacy Policy — Peptide Portal',
   description: 'Learn how Peptide Portal collects, uses, and protects your personal health information in compliance with HIPAA.',
@@ -11,85 +8,66 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   return (
-    <div style={{ background: '#FAFAF8', minHeight: '100vh', color: '#1A1A1A', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+    <div className="min-h-screen bg-[#F6F8F6] text-[#131811]">
       {/* Header */}
-      <header
-        style={{
-          borderBottom: '1px solid #E5E5E5',
-          padding: '20px 24px',
-          background: 'rgba(250,250,248,0.95)',
-          backdropFilter: 'blur(10px)',
-          position: 'sticky',
-          top: 0,
-          zIndex: 50,
-        }}
-      >
-        <div style={{ maxWidth: 720, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Link
-            href="/"
-            style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}
-          >
-            <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: ACCENT, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <span style={{ color: '#fff', fontWeight: '700', fontSize: '14px' }}>P</span>
-            </div>
-            <span style={{ fontWeight: '600', fontSize: '18px', color: '#1A1A1A' }}>Peptide Portal</span>
+      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-[#E5E7EB]">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2.5 no-underline cursor-pointer">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#131811" strokeWidth="1.5" aria-hidden="true">
+              <path d="M16 2L28 9v14l-12 7L4 23V9l12-7z" />
+              <circle cx="16" cy="16" r="4" />
+              <path d="M16 12v-4M20 14l3.5-2M20 18l3.5 2M16 20v4M12 18l-3.5 2M12 14l-3.5-2" />
+            </svg>
+            <span className="font-semibold text-lg text-[#131811]">PeptidePortal</span>
           </Link>
-          <Link
-            href="/"
-            style={{ fontSize: 13, color: '#666', textDecoration: 'none' }}
-          >
-            ← Back to home
+          <Link href="/" className="text-sm text-[#6B7280] no-underline hover:text-[#131811] transition-colors cursor-pointer">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="inline mr-1" aria-hidden="true">
+              <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+            Back to home
           </Link>
         </div>
       </header>
 
       {/* Main content */}
-      <main id="main-content" style={{ maxWidth: 720, margin: '0 auto', padding: '64px 24px 96px' }}>
+      <main id="main-content" className="max-w-[720px] mx-auto px-6 pt-16 pb-24">
         {/* Title */}
-        <div style={{ marginBottom: 48 }}>
-          <p style={{ fontSize: 12, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#888', marginBottom: 12 }}>
+        <div className="mb-12">
+          <p className="text-xs tracking-[0.1em] uppercase text-[#9CA3AF] mb-3">
             Legal
           </p>
-          <h1
-            style={{ fontSize: 'clamp(36px, 5vw, 52px)', fontWeight: '700', color: '#1A1A1A', lineHeight: 1.1, marginBottom: 16 }}
-          >
+          <h1 className="text-4xl sm:text-5xl font-bold text-[#131811] leading-tight mb-4">
             Privacy Policy
           </h1>
-          <p style={{ fontSize: 14, color: '#666' }}>
-            Effective date: January 1, 2026 &nbsp;·&nbsp; Last updated: February 1, 2026
+          <p className="text-sm text-[#6B7280]">
+            Effective date: January 1, 2026 &middot; Last updated: February 1, 2026
           </p>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 48 }}>
+        <div className="flex flex-col gap-12">
 
           {/* Introduction */}
           <section>
-            <h2
-              
-              style={{ fontSize: 24, fontWeight: '600', color: '#1A1A1A', marginBottom: 16 }}
-            >
+            <h2 className="text-2xl font-semibold text-[#131811] mb-4">
               Introduction
             </h2>
-            <p style={{ fontSize: 15, color: '#666', lineHeight: 1.8, marginBottom: 12 }}>
+            <p className="text-[15px] text-[#6B7280] leading-relaxed mb-3">
               Peptide Portal, Inc. (&quot;Peptide Portal,&quot; &quot;we,&quot; &quot;us,&quot; or &quot;our&quot;) operates a telehealth platform that connects patients with licensed physicians for evaluation and prescription of peptide therapy protocols. We are committed to protecting your privacy and handling your personal and health information with the highest standards of care.
             </p>
-            <p style={{ fontSize: 15, color: '#666', lineHeight: 1.8 }}>
+            <p className="text-[15px] text-[#6B7280] leading-relaxed">
               This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our website and services. Please read this policy carefully. By using Peptide Portal, you agree to the collection and use of information in accordance with this policy.
             </p>
           </section>
 
           {/* Information We Collect */}
           <section>
-            <h2
-              
-              style={{ fontSize: 24, fontWeight: '600', color: '#1A1A1A', marginBottom: 16 }}
-            >
+            <h2 className="text-2xl font-semibold text-[#131811] mb-4">
               Information We Collect
             </h2>
-            <p style={{ fontSize: 15, color: '#666', lineHeight: 1.8, marginBottom: 16 }}>
+            <p className="text-[15px] text-[#6B7280] leading-relaxed mb-4">
               We collect information you provide directly to us, information collected automatically, and information from third-party services.
             </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+            <div className="flex flex-col gap-5">
               {[
                 {
                   title: 'Account Information',
@@ -114,15 +92,10 @@ export default function PrivacyPage() {
               ].map((item) => (
                 <div
                   key={item.title}
-                  style={{
-                    padding: '20px 24px',
-                    borderRadius: 12,
-                    background: '#fff',
-                    border: '1px solid #E5E5E5',
-                  }}
+                  className="px-6 py-5 rounded-xl bg-white border border-[#E5E7EB]"
                 >
-                  <div style={{ fontSize: 14, fontWeight: 600, color: '#1A1A1A', marginBottom: 6 }}>{item.title}</div>
-                  <p style={{ fontSize: 14, color: '#666', lineHeight: 1.7, margin: 0 }}>{item.body}</p>
+                  <div className="text-sm font-semibold text-[#131811] mb-1.5">{item.title}</div>
+                  <p className="text-sm text-[#6B7280] leading-relaxed m-0">{item.body}</p>
                 </div>
               ))}
             </div>
@@ -130,16 +103,13 @@ export default function PrivacyPage() {
 
           {/* How We Use Your Information */}
           <section>
-            <h2
-              
-              style={{ fontSize: 24, fontWeight: '600', color: '#1A1A1A', marginBottom: 16 }}
-            >
+            <h2 className="text-2xl font-semibold text-[#131811] mb-4">
               How We Use Your Information
             </h2>
-            <p style={{ fontSize: 15, color: '#666', lineHeight: 1.8, marginBottom: 16 }}>
+            <p className="text-[15px] text-[#6B7280] leading-relaxed mb-4">
               We use the information we collect to:
             </p>
-            <ul style={{ paddingLeft: 20, display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <ul className="pl-5 flex flex-col gap-2.5">
               {[
                 'Provide, operate, and improve our telehealth platform and services',
                 'Facilitate physician review and prescription of your protocol',
@@ -150,44 +120,34 @@ export default function PrivacyPage() {
                 'Comply with applicable law, including HIPAA regulations',
                 'Detect and prevent fraud and misuse of our platform',
               ].map((item) => (
-                <li key={item} style={{ fontSize: 15, color: '#666', lineHeight: 1.7 }}>
+                <li key={item} className="text-[15px] text-[#6B7280] leading-relaxed">
                   {item}
                 </li>
               ))}
             </ul>
-            <p style={{ fontSize: 15, color: '#666', lineHeight: 1.8, marginTop: 16 }}>
+            <p className="text-[15px] text-[#6B7280] leading-relaxed mt-4">
               We do not sell your personal information or PHI to third parties for marketing purposes.
             </p>
           </section>
 
           {/* HIPAA Compliance */}
-          <section
-            style={{
-              padding: '28px 32px',
-              borderRadius: 16,
-              background: 'rgba(45,214,168,0.04)',
-              border: '1px solid rgba(45,214,168,0.15)',
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D4A574" strokeWidth="1.5">
+          <section className="px-8 py-7 rounded-2xl bg-[#F5F0E8]/40 border border-[#D4A574]/15">
+            <div className="flex items-center gap-3 mb-4">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D4A574" strokeWidth="1.5" aria-hidden="true">
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                 <path d="M9 12l2 2 4-4" />
               </svg>
-              <h2
-                
-                style={{ fontSize: 24, fontWeight: '600', color: '#1A1A1A', margin: 0 }}
-              >
+              <h2 className="text-2xl font-semibold text-[#131811] m-0">
                 HIPAA Compliance
               </h2>
             </div>
-            <p style={{ fontSize: 15, color: '#666', lineHeight: 1.8, marginBottom: 12 }}>
+            <p className="text-[15px] text-[#6B7280] leading-relaxed mb-3">
               Peptide Portal is a Covered Entity and Business Associate under the Health Insurance Portability and Accountability Act (HIPAA). We maintain administrative, physical, and technical safeguards to protect your PHI in accordance with the HIPAA Privacy Rule and Security Rule.
             </p>
-            <p style={{ fontSize: 15, color: '#666', lineHeight: 1.8, marginBottom: 12 }}>
+            <p className="text-[15px] text-[#6B7280] leading-relaxed mb-3">
               Key HIPAA protections we implement include:
             </p>
-            <ul style={{ paddingLeft: 20, display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <ul className="pl-5 flex flex-col gap-2">
               {[
                 'End-to-end encryption of all PHI at rest and in transit (AES-256 and TLS 1.3)',
                 'Business Associate Agreements (BAAs) with all vendors who access PHI',
@@ -196,7 +156,7 @@ export default function PrivacyPage() {
                 'Annual HIPAA training for all staff with access to PHI',
                 'Breach notification procedures in compliance with the HIPAA Breach Notification Rule',
               ].map((item) => (
-                <li key={item} style={{ fontSize: 14, color: '#666', lineHeight: 1.7 }}>
+                <li key={item} className="text-sm text-[#6B7280] leading-relaxed">
                   {item}
                 </li>
               ))}
@@ -205,16 +165,13 @@ export default function PrivacyPage() {
 
           {/* Data Sharing */}
           <section>
-            <h2
-              
-              style={{ fontSize: 24, fontWeight: '600', color: '#1A1A1A', marginBottom: 16 }}
-            >
+            <h2 className="text-2xl font-semibold text-[#131811] mb-4">
               Data Sharing
             </h2>
-            <p style={{ fontSize: 15, color: '#666', lineHeight: 1.8, marginBottom: 16 }}>
+            <p className="text-[15px] text-[#6B7280] leading-relaxed mb-4">
               We share your information only in the following circumstances:
             </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <div className="flex flex-col gap-4">
               {[
                 {
                   title: 'Licensed Physicians',
@@ -237,9 +194,9 @@ export default function PrivacyPage() {
                   body: 'We may share your information for any other purpose with your explicit consent.',
                 },
               ].map((item) => (
-                <div key={item.title} style={{ paddingLeft: 16, borderLeft: '2px solid #D4A574' }}>
-                  <div style={{ fontSize: 14, fontWeight: 600, color: '#1A1A1A', marginBottom: 4 }}>{item.title}</div>
-                  <p style={{ fontSize: 14, color: '#666', lineHeight: 1.7, margin: 0 }}>{item.body}</p>
+                <div key={item.title} className="pl-4 border-l-2 border-[#D4A574]">
+                  <div className="text-sm font-semibold text-[#131811] mb-1">{item.title}</div>
+                  <p className="text-sm text-[#6B7280] leading-relaxed m-0">{item.body}</p>
                 </div>
               ))}
             </div>
@@ -247,45 +204,36 @@ export default function PrivacyPage() {
 
           {/* Data Security */}
           <section>
-            <h2
-              
-              style={{ fontSize: 24, fontWeight: '600', color: '#1A1A1A', marginBottom: 16 }}
-            >
+            <h2 className="text-2xl font-semibold text-[#131811] mb-4">
               Data Security
             </h2>
-            <p style={{ fontSize: 15, color: '#666', lineHeight: 1.8 }}>
+            <p className="text-[15px] text-[#6B7280] leading-relaxed">
               We use industry-standard security measures to protect your information, including AES-256 encryption at rest, TLS 1.3 encryption in transit, SOC 2 Type II compliant infrastructure, multi-factor authentication for provider and admin accounts, and regular third-party security audits. However, no method of electronic transmission or storage is 100% secure. While we strive to protect your PHI, we cannot guarantee absolute security.
             </p>
           </section>
 
           {/* Data Retention */}
           <section>
-            <h2
-              
-              style={{ fontSize: 24, fontWeight: '600', color: '#1A1A1A', marginBottom: 16 }}
-            >
+            <h2 className="text-2xl font-semibold text-[#131811] mb-4">
               Data Retention
             </h2>
-            <p style={{ fontSize: 15, color: '#666', lineHeight: 1.8, marginBottom: 12 }}>
+            <p className="text-[15px] text-[#6B7280] leading-relaxed mb-3">
               We retain your account information and PHI for a minimum of 7 years from your last interaction, as required by applicable state and federal regulations governing medical records. Payment records are retained for 7 years for tax and accounting purposes. You may request deletion of non-medical account data; however, medical records must be retained per legal requirements.
             </p>
-            <p style={{ fontSize: 15, color: '#666', lineHeight: 1.8 }}>
+            <p className="text-[15px] text-[#6B7280] leading-relaxed">
               After the retention period, data is securely destroyed using industry-standard data destruction methods.
             </p>
           </section>
 
           {/* Your Rights */}
           <section>
-            <h2
-              
-              style={{ fontSize: 24, fontWeight: '600', color: '#1A1A1A', marginBottom: 16 }}
-            >
+            <h2 className="text-2xl font-semibold text-[#131811] mb-4">
               Your Rights
             </h2>
-            <p style={{ fontSize: 15, color: '#666', lineHeight: 1.8, marginBottom: 16 }}>
+            <p className="text-[15px] text-[#6B7280] leading-relaxed mb-4">
               Under HIPAA and applicable privacy laws, you have the following rights regarding your information:
             </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <div className="flex flex-col gap-3">
               {[
                 { right: 'Right of Access', desc: 'Request a copy of your PHI and medical records we hold.' },
                 { right: 'Right to Correct', desc: 'Request correction of inaccurate or incomplete PHI.' },
@@ -294,48 +242,38 @@ export default function PrivacyPage() {
                 { right: 'Right to Confidential Communications', desc: 'Request that we communicate with you in a specific way or at a specific location.' },
                 { right: 'Right to Complain', desc: 'File a complaint with us or the U.S. Department of Health and Human Services if you believe your privacy rights have been violated.' },
               ].map((item) => (
-                <div key={item.right} style={{ display: 'flex', gap: 16, padding: '16px 20px', background: '#fff', borderRadius: 10, border: '1px solid #E5E5E5' }}>
-                  <div style={{ fontSize: 14, fontWeight: 600, color: '#D4A574', whiteSpace: 'nowrap', minWidth: 160 }}>{item.right}</div>
-                  <p style={{ fontSize: 14, color: '#666', lineHeight: 1.7, margin: 0 }}>{item.desc}</p>
+                <div key={item.right} className="flex flex-col sm:flex-row gap-2 sm:gap-4 px-5 py-4 bg-white rounded-xl border border-[#E5E7EB]">
+                  <div className="text-sm font-semibold text-[#D4A574] whitespace-nowrap sm:min-w-[160px]">{item.right}</div>
+                  <p className="text-sm text-[#6B7280] leading-relaxed m-0">{item.desc}</p>
                 </div>
               ))}
             </div>
-            <p style={{ fontSize: 14, color: '#666', lineHeight: 1.8, marginTop: 16 }}>
+            <p className="text-sm text-[#6B7280] leading-relaxed mt-4">
               To exercise any of these rights, contact us at{' '}
-              <a href="mailto:privacy@peptideportal.com" style={{ color: '#D4A574' }}>privacy@peptideportal.com</a>.
+              <a href="mailto:privacy@peptideportal.com" className="text-[#D4A574] hover:text-[#B8864A] transition-colors">privacy@peptideportal.com</a>.
             </p>
           </section>
 
           {/* Contact */}
-          <section
-            style={{
-              padding: '28px 32px',
-              borderRadius: 16,
-              background: '#fff',
-              border: '1px solid #E5E5E5',
-            }}
-          >
-            <h2
-              
-              style={{ fontSize: 24, fontWeight: '600', color: '#1A1A1A', marginBottom: 16 }}
-            >
+          <section className="px-8 py-7 rounded-2xl bg-white border border-[#E5E7EB]">
+            <h2 className="text-2xl font-semibold text-[#131811] mb-4">
               Contact Us
             </h2>
-            <p style={{ fontSize: 15, color: '#666', lineHeight: 1.8, marginBottom: 12 }}>
+            <p className="text-[15px] text-[#6B7280] leading-relaxed mb-3">
               If you have questions about this Privacy Policy or our data practices, please contact our Privacy Officer:
             </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              <p style={{ fontSize: 14, color: '#666', margin: 0 }}>
-                <strong style={{ color: '#1A1A1A' }}>Peptide Portal, Inc.</strong>
+            <div className="flex flex-col gap-1.5">
+              <p className="text-sm text-[#6B7280] m-0">
+                <strong className="text-[#131811]">Peptide Portal, Inc.</strong>
               </p>
-              <p style={{ fontSize: 14, color: '#666', margin: 0 }}>
+              <p className="text-sm text-[#6B7280] m-0">
                 Attn: Privacy Officer
               </p>
-              <a href="mailto:privacy@peptideportal.com" style={{ fontSize: 14, color: '#D4A574' }}>
+              <a href="mailto:privacy@peptideportal.com" className="text-sm text-[#D4A574] hover:text-[#B8864A] transition-colors">
                 privacy@peptideportal.com
               </a>
             </div>
-            <p style={{ fontSize: 13, color: '#888', marginTop: 16, lineHeight: 1.7 }}>
+            <p className="text-[13px] text-[#9CA3AF] mt-4 leading-relaxed">
               We reserve the right to update this Privacy Policy at any time. We will notify you of material changes by email or by posting a prominent notice on our platform. Your continued use of our services after such modifications constitutes acceptance of the updated policy.
             </p>
           </section>

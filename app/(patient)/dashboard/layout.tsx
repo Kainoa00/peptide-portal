@@ -4,14 +4,10 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { createClient, isSupabaseConfigured } from '@/lib/supabase'
 
-const ACCENT = '#D4A574'
-const ACCENT_DARK = '#8B7355'
-const ACCENT_LIGHT = '#F5F0E8'
-
 /* ─── Icons ─────────────────────────────────────────────────────── */
 function IconProtocol() {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
       <rect x="3" y="11" width="18" height="4" rx="2" />
       <path d="M9 11V7a3 3 0 016 0v4" />
       <path d="M9 15v2a3 3 0 006 0v-2" />
@@ -21,7 +17,7 @@ function IconProtocol() {
 
 function IconMessages() {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
       <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
     </svg>
   )
@@ -29,7 +25,7 @@ function IconMessages() {
 
 function IconSubscription() {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
       <rect x="1" y="4" width="22" height="16" rx="2" />
       <path d="M1 10h22" />
     </svg>
@@ -38,7 +34,7 @@ function IconSubscription() {
 
 function IconHistory() {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
       <circle cx="12" cy="12" r="10" />
       <path d="M12 6v6l4 2" />
     </svg>
@@ -56,21 +52,13 @@ function SidebarLink({ href, label, Icon, isActive }: { href: string; label: str
   return (
     <Link
       href={href}
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '12px',
-        padding: '12px 16px',
-        borderRadius: '12px',
-        fontSize: '14px',
-        textDecoration: 'none',
-        color: isActive ? '#1A1A1A' : '#666',
-        background: isActive ? ACCENT_LIGHT : 'transparent',
-        fontWeight: isActive ? 600 : 500,
-        transition: 'all 0.2s',
-      }}
+      className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-colors duration-200 cursor-pointer no-underline ${
+        isActive
+          ? 'bg-[#F5F0E8] text-[#B8864A] font-semibold'
+          : 'text-[#6B7280] hover:bg-[#F6F8F6] hover:text-[#131811]'
+      }`}
     >
-      <span style={{ color: isActive ? ACCENT : '#666' }}>
+      <span className={isActive ? 'text-[#D4A574]' : 'text-[#6B7280]'}>
         <Icon />
       </span>
       {label}
@@ -82,16 +70,9 @@ function TabLink({ href, label, Icon, isActive }: { href: string; label: string;
   return (
     <Link
       href={href}
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: '4px',
-        padding: '8px 12px',
-        fontSize: '12px',
-        textDecoration: 'none',
-        color: isActive ? ACCENT : '#666',
-      }}
+      className={`flex flex-col items-center gap-1 py-2 px-3 text-xs no-underline cursor-pointer transition-colors duration-200 ${
+        isActive ? 'text-[#D4A574]' : 'text-[#6B7280]'
+      }`}
     >
       <Icon />
       <span>{label}</span>
@@ -113,17 +94,8 @@ function SignOutButton() {
     <button
       onClick={handleSignOut}
       disabled={loading}
-      style={{
-        padding: '8px 16px',
-        fontSize: '14px',
-        fontWeight: 500,
-        color: '#666',
-        background: 'transparent',
-        border: '1px solid #E5E5E5',
-        borderRadius: '8px',
-        cursor: loading ? 'not-allowed' : 'pointer',
-        opacity: loading ? 0.7 : 1,
-      }}
+      className="px-4 py-2 text-sm font-medium text-red-600 bg-transparent border border-red-200 rounded-xl hover:bg-red-50 transition-colors duration-200 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+      aria-label="Sign out of your account"
     >
       {loading ? 'Signing out...' : 'Sign out'}
     </button>
@@ -148,7 +120,7 @@ function UserName() {
   }, [])
 
   return (
-    <span style={{ fontSize: '14px', fontWeight: 500, color: '#1A1A1A' }}>{name}</span>
+    <span className="text-sm font-medium text-[#131811]">{name}</span>
   )
 }
 
@@ -161,52 +133,38 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }, [])
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#FAFAF8', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+    <div className="min-h-screen flex flex-col bg-[#F6F8F6]">
 
       {/* Navbar */}
-      <header style={{
-        position: 'sticky',
-        top: 0,
-        zIndex: 40,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '0 24px',
-        height: '64px',
-        background: 'rgba(255,255,255,0.95)',
-        backdropFilter: 'blur(16px)',
-        borderBottom: '1px solid #E5E5E5',
-      }}>
-        <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
-          <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: ACCENT, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <span style={{ color: '#fff', fontWeight: 700, fontSize: '14px' }}>P</span>
-          </div>
-          <span style={{ fontSize: '20px', fontWeight: 600, color: '#1A1A1A' }}>Peptide Portal</span>
+      <header className="sticky top-0 z-40 flex items-center justify-between px-4 sm:px-6 h-16 bg-white/95 backdrop-blur-md border-b border-[#E5E7EB]">
+        <Link href="/" className="flex items-center gap-2.5 no-underline cursor-pointer">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#131811" strokeWidth="1.5" aria-hidden="true">
+            <path d="M16 2L28 9v14l-12 7L4 23V9l12-7z" />
+            <circle cx="16" cy="16" r="4" />
+            <path d="M16 12v-4M20 14l3.5-2M20 18l3.5 2M16 20v4M12 18l-3.5 2M12 14l-3.5-2" />
+          </svg>
+          <span className="text-lg font-semibold text-[#131811]">PeptidePortal</span>
         </Link>
         <SignOutButton />
       </header>
 
       {/* Body */}
-      <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
+      <div className="flex flex-1 overflow-hidden">
 
         {/* Sidebar (desktop) */}
-        <aside style={{
-          display: 'none',
-          flexDirection: 'column',
-          width: '240px',
-          padding: '24px 12px',
-          borderRight: '1px solid #E5E5E5',
-          background: '#fff',
-        }} className="md:flex">
-          <nav style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+        <aside className="hidden md:flex flex-col w-60 p-4 border-r border-[#E5E7EB] bg-white">
+          <p className="px-3 mb-3 text-[10px] font-bold uppercase tracking-widest text-[#9CA3AF]">
+            Main
+          </p>
+          <nav className="flex flex-col gap-1">
             {NAV_ITEMS.map(({ href, label, Icon }) => (
               <SidebarLink key={href} href={href} label={label} Icon={Icon} isActive={currentPath === href || (href !== '/dashboard' && currentPath.startsWith(href))} />
             ))}
           </nav>
 
-          <div style={{ marginTop: 'auto', paddingTop: '16px', borderTop: '1px solid #E5E5E5' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '0 16px' }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="1.6">
+          <div className="mt-auto pt-4 border-t border-[#E5E7EB]">
+            <div className="flex items-center gap-2 px-3">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="1.6" aria-hidden="true">
                 <circle cx="12" cy="8" r="4" />
                 <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
               </svg>
@@ -216,20 +174,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </aside>
 
         {/* Main content */}
-        <main style={{ flex: 1, overflowY: 'auto', padding: '24px' }} className="md:p-10">
+        <main id="main-content" className="flex-1 overflow-y-auto p-6 md:p-10 bg-[#F6F8F6]">
           {children}
         </main>
       </div>
 
       {/* Bottom tabs (mobile) */}
-      <nav style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-around',
-        padding: '8px 0',
-        borderTop: '1px solid #E5E5E5',
-        background: '#fff',
-      }} className="md:hidden">
+      <nav className="md:hidden flex items-center justify-around py-2 border-t border-[#E5E7EB] bg-white" aria-label="Mobile navigation">
         {NAV_ITEMS.map(({ href, label, Icon }) => (
           <TabLink key={href} href={href} label={label} Icon={Icon} isActive={currentPath === href || (href !== '/dashboard' && currentPath.startsWith(href))} />
         ))}

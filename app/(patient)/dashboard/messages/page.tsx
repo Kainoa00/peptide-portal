@@ -3,9 +3,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { createClient } from '@/lib/supabase'
 
-const ACCENT = '#D4A574'
-const ACCENT_DARK = '#8B7355'
-
 /* ─── Types ─────────────────────────────────────────────────────── */
 interface Message {
   id: string
@@ -65,7 +62,7 @@ export default function MessagesPage() {
   async function fetchMessages() {
     const supabase = createClient()
     const { data: { session } } = await supabase.auth.getSession()
-    
+
     if (!session) {
       setMessages(DEMO_MESSAGES)
       setIsDemo(true)
@@ -98,7 +95,6 @@ export default function MessagesPage() {
       })
       const presData = await presResponse.json()
       if (presData.intake?.status === 'reviewed') {
-        // Get prescription ID
         const { data: prescription } = await supabase
           .from('prescriptions')
           .select('id')
@@ -128,7 +124,7 @@ export default function MessagesPage() {
       try {
         const response = await fetch('/api/messages', {
           method: 'POST',
-          headers: { 
+          headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${session.access_token}`
           },
@@ -138,7 +134,7 @@ export default function MessagesPage() {
           }),
         })
         const data = await response.json()
-        
+
         if (data.message) {
           setMessages(prev => [...prev, data.message])
           setIsDemo(false)
@@ -171,34 +167,24 @@ export default function MessagesPage() {
   }
 
   return (
-    <div style={{ maxWidth: '800px', margin: '0 auto', height: 'calc(100vh - 180px)', display: 'flex', flexDirection: 'column' }}>
+    <div className="max-w-3xl mx-auto h-[calc(100vh-180px)] flex flex-col">
       {/* Header */}
-      <div style={{ marginBottom: '24px' }}>
-        <p style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#888', marginBottom: '8px' }}>
+      <div className="mb-6">
+        <p className="text-[10px] font-bold uppercase tracking-widest text-[#9CA3AF] mb-2">
           Patient Dashboard
         </p>
-        <h1 style={{ fontSize: 'clamp(32px, 4vw, 42px)', fontWeight: '700', color: '#1A1A1A', lineHeight: 1.1, marginBottom: '8px' }}>
+        <h1 className="font-display text-3xl md:text-4xl font-normal tracking-tight text-[#131811] mb-2">
           Messages
         </h1>
-        <p style={{ fontSize: '14px', color: '#666' }}>
+        <p className="text-sm text-[#6B7280]">
           {isDemo ? 'Demo Mode - Messages are for illustration' : 'Secure clinical messaging'}
         </p>
       </div>
 
       {/* Demo Warning */}
       {isDemo && (
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
-          padding: '10px 16px',
-          background: '#DBEAFE',
-          borderRadius: '12px',
-          marginBottom: '16px',
-          fontSize: '12px',
-          color: '#1E40AF',
-        }}>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <div className="flex items-center gap-2 px-4 py-3 bg-blue-50 rounded-xl mb-4 text-xs text-blue-700" role="status">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
             <circle cx="12" cy="12" r="10" />
             <line x1="12" y1="8" x2="12" y2="12" />
             <line x1="12" y1="16" x2="12.01" y2="16" />
@@ -208,39 +194,29 @@ export default function MessagesPage() {
       )}
 
       {/* Messages Thread */}
-      <div style={{
-        flex: 1,
-        overflowY: 'auto',
-        background: '#fff',
-        border: '1px solid #E5E5E5',
-        borderRadius: '16px',
-        padding: '24px',
-        marginBottom: '16px',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '16px',
-      }}>
+      <div className="flex-1 overflow-y-auto bg-white border border-[#E5E7EB] rounded-2xl p-6 mb-4 flex flex-col gap-4">
         {loading ? (
-          <p style={{ color: '#666', textAlign: 'center' }}>Loading messages...</p>
+          <p className="text-[#6B7280] text-center text-sm">Loading messages...</p>
         ) : messages.length === 0 ? (
-          <p style={{ color: '#666', textAlign: 'center' }}>No messages yet. Start a conversation!</p>
+          <div className="text-center py-12">
+            <div className="w-12 h-12 rounded-full bg-[#F6F8F6] flex items-center justify-center mx-auto mb-3">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="1.5" aria-hidden="true">
+                <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+              </svg>
+            </div>
+            <p className="text-sm text-[#6B7280]">No messages yet. Start a conversation!</p>
+          </div>
         ) : (
           messages.map((msg) => (
-            <div key={msg.id} style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: msg.isProvider ? 'flex-start' : 'flex-end',
-            }}>
-              <div style={{
-                maxWidth: '75%',
-                padding: '12px 16px',
-                borderRadius: '16px',
-                background: msg.isProvider ? '#FAFAF8' : ACCENT,
-                color: msg.isProvider ? '#1A1A1A' : '#fff',
-              }}>
-                <p style={{ fontSize: '14px', lineHeight: 1.5 }}>{msg.body}</p>
+            <div key={msg.id} className={`flex flex-col ${msg.isProvider ? 'items-start' : 'items-end'}`}>
+              <div className={`max-w-[75%] px-4 py-3 rounded-2xl ${
+                msg.isProvider
+                  ? 'bg-[#F6F8F6] text-[#131811]'
+                  : 'bg-[#D4A574] text-white'
+              }`}>
+                <p className="text-sm leading-relaxed">{msg.body}</p>
               </div>
-              <span style={{ fontSize: '11px', color: '#888', marginTop: '4px' }}>
+              <span className="text-[11px] text-[#9CA3AF] mt-1">
                 {new Date(msg.createdAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}
               </span>
             </div>
@@ -250,45 +226,29 @@ export default function MessagesPage() {
       </div>
 
       {/* Input */}
-      <div style={{ display: 'flex', gap: '12px' }}>
+      <div className="flex gap-3">
+        <label htmlFor="message-input" className="sr-only">Type your message</label>
         <input
+          id="message-input"
           type="text"
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder={isDemo ? "Demo mode - messages won't be saved" : "Type your message..."}
           disabled={loading}
-          style={{
-            flex: 1,
-            padding: '14px 18px',
-            fontSize: '14px',
-            border: '1px solid #E5E5E5',
-            borderRadius: '12px',
-            outline: 'none',
-            background: '#fff',
-            opacity: loading ? 0.5 : 1,
-          }}
+          className="flex-1 px-4 py-3 rounded-xl border border-[#E5E7EB] bg-white text-[#131811] placeholder-[#9CA3AF] focus:outline-none focus:border-[#D4A574] focus:ring-2 focus:ring-[#D4A574]/20 transition-colors disabled:opacity-50"
         />
         <button
           onClick={handleSend}
           disabled={!newMessage.trim() || sending || loading}
-          style={{
-            padding: '14px 24px',
-            fontSize: '14px',
-            fontWeight: 600,
-            background: ACCENT,
-            color: '#fff',
-            border: 'none',
-            borderRadius: '12px',
-            cursor: (!newMessage.trim() || sending || loading) ? 'not-allowed' : 'pointer',
-            opacity: (!newMessage.trim() || sending || loading) ? 0.5 : 1,
-          }}
+          className="px-6 py-3 rounded-xl bg-[#D4A574] text-white font-semibold hover:bg-[#B8864A] transition-colors duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+          aria-label="Send message"
         >
           {sending ? 'Sending...' : 'Send'}
         </button>
       </div>
 
-      <p style={{ fontSize: '12px', color: '#888', textAlign: 'center', marginTop: '12px' }}>
+      <p className="text-xs text-[#9CA3AF] text-center mt-3">
         Messages are end-to-end encrypted and stored in your HIPAA-compliant patient record.
       </p>
     </div>

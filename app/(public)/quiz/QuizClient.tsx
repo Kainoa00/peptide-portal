@@ -4,10 +4,6 @@ import { useState, useCallback } from 'react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
 
-const ACCENT = '#D4A574'
-const ACCENT_DARK = '#8B7355'
-const ACCENT_LIGHT = '#F5F0E8'
-
 /* ─── Types ──────────────────────────────────────────────────────── */
 type Experience = 'beginner' | 'intermediate' | 'expert'
 type Goal = 'weight_loss' | 'recovery' | 'longevity' | 'cognitive' | 'sleep' | 'hormones'
@@ -27,34 +23,34 @@ interface Answers {
 }
 
 /* ─── Peptide Recommendation Data ───────────────────────────────── */
-const PEPTIDE_RECS: Record<Goal, { name: string; category: string; accent: string; desc: string; price: number; slug: string }> = {
+const PEPTIDE_RECS: Record<Goal, { name: string; category: string; desc: string; price: number; slug: string }> = {
   weight_loss: {
-    name: 'Tirzepatide', category: 'Weight Loss', accent: ACCENT,
+    name: 'Tirzepatide', category: 'Weight Loss',
     desc: 'Dual GIP/GLP-1 receptor agonist with the strongest clinical evidence for fat loss.',
     price: 299, slug: 'tirzepatide',
   },
   recovery: {
-    name: 'BPC-157 + TB-500', category: 'Recovery', accent: ACCENT,
+    name: 'BPC-157 + TB-500', category: 'Recovery',
     desc: 'Synergistic blend targeting both local tissue repair and systemic healing.',
     price: 249, slug: 'bpc-157-tb-500',
   },
   longevity: {
-    name: 'CJC-1295 / Ipamorelin', category: 'Longevity', accent: ACCENT,
+    name: 'CJC-1295 / Ipamorelin', category: 'Longevity',
     desc: 'Gold-standard GH secretagogue stack. Amplified GH pulse with no cortisol spike.',
     price: 169, slug: 'cjc-1295-ipamorelin',
   },
   cognitive: {
-    name: 'Semax', category: 'Cognitive', accent: ACCENT,
+    name: 'Semax', category: 'Cognitive',
     desc: 'BDNF upregulation and dopaminergic enhancement for sharper focus and memory.',
     price: 119, slug: 'semax',
   },
   sleep: {
-    name: 'MK-677 (Ibutamoren)', category: 'Longevity', accent: ACCENT,
+    name: 'MK-677 (Ibutamoren)', category: 'Longevity',
     desc: 'Oral GH secretagogue that extends deep sleep and elevates IGF-1.',
     price: 139, slug: 'mk-677',
   },
   hormones: {
-    name: 'CJC-1295 / Ipamorelin', category: 'Hormone Optimization', accent: ACCENT,
+    name: 'CJC-1295 / Ipamorelin', category: 'Hormone Optimization',
     desc: 'Restores youthful GH pulsatility for improved body composition and vitality.',
     price: 169, slug: 'cjc-1295-ipamorelin',
   },
@@ -65,33 +61,17 @@ const TOTAL_STEPS = 7
 /* ─── Radio Option Card ─────────────────────────────────────────── */
 function RadioCard({ selected, onClick, label, sub }: { selected: boolean; onClick: () => void; label: string; sub: string }) {
   return (
-    <button onClick={onClick} style={{ width: '100%', textAlign: 'left', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '20px 24px',
-        background: '#fff',
-        border: `2px solid ${selected ? ACCENT : '#E5E5E5'}`,
-        borderRadius: '12px',
-        transition: 'all 0.2s',
-      }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', paddingRight: '16px' }}>
-          <span style={{ fontSize: '16px', fontWeight: '600', color: '#1A1A1A' }}>{label}</span>
-          <span style={{ fontSize: '14px', color: '#666' }}>{sub}</span>
+    <button
+      onClick={onClick}
+      className="w-full text-left bg-transparent border-none cursor-pointer p-0"
+    >
+      <div className={`flex items-center justify-between px-6 py-5 bg-white rounded-xl transition-all duration-200 border-2 ${selected ? 'border-[#D4A574]' : 'border-[#E5E7EB]'}`}>
+        <div className="flex flex-col gap-1 pr-4">
+          <span className="text-base font-semibold text-[#131811]">{label}</span>
+          <span className="text-sm text-[#6B7280]">{sub}</span>
         </div>
-        <div style={{
-          width: '24px',
-          height: '24px',
-          borderRadius: '50%',
-          border: `2px solid ${selected ? ACCENT : '#E5E5E5'}`,
-          background: selected ? ACCENT : 'transparent',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          flexShrink: 0,
-        }}>
-          {selected && <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#fff' }} />}
+        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 ${selected ? 'border-[#D4A574] bg-[#D4A574]' : 'border-[#E5E7EB] bg-transparent'}`}>
+          {selected && <div className="w-2.5 h-2.5 rounded-full bg-white" />}
         </div>
       </div>
     </button>
@@ -101,34 +81,18 @@ function RadioCard({ selected, onClick, label, sub }: { selected: boolean; onCli
 /* ─── Checkbox Option Card ──────────────────────────────────────── */
 function CheckCard({ selected, onClick, label, sub }: { selected: boolean; onClick: () => void; label: string; sub: string }) {
   return (
-    <button onClick={onClick} style={{ width: '100%', textAlign: 'left', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '20px 24px',
-        background: '#fff',
-        border: `2px solid ${selected ? ACCENT : '#E5E5E5'}`,
-        borderRadius: '12px',
-        transition: 'all 0.2s',
-      }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', paddingRight: '16px' }}>
-          <span style={{ fontSize: '16px', fontWeight: '600', color: '#1A1A1A' }}>{label}</span>
-          <span style={{ fontSize: '14px', color: '#666' }}>{sub}</span>
+    <button
+      onClick={onClick}
+      className="w-full text-left bg-transparent border-none cursor-pointer p-0"
+    >
+      <div className={`flex items-center justify-between px-6 py-5 bg-white rounded-xl transition-all duration-200 border-2 ${selected ? 'border-[#D4A574]' : 'border-[#E5E7EB]'}`}>
+        <div className="flex flex-col gap-1 pr-4">
+          <span className="text-base font-semibold text-[#131811]">{label}</span>
+          <span className="text-sm text-[#6B7280]">{sub}</span>
         </div>
-        <div style={{
-          width: '24px',
-          height: '24px',
-          borderRadius: '6px',
-          border: `2px solid ${selected ? ACCENT : '#E5E5E5'}`,
-          background: selected ? ACCENT : 'transparent',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          flexShrink: 0,
-        }}>
+        <div className={`w-6 h-6 rounded-md border-2 flex items-center justify-center shrink-0 ${selected ? 'border-[#D4A574] bg-[#D4A574]' : 'border-[#E5E7EB] bg-transparent'}`}>
           {selected && (
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" aria-hidden="true">
               <polyline points="20 6 9 17 4 12" />
             </svg>
           )}
@@ -139,19 +103,16 @@ function CheckCard({ selected, onClick, label, sub }: { selected: boolean; onCli
 }
 
 /* ─── Pill Button ───────────────────────────────────────────────── */
-function Pill({ selected, onClick, children, accent = ACCENT }: { selected: boolean; onClick: () => void; children: React.ReactNode; accent?: string }) {
+function Pill({ selected, onClick, children }: { selected: boolean; onClick: () => void; children: React.ReactNode }) {
   return (
-    <button onClick={onClick} style={{
-      padding: '12px 24px',
-      borderRadius: '24px',
-      fontSize: '14px',
-      fontWeight: '600',
-      background: selected ? accent : '#fff',
-      color: selected ? '#fff' : '#666',
-      border: `2px solid ${selected ? accent : '#E5E5E5'}`,
-      cursor: 'pointer',
-      transition: 'all 0.2s',
-    }}>
+    <button
+      onClick={onClick}
+      className={`px-6 py-3 rounded-full text-sm font-semibold border-2 cursor-pointer transition-all duration-200 ${
+        selected
+          ? 'bg-[#D4A574] text-white border-[#D4A574]'
+          : 'bg-white text-[#6B7280] border-[#E5E7EB] hover:border-[#D4A574]/40'
+      }`}
+    >
       {children}
     </button>
   )
@@ -165,7 +126,7 @@ function StepExperience({ value, onChange }: { value: Experience | null; onChang
     { value: 'expert', label: 'Experienced user', sub: "I know what I'm looking for" },
   ]
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+    <div className="flex flex-col gap-3">
       {opts.map(o => (
         <RadioCard key={o.value} selected={value === o.value} onClick={() => onChange(o.value as Experience)} label={o.label} sub={o.sub} />
       ))}
@@ -175,12 +136,12 @@ function StepExperience({ value, onChange }: { value: Experience | null; onChang
 
 function StepGoals({ value, onChange }: { value: Goal[]; onChange: (v: Goal[]) => void }) {
   const opts = [
-    { value: 'weight_loss', label: '⚡ Weight Loss' },
-    { value: 'recovery', label: '💪 Recovery' },
-    { value: 'longevity', label: '⏳ Longevity' },
-    { value: 'cognitive', label: '🧠 Cognitive' },
-    { value: 'sleep', label: '😴 Sleep' },
-    { value: 'hormones', label: '⚗️ Hormone Optimization' },
+    { value: 'weight_loss', label: 'Weight Loss' },
+    { value: 'recovery', label: 'Recovery' },
+    { value: 'longevity', label: 'Longevity' },
+    { value: 'cognitive', label: 'Cognitive' },
+    { value: 'sleep', label: 'Sleep' },
+    { value: 'hormones', label: 'Hormone Optimization' },
   ]
   function toggle(v: Goal) {
     if (value.includes(v)) onChange(value.filter(g => g !== v))
@@ -188,8 +149,8 @@ function StepGoals({ value, onChange }: { value: Goal[]; onChange: (v: Goal[]) =
   }
   return (
     <div>
-      <p style={{ fontSize: '14px', color: '#666', marginBottom: '16px' }}>Select up to 2</p>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
+      <p className="text-sm text-[#6B7280] mb-4">Select up to 2</p>
+      <div className="flex flex-wrap gap-3">
         {opts.map(o => (
           <Pill key={o.value} selected={value.includes(o.value as Goal)} onClick={() => toggle(o.value as Goal)}>
             {o.label}
@@ -203,7 +164,7 @@ function StepGoals({ value, onChange }: { value: Goal[]; onChange: (v: Goal[]) =
 function StepAge({ value, onChange }: { value: string; onChange: (v: string) => void }) {
   const ages = ['18-29', '30-39', '40-49', '50-59', '60+']
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
+    <div className="flex flex-wrap gap-3">
       {ages.map(a => (
         <Pill key={a} selected={value === a} onClick={() => onChange(a)}>{a}</Pill>
       ))}
@@ -226,8 +187,8 @@ function StepConditions({ value, onChange }: { value: Condition[]; onChange: (v:
     onChange(next.includes(v) ? next.filter(c => c !== v) : [...next, v])
   }
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-      <p style={{ fontSize: '14px', color: '#666', marginBottom: '8px' }}>Select all that apply</p>
+    <div className="flex flex-col gap-3">
+      <p className="text-sm text-[#6B7280] mb-2">Select all that apply</p>
       {opts.map(o => (
         <CheckCard key={o.value} selected={value.includes(o.value as Condition)} onClick={() => toggle(o.value as Condition)} label={o.label} sub={o.note} />
       ))}
@@ -240,10 +201,10 @@ function StepLifestyle({ activity, sleep, onActivity, onSleep }: {
   onActivity: (v: Activity) => void; onSleep: (v: Sleep) => void
 }) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+    <div className="flex flex-col gap-8">
       <div>
-        <p style={{ fontSize: '15px', fontWeight: '600', color: '#1A1A1A', marginBottom: '12px' }}>Activity level</p>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
+        <p className="text-[15px] font-semibold text-[#131811] mb-3">Activity level</p>
+        <div className="flex flex-wrap gap-3">
           {[
             { value: 'sedentary', label: 'Sedentary' },
             { value: 'light', label: 'Light (1-2x/week)' },
@@ -254,8 +215,8 @@ function StepLifestyle({ activity, sleep, onActivity, onSleep }: {
         </div>
       </div>
       <div>
-        <p style={{ fontSize: '15px', fontWeight: '600', color: '#1A1A1A', marginBottom: '12px' }}>Sleep quality</p>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
+        <p className="text-[15px] font-semibold text-[#131811] mb-3">Sleep quality</p>
+        <div className="flex flex-wrap gap-3">
           {[
             { value: 'poor', label: 'Poor (< 6 hrs)' },
             { value: 'fair', label: 'Fair (6-7 hrs)' },
@@ -270,31 +231,36 @@ function StepLifestyle({ activity, sleep, onActivity, onSleep }: {
 function StepPhysical({ weight, height, onWeight, onHeight }: {
   weight: string; height: string; onWeight: (v: string) => void; onHeight: (v: string) => void
 }) {
-  const inputStyle = {
-    padding: '14px 18px',
-    fontSize: '15px',
-    border: '1px solid #E5E5E5',
-    borderRadius: '10px',
-    outline: 'none',
-    background: '#fff',
-    color: '#1A1A1A',
-  }
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+    <div className="flex flex-col gap-6">
       <div>
-        <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', color: '#1A1A1A', marginBottom: '8px' }}>Weight</label>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <input type="number" placeholder="185" value={weight} onChange={e => onWeight(e.target.value)} style={inputStyle} />
-          <span style={{ fontSize: '14px', color: '#666' }}>lbs</span>
+        <label htmlFor="weight-input" className="block text-sm font-semibold text-[#131811] mb-2">Weight</label>
+        <div className="flex items-center gap-3">
+          <input
+            id="weight-input"
+            type="number"
+            placeholder="185"
+            value={weight}
+            onChange={e => onWeight(e.target.value)}
+            className="px-4 py-3.5 text-[15px] border border-[#E5E7EB] rounded-xl bg-white text-[#131811] outline-none focus:border-[#D4A574] focus:ring-2 focus:ring-[#D4A574]/20 transition-colors"
+          />
+          <span className="text-sm text-[#6B7280]">lbs</span>
         </div>
       </div>
       <div>
-        <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', color: '#1A1A1A', marginBottom: '8px' }}>Height</label>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <input type="text" placeholder="5'10&quot;" value={height} onChange={e => onHeight(e.target.value)} style={{ ...inputStyle, width: '120px' }} />
+        <label htmlFor="height-input" className="block text-sm font-semibold text-[#131811] mb-2">Height</label>
+        <div className="flex items-center gap-3">
+          <input
+            id="height-input"
+            type="text"
+            placeholder="5'10&quot;"
+            value={height}
+            onChange={e => onHeight(e.target.value)}
+            className="w-[120px] px-4 py-3.5 text-[15px] border border-[#E5E7EB] rounded-xl bg-white text-[#131811] outline-none focus:border-[#D4A574] focus:ring-2 focus:ring-[#D4A574]/20 transition-colors"
+          />
         </div>
       </div>
-      <p style={{ fontSize: '12px', color: '#999' }}>Used by your physician for dosing calculations only.</p>
+      <p className="text-xs text-[#9CA3AF]">Used by your physician for dosing calculations only.</p>
     </div>
   )
 }
@@ -365,85 +331,53 @@ function StepRecommendation({ answers }: { answers: Answers }) {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+    <div className="flex flex-col gap-5">
       {hasContraindications && (
-        <div style={{ 
-          display: 'flex', 
-          alignItems: 'flex-start', 
-          gap: '12px', 
-          padding: '16px', 
-          background: '#FEF3C7', 
-          borderRadius: '12px',
-          fontSize: '14px',
-          color: '#92400E'
-        }}>
-          <span style={{ fontSize: '18px' }}>⚠️</span>
+        <div className="flex items-start gap-3 p-4 bg-amber-50 rounded-xl text-sm text-amber-800">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="shrink-0 mt-0.5" aria-hidden="true">
+            <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+            <line x1="12" y1="9" x2="12" y2="13" />
+            <line x1="12" y1="17" x2="12.01" y2="17" />
+          </svg>
           <span>You indicated a medical condition. Your intake will be flagged for physician review.</span>
         </div>
       )}
-      
-      <p style={{ fontSize: '15px', color: '#666' }}>
+
+      <p className="text-[15px] text-[#6B7280]">
         Based on your profile, here {recs.length > 1 ? 'are your' : 'is your'} recommended protocol{recs.length > 1 ? 's' : ''}.
       </p>
 
       {recs.map((rec, i) => (
-        <div key={rec.slug} style={{
-          padding: '24px',
-          background: '#fff',
-          border: `2px solid ${i === 0 ? ACCENT : '#E5E5E5'}`,
-          borderRadius: '16px',
-        }}>
+        <div key={rec.slug} className={`p-6 bg-white rounded-2xl border-2 ${i === 0 ? 'border-[#D4A574]' : 'border-[#E5E7EB]'}`}>
           {i === 0 && (
-            <div style={{ 
-              display: 'inline-flex', 
-              alignItems: 'center', 
-              gap: '6px', 
-              padding: '6px 12px', 
-              background: ACCENT_LIGHT, 
-              borderRadius: '20px', 
-              fontSize: '12px', 
-              fontWeight: '600', 
-              color: ACCENT_DARK,
-              marginBottom: '16px'
-            }}>
-              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: ACCENT }} />
+            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#F5F0E8] rounded-full text-xs font-semibold text-[#B8864A] mb-4">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#D4A574]" />
               Top recommendation
             </div>
           )}
-          
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '16px' }}>
-            <div style={{ flex: 1 }}>
-              <h3 style={{ fontSize: '22px', fontWeight: '700', color: '#1A1A1A', marginBottom: '4px' }}>{rec.name}</h3>
-              <p style={{ fontSize: '12px', fontWeight: '600', color: ACCENT, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>{rec.category}</p>
-              <p style={{ fontSize: '14px', color: '#666', lineHeight: 1.6 }}>{rec.desc}</p>
+
+          <div className="flex justify-between items-start gap-4">
+            <div className="flex-1">
+              <h3 className="text-[22px] font-bold text-[#131811] mb-1">{rec.name}</h3>
+              <p className="text-xs font-semibold text-[#D4A574] uppercase tracking-widest mb-3">{rec.category}</p>
+              <p className="text-sm text-[#6B7280] leading-relaxed">{rec.desc}</p>
             </div>
-            <div style={{ textAlign: 'right' }}>
-              <div style={{ fontSize: '28px', fontWeight: '700', color: '#1A1A1A' }}>${rec.price}</div>
-              <div style={{ fontSize: '12px', color: '#999' }}>/month</div>
+            <div className="text-right">
+              <div className="text-[28px] font-bold text-[#131811]">${rec.price}</div>
+              <div className="text-xs text-[#9CA3AF]">/month</div>
             </div>
           </div>
 
           {i === 0 && (
-            <div style={{ marginTop: '20px' }}>
-              <button 
+            <div className="mt-5">
+              <button
                 onClick={() => handleCheckout(rec)}
                 disabled={loadingSlug === rec.slug}
-                style={{
-                  width: '100%',
-                  padding: '16px',
-                  background: ACCENT,
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: '12px',
-                  fontSize: '15px',
-                  fontWeight: '600',
-                  cursor: loadingSlug === rec.slug ? 'not-allowed' : 'pointer',
-                  opacity: loadingSlug === rec.slug ? 0.7 : 1,
-                }}
+                className="w-full py-4 bg-[#D4A574] text-white rounded-full text-[15px] font-semibold cursor-pointer hover:bg-[#B8864A] transition-colors duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 {loadingSlug === rec.slug ? 'Processing...' : `Start Consultation — $${rec.price}/mo`}
               </button>
-              <p style={{ textAlign: 'center', fontSize: '12px', color: '#999', marginTop: '12px' }}>
+              <p className="text-center text-xs text-[#9CA3AF] mt-3">
                 Cancel anytime. Refund available if prescription denied.
               </p>
             </div>
@@ -502,56 +436,66 @@ export default function QuizClient() {
   const proceed = canProceed(step, answers)
 
   return (
-    <div style={{ minHeight: '100vh', background: '#FAFAF8', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+    <div className="min-h-screen bg-[#F6F8F6]">
 
       {/* Header */}
-      <header style={{ background: '#fff', borderBottom: '1px solid #E5E5E5', position: 'sticky', top: 0, zIndex: 100 }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '16px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: ACCENT, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <span style={{ color: '#fff', fontWeight: '700', fontSize: '14px' }}>P</span>
-            </div>
-            <span style={{ fontWeight: '600', fontSize: '18px', color: '#1A1A1A' }}>Peptide Portal</span>
+      <header className="sticky top-0 z-50 bg-white border-b border-[#E5E7EB]">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2.5 no-underline cursor-pointer">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#131811" strokeWidth="1.5" aria-hidden="true">
+              <path d="M16 2L28 9v14l-12 7L4 23V9l12-7z" />
+              <circle cx="16" cy="16" r="4" />
+              <path d="M16 12v-4M20 14l3.5-2M20 18l3.5 2M16 20v4M12 18l-3.5 2M12 14l-3.5-2" />
+            </svg>
+            <span className="font-semibold text-lg text-[#131811]">PeptidePortal</span>
           </Link>
-          <span style={{ fontSize: '14px', color: '#666', fontWeight: '500' }}>
+          <span className="text-sm text-[#6B7280] font-medium">
             Step {step} of {TOTAL_STEPS}
           </span>
         </div>
         {/* Progress bar */}
-        <div style={{ width: '100%', height: '4px', background: '#E5E5E5' }}>
-          <div style={{ width: `${(step / TOTAL_STEPS) * 100}%`, height: '100%', background: ACCENT, transition: 'width 0.3s' }} />
+        <div className="w-full h-1 bg-[#E5E7EB]">
+          <div
+            className="h-full bg-[#D4A574] transition-all duration-300"
+            style={{ width: `${(step / TOTAL_STEPS) * 100}%` }}
+            role="progressbar"
+            aria-valuenow={step}
+            aria-valuemin={1}
+            aria-valuemax={TOTAL_STEPS}
+            aria-label={`Step ${step} of ${TOTAL_STEPS}`}
+          />
         </div>
       </header>
 
       {/* Main Content */}
-      <main style={{ padding: '60px 24px' }}>
-        <div style={{ maxWidth: '600px', margin: '0 auto' }}>
-          
+      <main id="main-content" className="py-12 md:py-16 px-4 sm:px-6">
+        <div className="max-w-[600px] mx-auto">
+
           {/* Question */}
           {step < TOTAL_STEPS && (
-            <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-              <h2 style={{ fontSize: 'clamp(24px, 5vw, 36px)', fontWeight: '700', color: '#1A1A1A', lineHeight: 1.2, marginBottom: '12px' }}>
+            <div className="text-center mb-12">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#131811] leading-tight mb-3">
                 {STEP_QUESTIONS[step - 1]}
               </h2>
               {step === 1 && (
-                <p style={{ fontSize: '16px', color: '#666' }}>Select the option that best describes you.</p>
+                <p className="text-base text-[#6B7280]">Select the option that best describes you.</p>
               )}
             </div>
           )}
 
           {step === TOTAL_STEPS && (
-            <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-              <p style={{ fontSize: '12px', fontWeight: '600', color: ACCENT, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>
+            <div className="text-center mb-8">
+              <p className="text-xs font-semibold text-[#D4A574] uppercase tracking-widest mb-2">
                 Assessment Complete
               </p>
-              <h2 style={{ fontSize: '28px', fontWeight: '700', color: '#1A1A1A' }}>
+              <h2 className="text-[28px] font-bold text-[#131811]">
                 {STEP_QUESTIONS[step - 1]}
               </h2>
             </div>
           )}
 
           {/* Step Content */}
-          <div style={{ marginBottom: '40px' }}>
+          <div className="mb-10">
             {step === 1 && <StepExperience value={answers.experience} onChange={v => update('experience', v)} />}
             {step === 2 && <StepGoals value={answers.goals} onChange={v => update('goals', v)} />}
             {step === 3 && <StepAge value={answers.age} onChange={v => update('age', v)} />}
@@ -563,45 +507,33 @@ export default function QuizClient() {
 
           {/* Navigation */}
           {step < TOTAL_STEPS && (
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div className="flex justify-between items-center">
               <button
                 onClick={goBack}
                 disabled={step === 1}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  padding: '12px 20px',
-                  background: 'none',
-                  border: 'none',
-                  fontSize: '14px',
-                  fontWeight: '600',
-                  color: step === 1 ? '#CCC' : '#666',
-                  cursor: step === 1 ? 'not-allowed' : 'pointer',
-                }}
+                className={`flex items-center gap-2 px-5 py-3 bg-transparent border-none text-sm font-semibold cursor-pointer ${
+                  step === 1 ? 'text-[#D1D5DB] cursor-not-allowed' : 'text-[#6B7280] hover:text-[#131811]'
+                } transition-colors`}
+                aria-label="Go to previous step"
               >
-                ← Back
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                  <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                Back
               </button>
 
               <button
                 onClick={goNext}
                 disabled={!proceed}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  padding: '14px 32px',
-                  background: proceed ? ACCENT : '#E5E5E5',
-                  color: proceed ? '#fff' : '#999',
-                  border: 'none',
-                  borderRadius: '28px',
-                  fontSize: '15px',
-                  fontWeight: '600',
-                  cursor: proceed ? 'pointer' : 'not-allowed',
-                }}
+                className={`flex items-center gap-2 px-8 py-3.5 rounded-full text-[15px] font-semibold transition-colors duration-200 ${
+                  proceed
+                    ? 'bg-[#D4A574] text-white cursor-pointer hover:bg-[#B8864A]'
+                    : 'bg-[#E5E7EB] text-[#9CA3AF] cursor-not-allowed'
+                }`}
+                aria-label={step === TOTAL_STEPS - 1 ? 'See my protocol' : 'Continue to next step'}
               >
                 {step === TOTAL_STEPS - 1 ? 'See My Protocol' : 'Continue'}
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
                   <path d="M5 12h14M12 5l7 7-7 7" />
                 </svg>
               </button>
@@ -609,19 +541,10 @@ export default function QuizClient() {
           )}
 
           {step === TOTAL_STEPS && (
-            <div style={{ textAlign: 'center' }}>
+            <div className="text-center">
               <button
                 onClick={goBack}
-                style={{
-                  padding: '12px 24px',
-                  background: 'none',
-                  border: '1px solid #E5E5E5',
-                  borderRadius: '24px',
-                  fontSize: '14px',
-                  fontWeight: '600',
-                  color: '#666',
-                  cursor: 'pointer',
-                }}
+                className="px-6 py-3 bg-transparent border border-[#E5E7EB] rounded-full text-sm font-semibold text-[#6B7280] cursor-pointer hover:bg-[#F6F8F6] transition-colors"
               >
                 Edit answers
               </button>

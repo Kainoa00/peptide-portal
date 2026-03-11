@@ -39,7 +39,7 @@ function SidebarLink({
   return (
     <Link
       href={href}
-      className="group flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-all relative"
+      className="group flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-all relative cursor-pointer no-underline"
       style={{ color: 'var(--text-2)' }}
     >
       <span
@@ -71,7 +71,7 @@ function TabLink({
   return (
     <Link
       href={href}
-      className="flex flex-col items-center gap-1 py-2 px-3 text-xs transition-colors"
+      className="flex flex-col items-center gap-1 py-2 px-3 text-xs transition-colors cursor-pointer no-underline"
       style={{ color: 'var(--text-2)' }}
     >
       <Icon />
@@ -95,15 +95,14 @@ export default function ProviderLayout({ children }: { children: React.ReactNode
         }}
       >
         <div className="flex items-center gap-3">
-          <Link href="/" className="flex items-center gap-2.5" style={{ textDecoration: 'none' }}>
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: '#255736' }}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
-                <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v11" />
-                <circle cx="12" cy="17" r="4" />
-              </svg>
-            </div>
-            <span className="text-xl font-extrabold tracking-tight" style={{ color: '#131811' }}>
-              Peptide Portal
+          <Link href="/" className="flex items-center gap-2.5 no-underline cursor-pointer">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#131811" strokeWidth="1.5" aria-hidden="true">
+              <path d="M16 2L28 9v14l-12 7L4 23V9l12-7z" />
+              <circle cx="16" cy="16" r="4" />
+              <path d="M16 12v-4M20 14l3.5-2M20 18l3.5 2M16 20v4M12 18l-3.5 2M12 14l-3.5-2" />
+            </svg>
+            <span className="font-semibold text-lg text-[#131811]">
+              PeptidePortal
             </span>
           </Link>
 
@@ -151,6 +150,7 @@ export default function ProviderLayout({ children }: { children: React.ReactNode
 
         {/* ── Main content ─────────────────────────────────────────── */}
         <main
+          id="main-content"
           className="flex-1 overflow-y-auto p-6 md:p-10"
           style={{ background: 'var(--bg)' }}
         >
