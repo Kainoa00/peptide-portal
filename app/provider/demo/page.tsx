@@ -17,7 +17,6 @@ export default function RequestDemoPage() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    // In production, save to DB or send to email service
     setSubmitted(true)
   }
 
@@ -100,7 +99,7 @@ export default function RequestDemoPage() {
             />
           </div>
 
-          marginBottom: '24 <div style={{px' }}>
+          <div style={{ marginBottom: '24px' }}>
             <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px' }}>What are you interested in?</label>
             <select
               value={form.interest}
@@ -113,21 +112,6 @@ export default function RequestDemoPage() {
               <option value="compliance">HIPAA compliance</option>
               <option value="exploring">Just exploring</option>
             </select>
-          </div>
-
-          {/* Optional Calendly embed could go here */}
-          <div style={{ marginBottom: '24px', padding: '16px', background: '#F5F0E8', borderRadius: '12px', textAlign: 'center' }}>
-            <p style={{ fontSize: '13px', color: '#666', marginBottom: '8px' }}>Or schedule directly:</p>
-            <a 
-              href="#" 
-              style={{ color: ACCENT, fontWeight: '600', textDecoration: 'none', fontSize: '14px' }}
-              onClick={(e) => {
-                e.preventDefault()
-                alert('Add your Calendly link here: https://calendly.com/your-link')
-              }}
-            >
-              📅 Book a time that works for you →
-            </a>
           </div>
 
           <button

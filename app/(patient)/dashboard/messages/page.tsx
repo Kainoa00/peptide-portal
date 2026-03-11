@@ -122,7 +122,7 @@ export default function MessagesPage() {
     setSending(true)
 
     const supabase = createClient()
-    const { data: { session } } = await supabase.auth.getUser()
+    const { data: { session } } = await supabase.auth.getSession()
 
     if (session && prescriptionId) {
       try {
