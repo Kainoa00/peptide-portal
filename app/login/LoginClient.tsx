@@ -149,6 +149,12 @@ export default function LoginClient() {
                 Sign up
               </Link>
             </div>
+
+            <div style={{ textAlign: 'center', marginTop: '16px', fontSize: '13px', color: '#999' }}>
+              <Link href="/provider/login" style={{ color: ACCENT_DARK, textDecoration: 'none' }}>
+                Provider login →
+              </Link>
+            </div>
           </div>
 
         </div>

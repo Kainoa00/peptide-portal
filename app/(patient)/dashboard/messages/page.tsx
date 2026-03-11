@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { createClient, isSupabaseConfigured } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase'
 
 const ACCENT = '#D4A574'
 const ACCENT_DARK = '#8B7355'
@@ -16,8 +16,8 @@ interface Message {
   isProvider: boolean
 }
 
-/* ─── Mock Data ──────────────────────────────────────────────────── */
-const INITIAL_MESSAGES: Message[] = [
+/* ─── Mock Data (for demo when no prescription) ────────────────── */
+const DEMO_MESSAGES: Message[] = [
   {
     id: '1',
     senderId: 'provider',
@@ -46,42 +46,119 @@ const INITIAL_MESSAGES: Message[] = [
 
 /* ─── Page ───────────────────────────────────────────────────────── */
 export default function MessagesPage() {
-  const [messages, setMessages] = useState<Message[]>(INITIAL_MESSAGES)
+  const [messages, setMessages] = useState<Message[]>([])
+  const [isDemo, setIsDemo] = useState(false)
+  const [prescriptionId, setPrescriptionId] = useState<string | null>(null)
   const [newMessage, setNewMessage] = useState('')
   const [sending, setSending] = useState(false)
+  const [loading, setLoading] = useState(true)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    fetchMessages()
+  }, [])
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
+  async function fetchMessages() {
+    const supabase = createClient()
+    const { data: { session } } = await supabase.auth.getSession()
+    
+    if (!session) {
+      setMessages(DEMO_MESSAGES)
+      setIsDemo(true)
+      setLoading(false)
+      return
+    }
+
+    try {
+      const response = await fetch('/api/messages', {
+        headers: {
+          'Authorization': `Bearer ${session.access_token}`
+        }
+      })
+      const data = await response.json()
+
+      if (data.messages && data.messages.length > 0) {
+        setMessages(data.messages)
+        setIsDemo(false)
+      } else if (data.isDemo) {
+        setMessages(DEMO_MESSAGES)
+        setIsDemo(true)
+      } else {
+        setMessages([])
+        setIsDemo(false)
+      }
+
+      // Try to get prescription ID for sending messages
+      const presResponse = await fetch('/api/dashboard', {
+        headers: { 'Authorization': `Bearer ${session.access_token}` }
+      })
+      const presData = await presResponse.json()
+      if (presData.intake?.status === 'reviewed') {
+        // Get prescription ID
+        const { data: prescription } = await supabase
+          .from('prescriptions')
+          .select('id')
+          .eq('intake_submission_id', presData.intake.id)
+          .single()
+        if (prescription) {
+          setPrescriptionId(prescription.id)
+        }
+      }
+    } catch (err) {
+      console.error('Error fetching messages:', err)
+      setMessages(DEMO_MESSAGES)
+      setIsDemo(true)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   async function handleSend() {
     if (!newMessage.trim() || sending) return
     setSending(true)
 
-    if (isSupabaseConfigured) {
-      const supabase = createClient()
-      const { data: { user } } = await supabase.auth.getUser()
-      if (user) {
-        await supabase.from('messages').insert({
-          patient_id: user.id,
-          sender_id: user.id,
-          body: newMessage,
-          is_provider: false,
+    const supabase = createClient()
+    const { data: { session } } = await supabase.auth.getUser()
+
+    if (session && prescriptionId) {
+      try {
+        const response = await fetch('/api/messages', {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${session.access_token}`
+          },
+          body: JSON.stringify({
+            message: newMessage,
+            prescriptionId,
+          }),
         })
+        const data = await response.json()
+        
+        if (data.message) {
+          setMessages(prev => [...prev, data.message])
+          setIsDemo(false)
+        }
+      } catch (err) {
+        console.error('Error sending message:', err)
       }
+    } else {
+      // Demo mode - add locally
+      const msg: Message = {
+        id: `msg-${Date.now()}`,
+        senderId: 'patient',
+        senderName: 'You',
+        body: newMessage,
+        createdAt: new Date().toISOString(),
+        isProvider: false,
+      }
+      setMessages(prev => [...prev, msg])
     }
 
-    // Add to local state
-    const msg: Message = {
-      id: `msg-${Date.now()}`,
-      senderId: 'patient',
-      senderName: 'You',
-      body: newMessage,
-      createdAt: new Date().toISOString(),
-      isProvider: false,
-    }
-    setMessages(prev => [...prev, msg])
     setNewMessage('')
     setSending(false)
   }
@@ -100,31 +177,35 @@ export default function MessagesPage() {
         <p style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#888', marginBottom: '8px' }}>
           Patient Dashboard
         </p>
-        <h1 style={{ fontSize: 'clamp(32px, 4vw, 42px)', fontWeight: 700, color: '#1A1A1A', lineHeight: 1.1, marginBottom: '8px' }}>
+        <h1 style={{ fontSize: 'clamp(32px, 4vw, 42px)', fontWeight: '700', color: '#1A1A1A', lineHeight: 1.1, marginBottom: '8px' }}>
           Messages
         </h1>
-        <p style={{ fontSize: '14px', color: '#666' }}>Dr. Sarah Chen, MD</p>
+        <p style={{ fontSize: '14px', color: '#666' }}>
+          {isDemo ? 'Demo Mode - Messages are for illustration' : 'Secure clinical messaging'}
+        </p>
       </div>
 
-      {/* Disclaimer */}
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '8px',
-        padding: '10px 16px',
-        background: '#FEF3C7',
-        borderRadius: '12px',
-        marginBottom: '16px',
-        fontSize: '12px',
-        color: '#92400E',
-      }}>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <circle cx="12" cy="12" r="10" />
-          <line x1="12" y1="8" x2="12" y2="12" />
-          <line x1="12" y1="16" x2="12.01" y2="16" />
-        </svg>
-        Secure clinical messaging — responses typically within 24 hours on business days.
-      </div>
+      {/* Demo Warning */}
+      {isDemo && (
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+          padding: '10px 16px',
+          background: '#DBEAFE',
+          borderRadius: '12px',
+          marginBottom: '16px',
+          fontSize: '12px',
+          color: '#1E40AF',
+        }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
+          </svg>
+          Demo mode — complete your intake to enable secure messaging with your provider.
+        </div>
+      )}
 
       {/* Messages Thread */}
       <div style={{
@@ -139,26 +220,32 @@ export default function MessagesPage() {
         flexDirection: 'column',
         gap: '16px',
       }}>
-        {messages.map((msg) => (
-          <div key={msg.id} style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: msg.isProvider ? 'flex-start' : 'flex-end',
-          }}>
-            <div style={{
-              maxWidth: '75%',
-              padding: '12px 16px',
-              borderRadius: '16px',
-              background: msg.isProvider ? '#FAFAF8' : ACCENT,
-              color: msg.isProvider ? '#1A1A1A' : '#fff',
+        {loading ? (
+          <p style={{ color: '#666', textAlign: 'center' }}>Loading messages...</p>
+        ) : messages.length === 0 ? (
+          <p style={{ color: '#666', textAlign: 'center' }}>No messages yet. Start a conversation!</p>
+        ) : (
+          messages.map((msg) => (
+            <div key={msg.id} style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: msg.isProvider ? 'flex-start' : 'flex-end',
             }}>
-              <p style={{ fontSize: '14px', lineHeight: 1.5 }}>{msg.body}</p>
+              <div style={{
+                maxWidth: '75%',
+                padding: '12px 16px',
+                borderRadius: '16px',
+                background: msg.isProvider ? '#FAFAF8' : ACCENT,
+                color: msg.isProvider ? '#1A1A1A' : '#fff',
+              }}>
+                <p style={{ fontSize: '14px', lineHeight: 1.5 }}>{msg.body}</p>
+              </div>
+              <span style={{ fontSize: '11px', color: '#888', marginTop: '4px' }}>
+                {new Date(msg.createdAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}
+              </span>
             </div>
-            <span style={{ fontSize: '11px', color: '#888', marginTop: '4px' }}>
-              {new Date(msg.createdAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}
-            </span>
-          </div>
-        ))}
+          ))
+        )}
         <div ref={messagesEndRef} />
       </div>
 
@@ -169,7 +256,8 @@ export default function MessagesPage() {
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Type your message..."
+          placeholder={isDemo ? "Demo mode - messages won't be saved" : "Type your message..."}
+          disabled={loading}
           style={{
             flex: 1,
             padding: '14px 18px',
@@ -178,11 +266,12 @@ export default function MessagesPage() {
             borderRadius: '12px',
             outline: 'none',
             background: '#fff',
+            opacity: loading ? 0.5 : 1,
           }}
         />
         <button
           onClick={handleSend}
-          disabled={!newMessage.trim() || sending}
+          disabled={!newMessage.trim() || sending || loading}
           style={{
             padding: '14px 24px',
             fontSize: '14px',
@@ -191,8 +280,8 @@ export default function MessagesPage() {
             color: '#fff',
             border: 'none',
             borderRadius: '12px',
-            cursor: sending ? 'not-allowed' : 'pointer',
-            opacity: sending ? 0.7 : 1,
+            cursor: (!newMessage.trim() || sending || loading) ? 'not-allowed' : 'pointer',
+            opacity: (!newMessage.trim() || sending || loading) ? 0.5 : 1,
           }}
         >
           {sending ? 'Sending...' : 'Send'}
@@ -200,8 +289,8 @@ export default function MessagesPage() {
       </div>
 
       <p style={{ fontSize: '12px', color: '#888', textAlign: 'center', marginTop: '12px' }}>
-        Messages are end-to-end encrypted and stored in record.
-       your HIPAA-compliant patient</p>
+        Messages are end-to-end encrypted and stored in your HIPAA-compliant patient record.
+      </p>
     </div>
   )
 }

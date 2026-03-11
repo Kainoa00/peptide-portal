@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
       .single()
 
     if (intakeError || !intake) {
-      return NextResponse.json({ intake: null, peptide: null })
+      return NextResponse.json({ intake: null, peptide: null, provider: null })
     }
 
     // Fetch recommended peptide
@@ -43,7 +43,27 @@ export async function GET(request: NextRequest) {
       peptide = peptideData
     }
 
-    return NextResponse.json({ intake, peptide })
+    // If approved, fetch provider name
+    let provider = null
+    if (intake.status === 'reviewed') {
+      const { data: prescription } = await supabase
+        .from('prescriptions')
+        .select('provider_id')
+        .eq('intake_submission_id', intake.id)
+        .single()
+
+      if (prescription?.provider_id) {
+        const { data: providerProfile } = await supabase
+          .from('profiles')
+          .select('full_name')
+          .eq('id', prescription.provider_id)
+          .single()
+        
+        provider = providerProfile?.full_name || 'Your Provider'
+      }
+    }
+
+    return NextResponse.json({ intake, peptide, provider })
   } catch (error) {
     console.error('Dashboard API error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })

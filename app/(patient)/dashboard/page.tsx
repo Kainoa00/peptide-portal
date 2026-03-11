@@ -32,6 +32,12 @@ interface Peptide {
   price_monthly: number
 }
 
+interface DashboardData {
+  intake: IntakeSubmission | null
+  peptide: Peptide | null
+  provider: string | null
+}
+
 /* ─── Empty State ────────────────────────────────────────────────── */
 function EmptyState() {
   return (
@@ -124,6 +130,7 @@ function ActionButton({ href, icon, label, description }: { href: string; icon: 
 export default function DashboardPage() {
   const [intake, setIntake] = useState<IntakeSubmission | null>(null)
   const [peptide, setPeptide] = useState<Peptide | null>(null)
+  const [provider, setProvider] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -147,6 +154,7 @@ export default function DashboardPage() {
         if (data.intake && data.peptide) {
           setIntake(data.intake)
           setPeptide(data.peptide)
+          setProvider(data.provider)
         }
       } catch (err) {
         console.error('Error fetching dashboard data:', err)
@@ -171,7 +179,7 @@ export default function DashboardPage() {
         </h1>
         {peptide && (
           <p style={{ fontSize: '14px', color: '#666' }}>
-            Prescribed by <span style={{ color: '#1A1A1A', fontWeight: 600 }}>Dr. Sarah Chen, MD</span>
+            Prescribed by <span style={{ color: '#1A1A1A', fontWeight: 600 }}>{provider || 'Your Provider'}</span>
           </p>
         )}
       </div>

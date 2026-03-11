@@ -232,6 +232,12 @@ export default function SignupClient() {
                 Sign in
               </Link>
             </div>
+
+            <div style={{ textAlign: 'center', marginTop: '16px', fontSize: '13px', color: '#999' }}>
+              <Link href="/provider/signup" style={{ color: ACCENT_DARK, textDecoration: 'none' }}>
+                Provider? Start free pilot →
+              </Link>
+            </div>
           </div>
 
         </div>
