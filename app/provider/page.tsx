@@ -18,7 +18,8 @@ export default function ProviderPage() {
             <span style={{ fontWeight: '600', fontSize: '18px', color: '#1A1A1A' }}>Peptide Portal</span>
           </Link>
           <div style={{ display: 'flex', gap: '16px' }}>
-            <Link href="/login" style={{ fontSize: '14px', color: '#666', textDecoration: 'none' }}>Log in</Link>
+            <Link href="/provider/demo" style={{ fontSize: '14px', color: '#666', textDecoration: 'none' }}>Request Demo</Link>
+            <Link href="/provider/login" style={{ fontSize: '14px', color: '#666', textDecoration: 'none' }}>Log in</Link>
             <Link href="/provider/signup" style={{ 
               fontSize: '14px', 
               background: ACCENT, 
@@ -220,10 +221,10 @@ export default function ProviderPage() {
             textDecoration: 'none',
             display: 'inline-block',
           }}>
-            Start 30-Day Free Pilot
+            Request a Demo
           </Link>
           <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', marginTop: '16px' }}>
-            No credit card required. No setup fees.
+            10 minutes. No pressure. See it in action.
           </p>
         </div>
       </section>
