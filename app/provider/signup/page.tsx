@@ -24,34 +24,33 @@ export default function ProviderSignupPage() {
     const supabase = createClient()
 
     try {
-      const { data: authData, error: authError } = await supabase.auth.signUp({
-        email: form.email,
-        password: form.password,
-        options: {
-          data: {
-            full_name: form.fullName,
-          }
-        }
+      // Create user + set provider role via admin API
+      const res = await fetch('/api/provider/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: form.email, password: form.password, fullName: form.fullName }),
       })
+      const data = await res.json()
 
-      if (authError) {
-        setError(authError.message)
+      if (!res.ok) {
+        setError(data.error || 'Failed to create account.')
         setLoading(false)
         return
       }
 
-      if (authData.user) {
-        const { error: profileError } = await supabase
-          .from('profiles')
-          .update({ role: 'provider' })
-          .eq('id', authData.user.id)
+      // Sign in immediately (email confirmation skipped)
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: form.email,
+        password: form.password,
+      })
 
-        if (profileError) {
-          console.error('Profile update error:', profileError)
-        }
-
-        router.push('/provider/dashboard')
+      if (signInError) {
+        setError(signInError.message)
+        setLoading(false)
+        return
       }
+
+      router.push('/provider/dashboard')
     } catch (err) {
       setError('Something went wrong. Please try again.')
     } finally {

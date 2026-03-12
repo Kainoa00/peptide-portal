@@ -28,12 +28,13 @@ export async function proxy(req: NextRequest) {
   const pathname = req.nextUrl.pathname
 
   // Redirect unauthenticated users away from protected routes
-  if (!session && (pathname.startsWith('/dashboard') || pathname.startsWith('/provider'))) {
+  const providerPublic = pathname === '/provider/login' || pathname === '/provider/signup'
+  if (!session && (pathname.startsWith('/dashboard') || (pathname.startsWith('/provider') && !providerPublic))) {
     return NextResponse.redirect(new URL('/login', req.url))
   }
 
   // Redirect non-providers away from provider routes
-  if (session && pathname.startsWith('/provider')) {
+  if (session && pathname.startsWith('/provider') && !providerPublic) {
     const { data: profile } = await supabase
       .from('profiles')
       .select('role')
