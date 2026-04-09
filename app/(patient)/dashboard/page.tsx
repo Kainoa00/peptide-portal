@@ -36,9 +36,10 @@ export default async function DashboardPage() {
     return <PatientDashboardClient intake={null} peptide={null} provider={null} />
   }
 
-  const peptideSlug = intake.recommended_protocols?.[0]
-  const { data: peptide } = peptideSlug
-    ? await supabase.from('peptides').select('*').eq('slug', peptideSlug).single()
+  // recommended_protocols stores peptide UUIDs, not slugs — must query by id
+  const peptideId = intake.recommended_protocols?.[0]
+  const { data: peptide } = peptideId
+    ? await supabase.from('peptides').select('*').eq('id', peptideId).single()
     : { data: null }
 
   const { data: providerProfile } = await supabase

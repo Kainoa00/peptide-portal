@@ -279,24 +279,23 @@ function StepRecommendation({ answers }: { answers: Answers }) {
     setLoadingSlug(rec.slug)
 
     try {
-      // Get current user
+      // Step 1: Ensure user is authenticated
       const supabase = createClient()
       const { data: { user } } = await supabase.auth.getUser()
 
       if (!user) {
-        // Not logged in - redirect to login
         window.location.href = '/login'
         return
       }
 
-      // Map conditions to medical history
+      // Step 2: Map conditions to medical history object
       const medicalHistory: Record<string, boolean> = {}
       answers.conditions.forEach((c: Condition) => {
         if (c !== 'none') medicalHistory[c] = true
       })
 
-      // Save intake submission
-      const response = await fetch('/api/intake', {
+      // Step 3: Save intake submission to Supabase
+      const intakeResponse = await fetch('/api/intake', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -313,14 +312,41 @@ function StepRecommendation({ answers }: { answers: Answers }) {
         }),
       })
 
-      const result = await response.json()
+      const intakeResult = await intakeResponse.json()
 
-      if (result.success) {
-        // Demo mode - redirect to dashboard
-        window.location.href = '/dashboard'
+      if (!intakeResult.success) {
+        alert('Error saving your intake: ' + (intakeResult.error || 'Please try again.'))
         return
+      }
+
+      // Step 4: Fetch the peptide from Supabase to get its Stripe price ID
+      const { data: peptideData } = await supabase
+        .from('peptides')
+        .select('id, stripe_price_id')
+        .eq('slug', rec.slug)
+        .single()
+
+      // Step 5: Trigger Stripe Checkout
+      const checkoutResponse = await fetch('/api/stripe/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          priceId: peptideData?.stripe_price_id ?? `price_demo_${rec.slug}`,
+          userId: user.id,
+          intakeSubmissionId: intakeResult.submissionId,
+        }),
+      })
+
+      const checkoutResult = await checkoutResponse.json()
+
+      if (checkoutResult.url) {
+        // Real Stripe session — redirect to hosted checkout
+        window.location.href = checkoutResult.url
+      } else if (checkoutResult.demo) {
+        // Stripe not configured (demo / test environment) — go straight to dashboard
+        window.location.href = '/dashboard'
       } else {
-        alert('Error: ' + (result.error || 'Failed to submit'))
+        alert('Checkout error: ' + (checkoutResult.error || 'Please try again.'))
       }
     } catch (err) {
       console.error(err)

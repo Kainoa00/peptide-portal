@@ -13,7 +13,6 @@ interface Intake {
   recommended_protocols: string[]
   profiles: {
     full_name: string | null
-    email: string | null
     state: string | null
   }
 }
@@ -104,7 +103,7 @@ function IntakeCard({ intake, peptide }: { intake: Intake; peptide?: Peptide }) 
               {intake.profiles?.state || 'N/A'}
             </span>
             <span className="text-xs text-[#9CA3AF]">
-              {intake.profiles?.email}
+              {intake.profiles?.state ? `${intake.profiles.state}` : ''}
             </span>
           </div>
 

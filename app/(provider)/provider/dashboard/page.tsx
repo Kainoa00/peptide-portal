@@ -32,9 +32,10 @@ export default async function ProviderDashboardPage() {
 
   if (profile?.role !== 'provider') redirect('/login')
 
+  // profiles table has full_name and state but NOT email (email lives in auth.users)
   const { data: intakes } = await supabase
     .from('intake_submissions')
-    .select('*, profiles:user_id(full_name, email, state)')
+    .select('*, profiles:user_id(full_name, state)')
     .eq('status', 'pending')
     .order('created_at', { ascending: false })
 
